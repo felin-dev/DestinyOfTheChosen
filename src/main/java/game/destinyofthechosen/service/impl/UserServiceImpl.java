@@ -23,4 +23,9 @@ public class UserServiceImpl implements UserService {
 
         //TODO
     }
+
+    @Override
+    public boolean isUsernameFree(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }

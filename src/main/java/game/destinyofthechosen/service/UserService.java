@@ -5,4 +5,6 @@ import game.destinyofthechosen.model.service.UserRegisterServiceModel;
 public interface UserService {
 
     void register(UserRegisterServiceModel userModel);
+
+    boolean isUsernameFree(String username);
 }

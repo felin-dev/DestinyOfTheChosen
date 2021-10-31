@@ -8,13 +8,13 @@
 <header th:replace="/fragments/navigation::navigation"></header>
 <main class="main-background">
     <br>
-    <section class="container-sm">
-        <form method="post"
-              th:object="${userRegisterBindingModel}"
-              th:action="@{/users/login}"
+    <section class="container-sm my-5">
+        <form th:object="${userRegisterBindingModel}"
+              th:action="@{/users/register}"
+              th:method="post"
               class="main-form text-center justify-content-center
                mx-auto col-md-6 bg-primary bg-opacity-75 text-secondary rounded-3">
-            <h2 class="text-center text-secondary fs-3 fw-bolder mt-5 pt-3">Login</h2>
+            <h2 class="text-center text-secondary fs-3 fw-bolder pt-3">Register</h2>
             <div class="form-group">
                 <label for="username" class="fs-5 pt-3">Username</label>
                 <input th:field="*{username}"
@@ -22,6 +22,20 @@
                        type="text"
                        class="form-control"
                        placeholder="Username"/>
+                <p th:if="${#fields.hasErrors('username')}"
+                   th:errors="*{username}"
+                   class="errors alert alert-danger"></p>
+            </div>
+            <div class="form-group">
+                <label for="email" class="fs-5 pt-3">Email</label>
+                <input th:field="*{email}"
+                       id="email"
+                       type="email"
+                       class="form-control"
+                       placeholder="Email"/>
+                <p th:if="${#fields.hasErrors('email')}"
+                   th:errors="*{email}"
+                   class="errors alert alert-danger"></p>
             </div>
             <div class="form-group">
                 <label for="password" class="fs-5 pt-3">Password</label>
@@ -30,17 +44,28 @@
                        type="password"
                        class="form-control"
                        placeholder="Password"/>
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}"
+                   class="errors alert alert-danger"></p>
             </div>
-
-            <p class="invalid-feedback errors alert alert-danger">
-                Invalid username or password.
-            </p>
+            <div class="form-group">
+                <label for="confirmPassword" class="fs-5 pt-3">Confirm password</label>
+                <input th:field="*{confirmPassword}"
+                       id="confirmPassword"
+                       type="password"
+                       class="form-control"
+                       placeholder="Confirm Password"/>
+                <p th:if="${#fields.hasErrors('confirmPassword')}"
+                   th:errors="*{confirmPassword}"
+                   class="errors alert alert-danger"></p>
+            </div>
 
             <input class="btn btn-primary bg-opacity-100 main-link fs-3 py-2 btn-lg mb-3"
                    type="submit"
-                   value="Login"/>
+                   value="Register"/>
         </form>
     </section>
+    <br>
 </main>
 <footer th:replace="/fragments/footer::footer"></footer>
 </body>
