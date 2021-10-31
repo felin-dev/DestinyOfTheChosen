@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/destiny_of_the_chosen"
+    username: postgres
+    password: 12345
+  sql:
+    init:
+      mode: never
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: "org.hibernate.dialect.PostgreSQL81Dialect"
+    defer-datasource-initialization: true
+    database: postgresql
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
