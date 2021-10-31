@@ -16,7 +16,7 @@ public class UserRegisterBindingModel {
 
     @NotBlank(message = "Password is required and must not be blank.")
     @Length(min = 8, max = 40, message = "Password should be between 8 and 40 characters.")
-    private String password;
+    private String rawPassword;
 
     @NotBlank(message = "Confirm password is required and must not be blank.")
     @Length(min = 8, max = 40, message = "Password should be between 8 and 40 characters.")
@@ -37,12 +37,12 @@ public class UserRegisterBindingModel {
         return this;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRawPassword() {
+        return rawPassword;
     }
 
-    public UserRegisterBindingModel setPassword(String password) {
-        this.password = password;
+    public UserRegisterBindingModel setRawPassword(String rawPassword) {
+        this.rawPassword = rawPassword;
         return this;
     }
 

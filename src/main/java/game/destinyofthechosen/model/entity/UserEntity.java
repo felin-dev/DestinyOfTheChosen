@@ -14,7 +14,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, unique = true, length = 35)
     private String username;
 
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true, length = 320)
@@ -28,10 +28,21 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<HeroEntity> heroes;
 
-    private Integer gold;
+    @Column(nullable = false)
+    private Integer gold = 0;
 
     @OneToMany(mappedBy = "user")
     private List<ItemEntity> stash;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String username, String password, String email, Set<UserRoleEntity> userRoles) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.userRoles = userRoles;
+    }
 
     public String getUsername() {
         return username;

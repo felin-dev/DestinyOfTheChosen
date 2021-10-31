@@ -9,6 +9,4 @@ public interface UserService {
     boolean isUsernameFree(String username);
 
     boolean isEmailFree(String email);
-
-    boolean doesUsernameExists(String username);
 }

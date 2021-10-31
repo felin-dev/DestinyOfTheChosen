@@ -26,6 +26,16 @@ public class UserRegisterController {
         this.modelMapper = modelMapper;
     }
 
+    @ModelAttribute("passwordMismatch")
+    public Boolean passwordMismatch() {
+        return false;
+    }
+
+    @ModelAttribute("usernameOrEmailIsTaken")
+    public Boolean usernameOrEmailIsTaken() {
+        return false;
+    }
+
     @ModelAttribute("userRegisterBindingModel")
     public UserRegisterBindingModel userRegisterBindingModel() {
         return new UserRegisterBindingModel();
@@ -48,7 +58,7 @@ public class UserRegisterController {
             return "redirect:register";
         }
 
-        if (!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
+        if (!userRegisterBindingModel.getRawPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
             redirectAttributes
                     .addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel)
                     .addFlashAttribute("passwordMismatch", true);
