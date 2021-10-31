@@ -7,4 +7,8 @@ public interface UserService {
     void register(UserRegisterServiceModel userModel);
 
     boolean isUsernameFree(String username);
+
+    boolean isEmailFree(String email);
+
+    boolean doesUsernameExists(String username);
 }

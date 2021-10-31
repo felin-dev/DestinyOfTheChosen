@@ -28,4 +28,14 @@ public class UserServiceImpl implements UserService {
     public boolean isUsernameFree(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    @Override
+    public boolean isEmailFree(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean doesUsernameExists(String username) {
+        return !userRepository.existsByUsername(username);
+    }
 }

@@ -1,5 +1,7 @@
 package game.destinyofthechosen.model.binding;
 
+import game.destinyofthechosen.validator.UniqueEmail;
+import game.destinyofthechosen.validator.UniqueUsername;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -7,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 public class UserRegisterBindingModel {
 
+    @UniqueUsername
     @NotBlank(message = "Username is required and must not be blank.")
     @Length(min = 5, max = 35, message = "Username should be between 5 and 35 characters.")
     private String username;
@@ -19,6 +22,7 @@ public class UserRegisterBindingModel {
     @Length(min = 8, max = 40, message = "Password should be between 8 and 40 characters.")
     private String confirmPassword;
 
+    @UniqueEmail
     @NotBlank(message = "Email is required and must not be blank.")
     @Email(message = "Please enter a valid email address.")
     @Length(max = 320, message = "Maximum email length is 320 characters.")
