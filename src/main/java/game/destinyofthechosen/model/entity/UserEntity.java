@@ -20,7 +20,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, unique = true, length = 320)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<UserRoleEntity> userRoles;
 
     private UUID currentHeroId;
