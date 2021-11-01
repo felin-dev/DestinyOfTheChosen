@@ -13,6 +13,9 @@ public class StatEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatEnum stat;
 
+    @Column(nullable = false)
+    private Integer value;
+
     @ManyToOne(targetEntity = ItemEntity.class)
     private UUID item;
 
@@ -22,6 +25,15 @@ public class StatEntity extends BaseEntity {
 
     public StatEntity setStat(StatEnum stat) {
         this.stat = stat;
+        return this;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public StatEntity setValue(Integer value) {
+        this.value = value;
         return this;
     }
 

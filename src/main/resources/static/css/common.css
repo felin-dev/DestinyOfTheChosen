@@ -19,6 +19,15 @@ body {
     min-height: 100vh;
 }
 
+.character-creation-background {
+    background-image: url(/images/home-image2.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    /*background-attachment: fixed;*/
+    background-size: cover;
+    min-height: 100vh;
+}
+
 .main-link {
     color: #B2DB34 !important;
 }

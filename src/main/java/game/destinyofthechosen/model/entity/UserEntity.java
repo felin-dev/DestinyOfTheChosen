@@ -115,4 +115,8 @@ public class UserEntity extends BaseEntity {
         this.stash = stash;
         return this;
     }
+
+    public void addNewHero(HeroEntity newHero) {
+        this.heroes.add(newHero);
+    }
 }

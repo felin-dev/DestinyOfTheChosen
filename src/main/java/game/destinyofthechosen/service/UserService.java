@@ -1,5 +1,6 @@
 package game.destinyofthechosen.service;
 
+import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
 
 public interface UserService {
@@ -9,4 +10,6 @@ public interface UserService {
     boolean isUsernameFree(String username);
 
     boolean isEmailFree(String email);
+
+    void addNewHero(HeroEntity newHeroEntity, String userUsername);
 }

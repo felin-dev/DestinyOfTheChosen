@@ -1,5 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
+import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
@@ -9,6 +10,7 @@ import game.destinyofthechosen.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Service
@@ -25,10 +27,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void addNewHero(HeroEntity newHeroEntity, String userUsername) {
+        UserEntity userEntity = userRepository.findByUsername(userUsername)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("User with username %s does not exist.", userUsername)));
+
+        userEntity.addNewHero(newHeroEntity);
+        userRepository.save(userEntity);
+    }
+
+    @Override
     public void register(UserRegisterServiceModel userModel) {
 
         if (userRepository.existsByUsernameOrEmail(userModel.getUsername(), userModel.getUsername())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Username is taken.");
         }
 
         UserEntity user = new UserEntity(

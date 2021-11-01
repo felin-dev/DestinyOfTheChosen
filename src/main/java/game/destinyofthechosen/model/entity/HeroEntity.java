@@ -30,7 +30,13 @@ public class HeroEntity extends BaseEntity {
     private Integer baseHealth;
 
     @Column(nullable = false)
+    private Integer baseMana;
+
+    @Column(nullable = false)
     private Integer baseAttack;
+
+    @Column(nullable = false)
+    private Integer baseMagicPower;
 
     @Column(nullable = false)
     private Integer baseDefense;
@@ -62,6 +68,14 @@ public class HeroEntity extends BaseEntity {
     public HeroEntity setName(String name) {
         this.name = name;
         return this;
+    }
+
+    public HeroEntity() {
+    }
+
+    public HeroEntity(String name, HeroRoleEnum heroRole) {
+        this.name = name;
+        this.heroRole = heroRole;
     }
 
     public HeroRoleEnum getHeroRole() {
@@ -109,12 +123,30 @@ public class HeroEntity extends BaseEntity {
         return this;
     }
 
+    public Integer getBaseMana() {
+        return baseMana;
+    }
+
+    public HeroEntity setBaseMana(Integer baseMana) {
+        this.baseMana = baseMana;
+        return this;
+    }
+
     public Integer getBaseAttack() {
         return baseAttack;
     }
 
     public HeroEntity setBaseAttack(Integer baseAttack) {
         this.baseAttack = baseAttack;
+        return this;
+    }
+
+    public Integer getBaseMagicPower() {
+        return baseMagicPower;
+    }
+
+    public HeroEntity setBaseMagicPower(Integer baseMagicPower) {
+        this.baseMagicPower = baseMagicPower;
         return this;
     }
 
