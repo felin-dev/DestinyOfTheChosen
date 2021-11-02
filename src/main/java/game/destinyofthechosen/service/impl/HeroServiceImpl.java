@@ -1,7 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.model.entity.HeroEntity;
-import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
 import game.destinyofthechosen.repository.HeroRepository;
 import game.destinyofthechosen.service.HeroService;

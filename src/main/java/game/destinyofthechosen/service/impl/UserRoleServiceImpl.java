@@ -1,6 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
-import game.destinyofthechosen.model.entity.UserRoleEntity;
+import game.destinyofthechosen.model.entity.RoleEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.repository.UserRoleRepository;
 import game.destinyofthechosen.service.UserRoleService;
@@ -24,11 +24,11 @@ public class UserRoleServiceImpl implements UserRoleService {
         Arrays.stream(UserRoleEnum.values())
                 .forEach(userRoleEnum ->
                         userRoleRepository.save(
-                                new UserRoleEntity().setUserRole(userRoleEnum)));
+                                new RoleEntity().setUserRole(userRoleEnum)));
     }
 
     @Override
-    public UserRoleEntity findByUserRole(UserRoleEnum userRole) {
+    public RoleEntity findByUserRole(UserRoleEnum userRole) {
         return userRoleRepository.findByUserRole(userRole);
     }
 }

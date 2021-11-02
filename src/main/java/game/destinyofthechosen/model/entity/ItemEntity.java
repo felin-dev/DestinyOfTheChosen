@@ -3,6 +3,7 @@ package game.destinyofthechosen.model.entity;
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class ItemEntity extends BaseEntity {
     private ItemTypeEnum type;
 
     @OneToMany(mappedBy = "item")
-    private List<StatEntity> stats;
+    private List<StatEntity> stats = new ArrayList<>();
 
     @Column(nullable = false)
     private String imageUrl;

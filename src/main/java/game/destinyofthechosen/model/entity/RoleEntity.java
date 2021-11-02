@@ -5,8 +5,8 @@ import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user_roles")
-public class UserRoleEntity extends BaseEntity {
+@Table(name = "roles")
+public class RoleEntity extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -16,7 +16,7 @@ public class UserRoleEntity extends BaseEntity {
         return userRole;
     }
 
-    public UserRoleEntity setUserRole(UserRoleEnum userRole) {
+    public RoleEntity setUserRole(UserRoleEnum userRole) {
         this.userRole = userRole;
         return this;
     }

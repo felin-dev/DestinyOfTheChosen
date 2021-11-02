@@ -1,11 +1,7 @@
 package game.destinyofthechosen.model.entity;
 
-import game.destinyofthechosen.model.enumeration.UserRoleEnum;
-
 import javax.persistence.*;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -21,23 +17,27 @@ public class UserEntity extends BaseEntity {
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<UserRoleEntity> userRoles;
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_role_id")
+    )
+    private Set<RoleEntity> userRoles = new HashSet<>();
 
     private UUID currentHeroId;
 
     @OneToMany(mappedBy = "user")
-    private List<HeroEntity> heroes;
+    private List<HeroEntity> heroes = new ArrayList<>();
 
     @Column(nullable = false)
     private Integer gold = 0;
 
     @OneToMany(mappedBy = "user")
-    private List<ItemEntity> stash;
+    private List<ItemEntity> stash = new ArrayList<>();
 
     public UserEntity() {
     }
 
-    public UserEntity(String username, String password, String email, Set<UserRoleEntity> userRoles) {
+    public UserEntity(String username, String password, String email, Set<RoleEntity> userRoles) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -71,11 +71,11 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
-    public Set<UserRoleEntity> getUserRoles() {
+    public Set<RoleEntity> getUserRoles() {
         return userRoles;
     }
 
-    public UserEntity setUserRoles(Set<UserRoleEntity> userRoles) {
+    public UserEntity setUserRoles(Set<RoleEntity> userRoles) {
         this.userRoles = userRoles;
         return this;
     }

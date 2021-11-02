@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dropList")
+@Table(name = "drop_list")
 public class DropListEntity extends BaseEntity {
 
     @Column(nullable = false)

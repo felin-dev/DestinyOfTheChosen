@@ -3,8 +3,7 @@ package game.destinyofthechosen.model.entity;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "heroes")
@@ -21,7 +20,10 @@ public class HeroEntity extends BaseEntity {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Integer level;
+    private Integer level = 1;
+
+    @Column(nullable = false)
+    private Integer stats = 0;
 
     @Column(nullable = false)
     private Integer experience;
@@ -56,7 +58,7 @@ public class HeroEntity extends BaseEntity {
     private UUID equippedWeapon;
 
     @OneToMany(mappedBy = "hero")
-    private Collection<ItemEntity> items;
+    private List<ItemEntity> items = new ArrayList<>();
 
     @ManyToOne(targetEntity = UserEntity.class)
     private UUID user;
@@ -102,6 +104,15 @@ public class HeroEntity extends BaseEntity {
 
     public HeroEntity setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getStats() {
+        return stats;
+    }
+
+    public HeroEntity setStats(Integer stats) {
+        this.stats = stats;
         return this;
     }
 
@@ -204,11 +215,11 @@ public class HeroEntity extends BaseEntity {
         return this;
     }
 
-    public Collection<ItemEntity> getItems() {
+    public List<ItemEntity> getItems() {
         return items;
     }
 
-    public HeroEntity setItems(Collection<ItemEntity> items) {
+    public HeroEntity setItems(List<ItemEntity> items) {
         this.items = items;
         return this;
     }

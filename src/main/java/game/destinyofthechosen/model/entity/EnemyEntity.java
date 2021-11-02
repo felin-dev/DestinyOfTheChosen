@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class EnemyEntity extends BaseEntity {
     private Integer goldDropLowerLimit;
 
     @OneToMany(mappedBy = "enemy")
-    private List<DropListEntity> dropList;
+    private List<DropListEntity> dropList = new ArrayList<>();
 
     public String getName() {
         return name;
