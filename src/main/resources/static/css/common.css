@@ -8,6 +8,7 @@ body {
     font-weight: bolder;
     letter-spacing: 6px;
     margin: 0;
+    background-color: transparent;
 }
 
 .main-background {
@@ -34,6 +35,13 @@ body {
 
 .main-link:hover {
     color: #baf508 !important;
+}
+
+.hero-image {
+    background-repeat: no-repeat;
+    /*background-position: right bottom;*/
+    width: 100%;
+    display: inline-block;
 }
 
 /*!* */
