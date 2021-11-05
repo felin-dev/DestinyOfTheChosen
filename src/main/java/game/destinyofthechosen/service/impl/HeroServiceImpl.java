@@ -1,11 +1,14 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.model.entity.HeroEntity;
+import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
 import game.destinyofthechosen.repository.HeroRepository;
 import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class HeroServiceImpl implements HeroService {
@@ -20,15 +23,18 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public void createNewHero(HeroCreationServiceModel heroModel, String userUsername) {
+
         if (heroRepository.existsByName(heroModel.getName())) {
             throw new IllegalArgumentException("Hero name is taken.");
         }
 
-        HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
+        UserEntity userEntity = userService.getUserByName(userUsername);
 
+        HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
+        newHeroEntity.setUser(userEntity);
         heroRepository.save(newHeroEntity);
 
-        userService.addNewHero(newHeroEntity, userUsername);
+        userService.addNewHero(userEntity, newHeroEntity, userUsername);
     }
 
     private HeroEntity createNewHeroEntity(HeroCreationServiceModel heroModel) {

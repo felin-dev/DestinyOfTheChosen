@@ -10,11 +10,11 @@ import javax.validation.constraints.NotNull;
 public class HeroCreationBindingModel {
 
     @UniqueHeroName
-    @NotBlank(message = "Username is required and must not be blank.")
-    @Length(min = 5, max = 35, message = "Username should be between 5 and 35 characters.")
+    @NotBlank(message = "Hero name is required and must not be blank.")
+    @Length(min = 5, max = 35, message = "Hero name should be between 5 and 35 characters.")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Please select a hero class.")
     private HeroRoleEnum heroRole;
 
     public String getName() {

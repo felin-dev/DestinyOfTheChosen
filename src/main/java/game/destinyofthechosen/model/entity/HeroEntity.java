@@ -26,7 +26,7 @@ public class HeroEntity extends BaseEntity {
     private Integer stats = 0;
 
     @Column(nullable = false)
-    private Integer experience;
+    private Integer experience = 0;
 
     @Column(nullable = false)
     private Integer baseHealth;
@@ -57,11 +57,11 @@ public class HeroEntity extends BaseEntity {
 
     private UUID equippedWeapon;
 
-    @OneToMany(mappedBy = "hero")
+    @OneToMany(mappedBy = "hero", fetch = FetchType.EAGER)
     private List<ItemEntity> items = new ArrayList<>();
 
-    @ManyToOne(targetEntity = UserEntity.class)
-    private UUID user;
+    @ManyToOne
+    private UserEntity user;
 
     public String getName() {
         return name;
@@ -224,11 +224,11 @@ public class HeroEntity extends BaseEntity {
         return this;
     }
 
-    public UUID getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public HeroEntity setUser(UUID user) {
+    public HeroEntity setUser(UserEntity user) {
         this.user = user;
         return this;
     }

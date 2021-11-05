@@ -7,6 +7,10 @@ spring:
   sql:
     init:
       mode: never
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,6 +25,11 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+#Cloudinary Properties
+cloudinary:
+  api-key: 996863619362757
+  api-secret: ${CLOUDINARY_API_SECRET}
+  cloud-name: felin
 
 #logging:
 #  level:

@@ -39,9 +39,7 @@ body {
 
 .hero-image {
     background-repeat: no-repeat;
-    /*background-position: right bottom;*/
-    width: 100%;
-    display: inline-block;
+    width: 350px;
 }
 
 /*!* */

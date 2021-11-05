@@ -9,7 +9,8 @@
 <main class="character-creation-background">
     <!-- TODO -->
     <br>
-    <form th:action="@{/heroes/create}"
+    <form th:object="${heroCreationBindingModel}"
+          th:action="@{/heroes/create}"
           th:method="POST">
         <section class="container my-5 text-center justify-content-center px-5
                         bg-primary bg-opacity-75 text-secondary rounded-3">
@@ -22,36 +23,51 @@
                         <button class="btn border-secondary main-link my-2 fs-3" id="hunter-select" type="button">
                             Hunter
                         </button>
-                        <button class="btn border-secondary main-link my-2 fs-3" id="mage-select" type="button">Mage
+                        <button class="btn border-secondary main-link my-2 fs-3" id="mage-select" type="button">
+                            Mage
                         </button>
                     </div>
                 </div>
-                <div class="col-xl-5 mt-5 mb-2">
+                <div class="col-xl-5 mt-5 mb-2 pb-3">
                     <img id="hero-creation-image"
-                         src="/images/hunter.png" class="rounded mx-auto d-block hero-image" alt="">
+                         src="/images/warrior.png" class="rounded mx-auto d-block hero-image" alt="">
                 </div>
-                <div class="col-xl-4 my-2 py-3 fs-4 mt-5">
+                <div class="col-xl-4 my-2 py-3 fs-5 mt-5">
                 <span id="hero-description">
-                    Hunters have high attack damage and their normal attack is very
-                    powerful as well as their skills. Most of their skills are for damage
-                    but they also have crowd control abilities like traps. Their main stat
-                    is Dexterity which gives them two points in attack damage for each
-                    Dexterity stat point.
+                    Warriors are tough, they have a lot of health and armor,
+                    but lower attack damage. Most of their skills are made for
+                    survival and soaking up damage. Their main stat is Strength which
+                    gives them two points in attack damage for each Strength stat point.
                 </span>
                 </div>
             </div>
+
             <div class="pb-3 form-group row justify-content-center">
                 <div class="col-md-4">
                     <label id="hero-name">
-                        <input class="bg-dark form-control text-secondary border-secondary fs-3" type="text"
+                        <input th:field="*{name}"
+                               class="bg-dark form-control text-secondary border-secondary fs-3" type="text"
                                placeholder="Hero name">
                     </label>
+                    <p th:if="${#fields.hasErrors('name')}"
+                       th:errors="*{name}"
+                       class="errors alert alert-danger"></p>
+                    <p th:if="${#fields.hasErrors('heroRole')}"
+                       th:errors="*{heroRole}"
+                       class="errors alert alert-danger"></p>
                 </div>
                 <div class="col-md-2">
                     <input class="btn text-secondary border-secondary fs-3" type="submit" value="Create"/>
                 </div>
             </div>
         </section>
+        <label>
+            <select th:field="*{heroRole}" class="invisible">
+                <option id="WARRIOR" value="WARRIOR">WARRIOR</option>
+                <option id="HUNTER" value="HUNTER">HUNTER</option>
+                <option id="MAGE" value="MAGE">MAGE</option>
+            </select>
+        </label>
     </form>
     <br>
 </main>

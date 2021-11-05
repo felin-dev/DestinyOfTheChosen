@@ -16,8 +16,8 @@ public class StatEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer value;
 
-    @ManyToOne(targetEntity = ItemEntity.class)
-    private UUID item;
+    @ManyToOne
+    private ItemEntity item;
 
     public StatEnum getStat() {
         return stat;
@@ -37,11 +37,11 @@ public class StatEntity extends BaseEntity {
         return this;
     }
 
-    public UUID getItem() {
+    public ItemEntity getItem() {
         return item;
     }
 
-    public StatEntity setItem(UUID item) {
+    public StatEntity setItem(ItemEntity item) {
         this.item = item;
         return this;
     }

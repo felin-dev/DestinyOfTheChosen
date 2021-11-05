@@ -18,7 +18,7 @@ public class ItemEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemTypeEnum type;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
     private List<StatEntity> stats = new ArrayList<>();
 
     @Column(nullable = false)
@@ -27,11 +27,11 @@ public class ItemEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer levelRequirement;
 
-    @ManyToOne(targetEntity = HeroEntity.class)
-    private UUID hero;
+    @ManyToOne
+    private HeroEntity hero;
 
-    @ManyToOne(targetEntity = UserEntity.class)
-    private UUID user;
+    @ManyToOne
+    private UserEntity user;
 
     public String getName() {
         return name;
@@ -78,20 +78,20 @@ public class ItemEntity extends BaseEntity {
         return this;
     }
 
-    public UUID getHero() {
+    public HeroEntity getHero() {
         return hero;
     }
 
-    public ItemEntity setHero(UUID owner) {
-        this.hero = owner;
+    public ItemEntity setHero(HeroEntity hero) {
+        this.hero = hero;
         return this;
     }
 
-    public UUID getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public ItemEntity setUser(UUID user) {
+    public ItemEntity setUser(UserEntity user) {
         this.user = user;
         return this;
     }
