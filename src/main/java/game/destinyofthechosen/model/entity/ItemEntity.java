@@ -1,5 +1,6 @@
 package game.destinyofthechosen.model.entity;
 
+import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
 
 import javax.persistence.*;
@@ -11,8 +12,9 @@ import java.util.UUID;
 @Table(name = "items")
 public class ItemEntity extends BaseEntity {
 
-    @Column(nullable = false, length = 35)
-    private String name;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ItemNameEnum itemNameEnum;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -33,12 +35,12 @@ public class ItemEntity extends BaseEntity {
     @ManyToOne
     private UserEntity user;
 
-    public String getName() {
-        return name;
+    public ItemNameEnum getItemNameEnum() {
+        return itemNameEnum;
     }
 
-    public ItemEntity setName(String name) {
-        this.name = name;
+    public ItemEntity setName(ItemNameEnum itemNameEnum) {
+        this.itemNameEnum = itemNameEnum;
         return this;
     }
 

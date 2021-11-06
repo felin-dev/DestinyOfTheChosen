@@ -1,4 +1,4 @@
-package game.destinyofthechosen.service;
+package game.destinyofthechosen.model.service;
 
 public class CloudinaryImage {
 

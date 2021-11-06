@@ -13,8 +13,8 @@ public class DropListEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemNameEnum ItemName;
 
-    @ManyToOne(targetEntity = EnemyEntity.class)
-    private UUID enemy;
+    @ManyToOne
+    private EnemyEntity enemy;
 
     public ItemNameEnum getItemName() {
         return ItemName;
@@ -25,11 +25,11 @@ public class DropListEntity extends BaseEntity {
         return this;
     }
 
-    public UUID getEnemy() {
+    public EnemyEntity getEnemy() {
         return enemy;
     }
 
-    public DropListEntity setEnemy(UUID enemy) {
+    public DropListEntity setEnemy(EnemyEntity enemy) {
         this.enemy = enemy;
         return this;
     }
