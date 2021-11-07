@@ -5,35 +5,36 @@
     const hunterSelectElement = document.getElementById('HUNTER');
     const mageSelectElement = document.getElementById('MAGE');
 
+    const WARRIOR_IMAGE = 'https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/warrior-f.png';
+    const HUNTER_IMAGE = 'https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/hunter-f.png';
+    const MAGE_IMAGE = 'https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/mage-f.png';
+
     document
         .getElementById('hero-select')
         .addEventListener('click', (event) => {
 
             switch (event.target.id) {
                 case ('warrior-select'): {
-                    changeHeroData('warrior', warriorDescription);
+                    changeHeroData('warrior', warriorDescription, WARRIOR_IMAGE);
                     warriorSelectElement.selected = true;
                     break;
                 }
                 case ('hunter-select'): {
-                    changeHeroData('hunter', hunterDescription);
+                    changeHeroData('hunter', hunterDescription, HUNTER_IMAGE);
                     hunterSelectElement.selected = true;
                     break;
                 }
                 case ('mage-select'): {
-                    changeHeroData('mage', mageDescription);
+                    changeHeroData('mage', mageDescription, MAGE_IMAGE);
                     mageSelectElement.selected = true;
                     break;
                 }
             }
         });
 
-    function changeHeroData(heroClass, heroDescription) {
-        heroImageElement.setAttribute('src', '/images/' + heroClass + '.png')
+    function changeHeroData(heroClass, heroDescription, heroImage) {
+        heroImageElement.setAttribute('src', heroImage)
         heroDescriptionElement.textContent = heroDescription;
-        // heroSelectElement.setAttribute('value', heroClass.toUpperCase());
-        // heroSelectElement.setAttribute('text', heroClass.toUpperCase());
-        // console.log(heroSelectElement);
     }
 
     const warriorDescription = 'Warriors are tough, they have a lot of health and armor, ' +

@@ -1,9 +1,6 @@
 package game.destinyofthechosen.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +29,7 @@ public class EnemyEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer goldDropLowerThreshold;
 
-    @OneToMany(mappedBy = "enemy")
+    @OneToMany(mappedBy = "enemy", fetch = FetchType.EAGER)
     private List<DropListEntity> dropList = new ArrayList<>();
 
     public String getName() {

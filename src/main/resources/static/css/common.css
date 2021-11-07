@@ -12,7 +12,7 @@ body {
 }
 
 .main-background {
-    background-image: url(/images/home-image.jpg);
+    background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/home-background.jpg);
     background-position: center;
     background-repeat: no-repeat;
     /*background-attachment: fixed;*/
@@ -21,7 +21,7 @@ body {
 }
 
 .character-creation-background {
-    background-image: url(/images/home-image2.jpg);
+    background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/character-creation-background.webp);
     background-position: center;
     background-repeat: no-repeat;
     /*background-attachment: fixed;*/

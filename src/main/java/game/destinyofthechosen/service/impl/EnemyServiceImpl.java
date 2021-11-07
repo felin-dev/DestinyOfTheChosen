@@ -1,6 +1,8 @@
 package game.destinyofthechosen.service.impl;
 
+import game.destinyofthechosen.model.entity.DropListEntity;
 import game.destinyofthechosen.model.entity.EnemyEntity;
+import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
 import game.destinyofthechosen.repository.DropListRepository;
@@ -11,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class EnemyServiceImpl implements EnemyService {
@@ -45,12 +48,17 @@ public class EnemyServiceImpl implements EnemyService {
 
         EnemyEntity enemyEntity = modelMapper.map(enemyModel, EnemyEntity.class);
         enemyEntity.setImageUrl(cloudinaryImage.getUrl());
-        enemyEntity.setDropList(dropListRepository.findAllByName(enemyModel.getDropList()));
 
-        // TODO save entity, add items and make image entity so the image can be deleted
+        enemyRepository.save(enemyEntity);
+        makeDropListEntities(enemyModel.getDropList(), enemyEntity);
+    }
 
-        System.out.println(enemyEntity);
-        System.out.println(enemyModel);
-//        System.out.println(enemyModel.getImage().isEmpty());
+    private void makeDropListEntities(List<ItemNameEnum> dropList, EnemyEntity enemyEntity) {
+        dropList
+                .forEach(dropItem -> dropListRepository
+                        .save(
+                                new DropListEntity()
+                                        .setItemName(dropItem)
+                                        .setEnemy(enemyEntity)));
     }
 }
