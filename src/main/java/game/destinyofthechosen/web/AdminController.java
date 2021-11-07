@@ -3,7 +3,6 @@ package game.destinyofthechosen.web;
 import game.destinyofthechosen.model.binding.EnemyCreationBindingModel;
 import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
-import game.destinyofthechosen.model.service.UserRegisterServiceModel;
 import game.destinyofthechosen.service.EnemyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Controller
 public class AdminController {

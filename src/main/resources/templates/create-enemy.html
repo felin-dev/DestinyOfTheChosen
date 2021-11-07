@@ -107,13 +107,14 @@
                         Items
                     </button>
                     <div class="dropdown-menu text-secondary bg-primary rounded-3" aria-labelledby="dropdownMenuButton">
-                        <input th:field="*{dropList}"
-                               th:each="i : ${items}"
-                               th:aria-label="${i.getItemName()}"
-                               th:value="${i.name()}"
-                               th:text="${i.getItemName()}"
-                               type="checkbox">
-                                <!-- TODO better view -->
+                        <div class="form-check mx-3" th:each="i : ${items}">
+                            <input th:field="*{dropList}"
+                                   th:aria-label="${i.getItemName()}"
+                                   th:value="${i.name()}"
+                                   th:text="${i.getItemName()}"
+                                   class="form-check-input"
+                                   type="checkbox">
+                        </div>
                     </div>
                 </div>
             </div>
