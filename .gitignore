@@ -32,9 +32,12 @@ build/
 ### VS Code ###
 .vscode/
 
+### Others ###
 /sass
 /node_modules
 /mvnw
 /mvnw.cmd
 .mvn
 /ps
+*.jpg
+*.png

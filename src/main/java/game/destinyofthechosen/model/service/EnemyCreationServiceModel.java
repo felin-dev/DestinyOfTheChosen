@@ -1,18 +1,17 @@
 package game.destinyofthechosen.model.service;
 
-import game.destinyofthechosen.model.entity.DropListEntity;
 import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class EnemyCreationServiceModel {
 
     private String name;
     private MultipartFile image;
     private Integer level;
+    private Integer experience;
     private Integer health;
     private Integer attack;
     private Integer goldDropUpperThreshold;
@@ -43,6 +42,15 @@ public class EnemyCreationServiceModel {
 
     public EnemyCreationServiceModel setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public EnemyCreationServiceModel setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 

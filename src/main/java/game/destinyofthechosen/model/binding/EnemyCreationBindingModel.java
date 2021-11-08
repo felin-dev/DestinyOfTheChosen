@@ -23,8 +23,13 @@ public class EnemyCreationBindingModel {
     @NotNullFile
     private MultipartFile image;
 
+    @NotNull(message = "Level is required.")
     @Positive(message = "The enemy level must be a positive number.")
     private Integer level;
+
+    @NotNull(message = "Experience is required.")
+    @Positive(message = "The enemy experience must be a positive number.")
+    private Integer experience;
 
     @NotNull(message = "Health is required.")
     @Positive(message = "The enemy health must be a positive number.")
@@ -68,6 +73,15 @@ public class EnemyCreationBindingModel {
 
     public EnemyCreationBindingModel setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public EnemyCreationBindingModel setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 

@@ -37,6 +37,11 @@ public class AdminController {
         return false;
     }
 
+    @ModelAttribute("goldLowerThresholdBiggerOrEqualThanUpperThreshold")
+    public Boolean goldLowerThresholdBiggerOrEqualThanUpperThreshold() {
+        return false;
+    }
+
     @ModelAttribute("imageNotSupported")
     public Boolean imageNotSupported() {
         return false;
@@ -58,6 +63,14 @@ public class AdminController {
             redirectAttributes
                     .addFlashAttribute("enemyCreationBindingModel", enemyCreationBindingModel)
                     .addFlashAttribute("org.springframework.validation.BindingResult.enemyCreationBindingModel", bindingResult);
+
+            return "redirect:/admin/enemies/create";
+        }
+
+        if (enemyCreationBindingModel.getGoldDropLowerThreshold() >= enemyCreationBindingModel.getGoldDropUpperThreshold()) {
+            redirectAttributes
+                    .addFlashAttribute("enemyCreationBindingModel", enemyCreationBindingModel)
+                    .addFlashAttribute("goldLowerThresholdBiggerOrEqualThanUpperThreshold", true);
 
             return "redirect:/admin/enemies/create";
         }

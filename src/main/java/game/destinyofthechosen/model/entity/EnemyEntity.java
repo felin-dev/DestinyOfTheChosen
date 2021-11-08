@@ -15,7 +15,10 @@ public class EnemyEntity extends BaseEntity {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Integer level = 1;
+    private Integer level;
+
+    @Column(nullable = false)
+    private Integer experience;
 
     @Column(nullable = false)
     private Integer health;
@@ -47,6 +50,24 @@ public class EnemyEntity extends BaseEntity {
 
     public EnemyEntity setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public EnemyEntity setLevel(Integer level) {
+        this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public EnemyEntity setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 
@@ -83,15 +104,6 @@ public class EnemyEntity extends BaseEntity {
 
     public EnemyEntity setGoldDropLowerThreshold(Integer goldDropLowerThreshold) {
         this.goldDropLowerThreshold = goldDropLowerThreshold;
-        return this;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public EnemyEntity setLevel(Integer level) {
-        this.level = level;
         return this;
     }
 
