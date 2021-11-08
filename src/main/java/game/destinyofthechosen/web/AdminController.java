@@ -52,7 +52,7 @@ public class AdminController {
 
         model.addAttribute("items", ItemNameEnum.values());
 
-        return "create-enemy";
+        return "enemy-creation";
     }
 
     @PostMapping("/admin/enemies/create")

@@ -20,7 +20,7 @@
                 <label for="username" class="fs-5 pt-3">Username</label>
                 <input th:field="*{username}"
                        id="username"
-                       type="text"
+                       type="text" minlength="5" maxlength="35" required
                        class="form-control"
                        placeholder="Username"/>
                 <p th:if="${#fields.hasErrors('username')}"
@@ -31,7 +31,7 @@
                 <label for="email" class="fs-5 pt-3">Email</label>
                 <input th:field="*{email}"
                        id="email"
-                       type="email"
+                       type="email" required
                        class="form-control"
                        placeholder="Email"/>
                 <p th:if="${#fields.hasErrors('email')}"
@@ -42,7 +42,7 @@
                 <label for="rawPassword" class="fs-5 pt-3">Password</label>
                 <input th:field="*{rawPassword}"
                        id="rawPassword"
-                       type="password"
+                       type="password" minlength="8" maxlength="40" required
                        class="form-control"
                        placeholder="Password"/>
                 <p th:if="${#fields.hasErrors('rawPassword')}"
@@ -56,7 +56,7 @@
                 <label for="confirmPassword" class="fs-5 pt-3">Confirm password</label>
                 <input th:field="*{confirmPassword}"
                        id="confirmPassword"
-                       type="password"
+                       type="password" minlength="8" maxlength="40" required
                        class="form-control"
                        placeholder="Confirm Password"/>
                 <p th:if="${#fields.hasErrors('confirmPassword')}"

@@ -17,9 +17,10 @@
             text-center text-secondary fs-3 fw-bolder mt-5 py-3">Login</h2>
             <div class="form-group">
                 <label for="username" class="fs-5 pt-3">Username</label>
-                <input name="username"
+                <input th:value="${username}"
+                       name="username"
                        id="username"
-                       type="text"
+                       type="text" minlength="5" maxlength="35" required
                        class="form-control"
                        placeholder="Username"/>
             </div>
@@ -27,14 +28,13 @@
                 <label for="password" class="fs-5 pt-3">Password</label>
                 <input name="password"
                        id="password"
-                       type="password"
+                       type="password" minlength="8" maxlength="40" required
                        class="form-control"
                        placeholder="Password"/>
+                <p th:if="${wrongCredentials}" class="errors alert alert-danger">
+                    Wrong credentials.
+                </p>
             </div>
-
-            <p class="invalid-feedback errors alert alert-danger">
-                Invalid username or password.
-            </p>
 
             <input class="btn btn-primary bg-opacity-100 main-link fs-3 py-2 btn-lg mb-3"
                    type="submit"

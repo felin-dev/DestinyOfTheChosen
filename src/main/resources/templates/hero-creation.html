@@ -46,7 +46,8 @@
                 <div class="col-md-4">
                     <label id="hero-name">
                         <input th:field="*{name}"
-                               class="bg-dark form-control text-secondary border-secondary fs-3" type="text"
+                               class="bg-dark form-control text-secondary border-secondary fs-3"
+                               type="text" minlength="5" maxlength="35" required
                                placeholder="Hero name">
                     </label>
                     <p th:if="${#fields.hasErrors('name')}"

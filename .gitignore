@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### Others ###
+/src/main/resources/static/images
 /sass
 /node_modules
 /mvnw

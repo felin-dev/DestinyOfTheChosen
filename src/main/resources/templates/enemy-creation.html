@@ -21,7 +21,7 @@
                 <label for="name" class="fs-5 pt-3">Name</label>
                 <input th:field="*{name}"
                        id="name"
-                       type="text"
+                       type="text" minlength="3" maxlength="35" required
                        class="form-control"
                        placeholder="Enemy name"/>
                 <p th:if="${#fields.hasErrors('name')}"
@@ -35,7 +35,7 @@
                 <label for="image" class="fs-5 pt-3">Image</label>
                 <input th:field="*{image}"
                        id="image"
-                       type="file"
+                       type="file" required
                        class="form-control"/>
                 <p th:if="${#fields.hasErrors('image')}"
                    th:errors="*{image}"
@@ -48,7 +48,7 @@
                 <label for="level" class="fs-5 pt-3">Level</label>
                 <input th:field="*{level}"
                        id="level"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Level"/>
                 <p th:if="${#fields.hasErrors('level')}"
@@ -59,7 +59,7 @@
                 <label for="experience" class="fs-5 pt-3">Experience</label>
                 <input th:field="*{experience}"
                        id="experience"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Experience"/>
                 <p th:if="${#fields.hasErrors('experience')}"
@@ -70,7 +70,7 @@
                 <label for="health" class="fs-5 pt-3">Health</label>
                 <input th:field="*{health}"
                        id="health"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Health"/>
                 <p th:if="${#fields.hasErrors('health')}"
@@ -81,7 +81,7 @@
                 <label for="attack" class="fs-5 pt-3">Attack</label>
                 <input th:field="*{attack}"
                        id="attack"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Attack"/>
                 <p th:if="${#fields.hasErrors('attack')}"
@@ -92,7 +92,7 @@
                 <label for="goldDropLowerThreshold" class="fs-5 pt-3">Gold lower threshold</label>
                 <input th:field="*{goldDropLowerThreshold}"
                        id="goldDropLowerThreshold"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Gold lower threshold"/>
                 <p th:if="${#fields.hasErrors('goldDropLowerThreshold')}"
@@ -105,7 +105,7 @@
                 <label for="goldDropUpperThreshold" class="fs-5 pt-3">Gold upper threshold</label>
                 <input th:field="*{goldDropUpperThreshold}"
                        id="goldDropUpperThreshold"
-                       type="number"
+                       type="number" min="1" required
                        class="form-control"
                        placeholder="Gold upper threshold"/>
                 <p th:if="${#fields.hasErrors('goldDropUpperThreshold')}"
