@@ -38,10 +38,6 @@ public class EnemyServiceImpl implements EnemyService {
     @Override
     public void createEnemy(EnemyCreationServiceModel enemyModel) throws IOException {
 
-        if (enemyRepository.existsByName(enemyModel.getName())) {
-            throw new IllegalArgumentException("Enemy name is already taken.");
-        }
-
         CloudinaryImage cloudinaryImage = cloudinaryService
                 .setFolderName("enemies")
                 .upload(enemyModel.getImage());

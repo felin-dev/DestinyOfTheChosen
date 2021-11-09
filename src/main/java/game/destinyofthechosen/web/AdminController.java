@@ -32,11 +32,6 @@ public class AdminController {
         return new EnemyCreationBindingModel();
     }
 
-    @ModelAttribute("enemyNameIsTaken")
-    public Boolean enemyNameIsTaken() {
-        return false;
-    }
-
     @ModelAttribute("goldLowerThresholdBiggerOrEqualThanUpperThreshold")
     public Boolean goldLowerThresholdBiggerOrEqualThanUpperThreshold() {
         return false;
@@ -77,12 +72,6 @@ public class AdminController {
 
         try {
             enemyService.createEnemy(modelMapper.map(enemyCreationBindingModel, EnemyCreationServiceModel.class));
-        } catch (IllegalArgumentException usernameOrEmailIsTaken) {
-            redirectAttributes
-                    .addFlashAttribute("enemyCreationBindingModel", enemyCreationBindingModel)
-                    .addFlashAttribute("enemyNameIsTaken", true);
-
-            return "redirect:/admin/enemies/create";
         } catch (IOException imageNotSupported) {
             redirectAttributes
                     .addFlashAttribute("enemyCreationBindingModel", enemyCreationBindingModel)

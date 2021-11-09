@@ -31,11 +31,6 @@ public class UserRegisterController {
         return false;
     }
 
-    @ModelAttribute("usernameOrEmailIsTaken")
-    public Boolean usernameOrEmailIsTaken() {
-        return false;
-    }
-
     @ModelAttribute("userRegisterBindingModel")
     public UserRegisterBindingModel userRegisterBindingModel() {
         return new UserRegisterBindingModel();
@@ -66,15 +61,7 @@ public class UserRegisterController {
             return "redirect:register";
         }
 
-        try {
-            userService.register(modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
-        } catch (IllegalArgumentException usernameOrEmailIsTaken) {
-            redirectAttributes
-                    .addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel)
-                    .addFlashAttribute("usernameOrEmailIsTaken", true);
-
-            return "redirect:register";
-        }
+        userService.register(modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
 
         return "redirect:/home";
     }

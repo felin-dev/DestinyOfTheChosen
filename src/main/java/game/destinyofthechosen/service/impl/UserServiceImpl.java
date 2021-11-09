@@ -47,10 +47,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(UserRegisterServiceModel userModel) {
 
-        if (userRepository.existsByUsernameOrEmail(userModel.getUsername(), userModel.getUsername())) {
-            throw new IllegalArgumentException("Username is taken.");
-        }
-
         UserEntity user = new UserEntity(
                 userModel.getUsername(),
                 passwordEncoder.encode(userModel.getRawPassword()),

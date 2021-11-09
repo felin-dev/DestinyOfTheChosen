@@ -25,11 +25,6 @@ public class HeroController {
         this.modelMapper = modelMapper;
     }
 
-    @ModelAttribute("heroNameIsTaken")
-    public Boolean heroNameIsTaken() {
-        return false;
-    }
-
     @ModelAttribute("heroCreationBindingModel")
     public HeroCreationBindingModel heroCreationBindingModel() {
         return new HeroCreationBindingModel();
@@ -53,18 +48,9 @@ public class HeroController {
             return "redirect:/heroes/create";
         }
 
-        try {
-            heroService.createNewHero(
-                    modelMapper.map(heroCreationBindingModel, HeroCreationServiceModel.class),
-                    principal.getName()
-            );
-        } catch (IllegalArgumentException usernameOrEmailIsTaken) {
-            redirectAttributes
-                    .addFlashAttribute("heroCreationBindingModel", heroCreationBindingModel)
-                    .addFlashAttribute("heroNameIsTaken", true);
-
-            return "redirect:/heroes/create";
-        }
+        heroService.createNewHero(
+                modelMapper.map(heroCreationBindingModel, HeroCreationServiceModel.class),
+                principal.getName());
 
         return "redirect:/home";
     }

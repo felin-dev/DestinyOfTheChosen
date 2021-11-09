@@ -24,10 +24,6 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public void createNewHero(HeroCreationServiceModel heroModel, String userUsername) {
 
-        if (heroRepository.existsByName(heroModel.getName())) {
-            throw new IllegalArgumentException("Hero name is taken.");
-        }
-
         UserEntity userEntity = userService.getUserByName(userUsername);
 
         HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
