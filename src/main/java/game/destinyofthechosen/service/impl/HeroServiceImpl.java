@@ -8,8 +8,6 @@ import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class HeroServiceImpl implements HeroService {
 
@@ -22,15 +20,15 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public void createNewHero(HeroCreationServiceModel heroModel, String userUsername) {
+    public void createNewHero(HeroCreationServiceModel heroModel, String username) {
 
-        UserEntity userEntity = userService.getUserByName(userUsername);
+        UserEntity userEntity = userService.getUserByUsername(username);
 
         HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
         newHeroEntity.setUser(userEntity);
         heroRepository.save(newHeroEntity);
 
-        userService.addNewHero(userEntity, newHeroEntity, userUsername);
+        userService.addNewHero(userEntity, newHeroEntity);
     }
 
     private HeroEntity createNewHeroEntity(HeroCreationServiceModel heroModel) {

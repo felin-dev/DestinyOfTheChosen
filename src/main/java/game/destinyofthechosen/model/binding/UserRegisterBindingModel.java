@@ -11,7 +11,7 @@ public class UserRegisterBindingModel {
 
     @UniqueUsername
     @NotBlank(message = "Username is required and must not be blank.")
-    @Length(min = 5, max = 35, message = "Username should be between 5 and 35 characters.")
+    @Length(min = 5, max = 16, message = "Username should be between 5 and 16 characters.")
     private String username;
 
     @NotBlank(message = "Password is required and must not be blank.")

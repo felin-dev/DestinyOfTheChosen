@@ -15,7 +15,6 @@ body {
     background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/home-background.jpg);
     background-position: center;
     background-repeat: no-repeat;
-    /*background-attachment: fixed;*/
     background-size: cover;
     min-height: 100vh;
 }
@@ -24,7 +23,6 @@ body {
     background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/character-creation-background.webp);
     background-position: center;
     background-repeat: no-repeat;
-    /*background-attachment: fixed;*/
     background-size: cover;
     min-height: 100vh;
 }
@@ -35,6 +33,7 @@ body {
 
 .main-link:hover {
     color: #baf508 !important;
+    cursor: pointer;
 }
 
 .hero-image {
@@ -49,6 +48,10 @@ body {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.hidden {
+    display: none;
 }
 
 /*!* */

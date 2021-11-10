@@ -9,7 +9,7 @@ import java.util.*;
 @Table(name = "heroes")
 public class HeroEntity extends BaseEntity {
 
-    @Column(nullable = false, unique = true, length = 35)
+    @Column(nullable = false, unique = true, length = 16)
     private String name;
 
     @Column(nullable = false)

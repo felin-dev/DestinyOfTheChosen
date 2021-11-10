@@ -11,7 +11,7 @@ public class HeroCreationBindingModel {
 
     @UniqueHeroName
     @NotBlank(message = "Hero name is required and must not be blank.")
-    @Length(min = 5, max = 35, message = "Hero name should be between 5 and 35 characters.")
+    @Length(min = 2, max = 16, message = "Hero name should be between 2 and 16 characters.")
     private String name;
 
     @NotNull(message = "Please select a hero class.")

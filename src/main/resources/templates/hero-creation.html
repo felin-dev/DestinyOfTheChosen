@@ -47,7 +47,7 @@
                     <label id="hero-name">
                         <input th:field="*{name}"
                                class="bg-dark form-control text-secondary border-secondary fs-3"
-                               type="text" minlength="5" maxlength="35" required
+                               type="text" minlength="5" maxlength="16" required
                                placeholder="Hero name">
                     </label>
                     <p th:if="${#fields.hasErrors('name')}"
@@ -74,7 +74,7 @@
     <br>
 </main>
 <footer th:replace="/fragments/footer::footer"></footer>
-<script src="/js/application.js"></script>
+<script src="/js/hero-creation.js"></script>
 </body>
 
 </html>

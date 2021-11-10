@@ -20,7 +20,7 @@
                 <label for="username" class="fs-5 pt-3">Username</label>
                 <input th:field="*{username}"
                        id="username"
-                       type="text" minlength="5" maxlength="35" required
+                       type="text" minlength="5" maxlength="16" required
                        class="form-control"
                        placeholder="Username"/>
                 <p th:if="${#fields.hasErrors('username')}"

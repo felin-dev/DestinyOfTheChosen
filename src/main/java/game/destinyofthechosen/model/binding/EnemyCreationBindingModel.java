@@ -16,7 +16,7 @@ public class EnemyCreationBindingModel {
 
     @UniqueEnemyName
     @NotBlank(message = "Enemy name is required and must not be blank.")
-    @Length(min = 3, max = 35, message = "Enemy name should be between 3 and 35 characters.")
+    @Length(min = 2, max = 16, message = "Enemy name should be between 2 and 16 characters.")
     private String name;
 
     @NotNullFile
