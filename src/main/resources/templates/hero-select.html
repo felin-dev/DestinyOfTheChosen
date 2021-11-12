@@ -8,24 +8,25 @@
 <header th:replace="/fragments/navigation::navigation"></header>
 <main class="character-creation-background">
     <br>
-    <form th:object="${heroSelectBindingModel}"
-          th:action="@{/heroes/select}"
-          th:method="POST">
-        <section class="container my-5 text-center justify-content-center px-5
+    <div th:object="${heroSelectBindingModel}">
+        <form th:method="POST"
+              th:action="@{/heroes/select}">
+            <section class="container my-5 text-center justify-content-center px-5
                         bg-primary bg-opacity-75 text-secondary rounded-3">
-            <div class="row">
-                <div class="col-xl-4 mt-5">
-                    <div class="row" id="hero-selection">
-                        <label th:each="hero : ${user.heroes}"
-                               class="border rounded-3 border-secondary no-select main-link fs-5 py-2 my-2">
-                            <input th:field="*{currentHeroId}"
-                                   th:value="${hero.heroId}"
-                                   th:text="${hero.name}"
-                                   th:classappend="${hero.heroRole.name()}"
-                                   type="radio" class="btn-check">
-                            <br/>
-                            <span th:text="|${hero.heroRole.getHeroRole()} lvl ${hero.level}|"></span>
-                            <span th:utext="${hero.name} +
+                <div class="row">
+                    <div class="col-xl-4 mt-5">
+                        <div class="row" id="hero-selection">
+                            <label th:each="hero : ${user.heroes}"
+                                   class="border rounded-3 border-secondary no-select main-link fs-5 py-2 my-2">
+                                <input th:field="*{currentHeroId}"
+                                       th:value="${hero.heroId}"
+                                       th:text="${hero.name}"
+                                       th:classappend="${hero.heroRole.name()}"
+                                       type="radio" class="btn-check"
+                                       required>
+                                <br/>
+                                <span th:text="|${hero.heroRole.getHeroRole()} lvl ${hero.level}|"></span>
+                                <span th:utext="${hero.name} +
                             ' br lvl ' + ${hero.level} + ' ' + ${hero.heroRole.getHeroRole()} +
                             ' br Experience: ' + ${hero.experience} +
                             ' br Health: ' + ${hero.baseHealth} +
@@ -37,27 +38,40 @@
                             ' br Strength: ' + ${hero.baseStrength} +
                             ' br Dexterity: ' + ${hero.baseDexterity} +
                             ' br Energy: ' + ${hero.baseEnergy}" class="hidden" th:classappend="${hero.heroId}"></span>
-                        </label>
-                        <a class="btn border-secondary main-link my-2 fs-3" th:href="@{create}">
-                            Create hero
-                        </a>
+                            </label>
+                            <a class="btn border-secondary main-link my-2 fs-3" th:href="@{create}">
+                                Create hero
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 mt-5 mb-2 pb-3">
+                        <img th:src="${user.currentHero.imageUrl}"
+                             id="hero-image" class="rounded mx-auto d-block hero-image" alt="">
+                    </div>
+                    <div class="col-xl-4 my-2 py-3 mt-5 fs-4">
+                        <p id="hero-information"></p>
                     </div>
                 </div>
-                <div class="col-xl-4 mt-5 mb-2 pb-3">
-                    <img th:src="${user.currentHero.imageUrl}"
-                         id="hero-image" class="rounded mx-auto d-block hero-image" alt="">
+                <div class="pb-3 form-group row justify-content-center">
+                    <div>
+                        <input class="btn text-secondary border-secondary fs-3" type="submit" value="Select hero"/>
+                        <input id="delete-hero-btn" class="btn text-secondary border-secondary fs-3" type="submit"
+                               value="Delete hero"/>
+                    </div>
                 </div>
-                <div class="col-xl-4 my-2 py-3 mt-5 fs-4">
-                    <p id="hero-information"></p>
-                </div>
-            </div>
-            <div class="pb-3 form-group row justify-content-center">
-                <div class="col-md-2">
-                    <input class="btn text-secondary border-secondary fs-3" type="submit" value="Select hero"/>
-                </div>
-            </div>
-        </section>
-    </form>
+            </section>
+        </form>
+        <form th:method="DELETE"
+              th:action="@{/heroes/delete}"
+              id="hero-delete-form"
+              class="hidden invisible">
+            <label>
+                <input th:field="*{currentHeroId}"
+                       id="hero-to-delete" type="text" required>
+            </label>
+            <input class="btn text-secondary border-secondary fs-3" type="submit" value="Delete hero"/>
+        </form>
+    </div>
     <br>
 </main>
 <footer th:replace="/fragments/footer::footer"></footer>
