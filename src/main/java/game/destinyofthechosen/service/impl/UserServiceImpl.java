@@ -1,6 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
-import game.destinyofthechosen.exception.UserNotFoundException;
+import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity getUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException(
+                .orElseThrow(() -> new ObjectNotFoundException(
                         String.format("User with username %s does not exist.", username)));
     }
 
