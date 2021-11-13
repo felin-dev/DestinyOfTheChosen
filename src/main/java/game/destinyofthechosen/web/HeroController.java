@@ -3,9 +3,11 @@ package game.destinyofthechosen.web;
 import game.destinyofthechosen.model.binding.HeroCreationBindingModel;
 import game.destinyofthechosen.model.binding.HeroSelectBindingModel;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
+import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,26 +45,31 @@ public class HeroController {
 
         return "hero-select";
     }
-
+    
+    @SuppressWarnings("SpringElInspection")
+    @PreAuthorize("ownsThisHero(#heroSelectBindingModel)")
     @PostMapping("/heroes/select")
     public String selectHeroConfirm(@Valid HeroSelectBindingModel heroSelectBindingModel,
                                     BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) return "redirect:select";
 
-        // TODO add selected hero to current hero
+        userService.selectNewHero(principal.getName(),
+                modelMapper.map(heroSelectBindingModel, HeroSelectServiceModel.class));
 
         return "redirect:/";
     }
 
+    @SuppressWarnings("SpringElInspection")
+    @PreAuthorize("ownsThisHero(#heroSelectBindingModel)")
     @DeleteMapping("/heroes/delete")
     public String deleteHeroConfirm(@Valid HeroSelectBindingModel heroSelectBindingModel,
                                     BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) return "redirect:select";
 
-
-        // TODO delete selected hero
+        userService.deleteHero(principal.getName(),
+                modelMapper.map(heroSelectBindingModel, HeroSelectServiceModel.class));
 
         return "redirect:/";
     }

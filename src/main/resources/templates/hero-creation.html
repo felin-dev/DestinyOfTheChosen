@@ -47,7 +47,7 @@
                     <label id="hero-name">
                         <input th:field="*{name}"
                                class="bg-dark form-control text-secondary border-secondary fs-3"
-                               type="text" minlength="5" maxlength="16" required
+                               type="text" minlength="2" maxlength="16" required
                                placeholder="Hero name">
                     </label>
                     <p th:if="${#fields.hasErrors('name')}"

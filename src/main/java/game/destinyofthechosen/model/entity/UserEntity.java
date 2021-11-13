@@ -1,5 +1,7 @@
 package game.destinyofthechosen.model.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -23,6 +25,7 @@ public class UserEntity extends BaseEntity {
     )
     private Set<RoleEntity> userRoles = new HashSet<>();
 
+    @Type(type = "uuid-char")
     private UUID currentHeroId;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

@@ -4,6 +4,7 @@ import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
+import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
 import game.destinyofthechosen.model.view.HeroSelectViewModel;
 import game.destinyofthechosen.model.view.UserHeroSelectViewModel;
@@ -42,9 +43,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void selectNewHero(String username, HeroSelectServiceModel selectedHero) {
+        UserEntity user = getUserByUsername(username);
+        user.setCurrentHeroId(selectedHero.getId());
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean userHasNoSelectedHero(String username) {
+        return getUserByUsername(username).getCurrentHeroId() == null;
+    }
+
+    @Override
     public void addNewHero(UserEntity userEntity, HeroEntity newHeroEntity) {
         userEntity.addNewHero(newHeroEntity);
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public void deleteHero(String username, HeroSelectServiceModel heroModel) {
+        UserEntity user = getUserByUsername(username);
+        if (user.getCurrentHeroId().equals(heroModel.getId())) user.setCurrentHeroId(null);
+
+        user.getHeroes().remove(heroRepository.findHeroById(heroModel.getId()).orElseThrow(
+                () -> new ObjectNotFoundException("You are trying to delete hero that does not exist.")));
+
+        userRepository.save(user);
+        heroRepository.deleteById(heroModel.getId());
+    }
+
+    @Override
+    public boolean ownsThisHero(String username, HeroSelectServiceModel selectedHero) {
+        return getUserByUsername(username)
+                .getHeroes()
+                .stream()
+                .anyMatch(hero -> hero.getId().equals(selectedHero.getId()));
     }
 
     @Override
@@ -60,11 +93,6 @@ public class UserServiceImpl implements UserService {
                         .sorted((h1, h2) -> h2.getLevel() - h1.getLevel())
                         .map(hero -> modelMapper.map(hero, HeroSelectViewModel.class))
                         .collect(Collectors.toList()));
-    }
-
-    @Override
-    public boolean userHasNoSelectedHero(String username) {
-        return getUserByUsername(username).getCurrentHeroId() == null;
     }
 
     @Override

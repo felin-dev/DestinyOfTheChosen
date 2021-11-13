@@ -1,6 +1,7 @@
 package game.destinyofthechosen.model.entity;
 
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.*;
@@ -55,6 +56,7 @@ public class HeroEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer baseEnergy;
 
+    @Type(type = "uuid-char")
     private UUID equippedWeapon;
 
     @OneToMany(mappedBy = "hero", fetch = FetchType.EAGER)
