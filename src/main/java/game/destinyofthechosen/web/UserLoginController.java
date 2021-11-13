@@ -28,7 +28,7 @@ public class UserLoginController {
     @PostMapping("/users/login-error")
     public String loginError(
             @ModelAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
-            String username, RedirectAttributes redirectAttributes) {
+                    String username, RedirectAttributes redirectAttributes) {
 
         redirectAttributes
                 .addFlashAttribute("wrongCredentials", true)
