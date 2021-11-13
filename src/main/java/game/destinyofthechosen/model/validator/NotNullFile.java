@@ -1,4 +1,4 @@
-package game.destinyofthechosen.validator;
+package game.destinyofthechosen.model.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueUsernameValidator.class)
-public @interface UniqueUsername {
+@Constraint(validatedBy = NotNullFileValidator.class)
+public @interface NotNullFile {
 
-    String message() default "Username is already taken.";
+    String message() default "The file is required.";
 
     Class<?>[] groups() default { };
 

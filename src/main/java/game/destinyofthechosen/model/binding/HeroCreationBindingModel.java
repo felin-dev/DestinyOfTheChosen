@@ -1,7 +1,7 @@
 package game.destinyofthechosen.model.binding;
 
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
-import game.destinyofthechosen.validator.UniqueHeroName;
+import game.destinyofthechosen.model.validator.UniqueHeroName;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package game.destinyofthechosen.validator;
+package game.destinyofthechosen.model.validator;
 
 import game.destinyofthechosen.service.HeroService;
 

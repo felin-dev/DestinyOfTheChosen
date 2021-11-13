@@ -46,12 +46,9 @@ public class HeroController {
 
     @PostMapping("/heroes/select")
     public String selectHeroConfirm(@Valid HeroSelectBindingModel heroSelectBindingModel,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult, Principal principal) {
 
-        if (bindingResult.hasErrors()) {
-
-            return "redirect:select";
-        }
+        if (bindingResult.hasErrors()) return "redirect:select";
 
         // TODO add selected hero to current hero
 
@@ -60,12 +57,10 @@ public class HeroController {
 
     @DeleteMapping("/heroes/delete")
     public String deleteHeroConfirm(@Valid HeroSelectBindingModel heroSelectBindingModel,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult, Principal principal) {
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) return "redirect:select";
 
-            return "redirect:select";
-        }
 
         // TODO delete selected hero
 

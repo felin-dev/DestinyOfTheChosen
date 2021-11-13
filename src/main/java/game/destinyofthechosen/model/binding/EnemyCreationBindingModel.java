@@ -1,8 +1,8 @@
 package game.destinyofthechosen.model.binding;
 
 import game.destinyofthechosen.model.enumeration.ItemNameEnum;
-import game.destinyofthechosen.validator.NotNullFile;
-import game.destinyofthechosen.validator.UniqueEnemyName;
+import game.destinyofthechosen.model.validator.NotNullFile;
+import game.destinyofthechosen.model.validator.UniqueEnemyName;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 

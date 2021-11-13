@@ -1,4 +1,4 @@
-package game.destinyofthechosen.validator;
+package game.destinyofthechosen.model.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = NotNullFileValidator.class)
-public @interface NotNullFile {
+@Constraint(validatedBy = UniqueEmailValidator.class)
+public @interface UniqueEmail {
 
-    String message() default "The file is required.";
+    String message() default "Email is already taken.";
 
     Class<?>[] groups() default { };
 

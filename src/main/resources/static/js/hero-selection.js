@@ -19,14 +19,14 @@
     document
         .getElementById('delete-hero-btn')
         .addEventListener('click', (event) => {
-           event.preventDefault();
+            event.preventDefault();
 
             if (heroDeleteElement.value) heroDeleteFormElement.submit();
         });
 
     function changeHeroData(heroImage, heroId) {
-        let textContent = document.getElementsByClassName(heroId)[0].textContent;
-        let newText = textContent.replaceAll(' br ', '<br/>')
+        const textContent = document.getElementsByClassName(heroId)[0].textContent;
+        const newText = textContent.replaceAll(' br ', '<br/>')
         heroImageElement.setAttribute('src', heroImage)
         heroInformationElement.innerHTML = newText;
         heroDeleteElement.value = heroId;

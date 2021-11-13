@@ -1,7 +1,7 @@
 package game.destinyofthechosen.model.binding;
 
-import game.destinyofthechosen.validator.UniqueEmail;
-import game.destinyofthechosen.validator.UniqueUsername;
+import game.destinyofthechosen.model.validator.UniqueEmail;
+import game.destinyofthechosen.model.validator.UniqueUsername;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;

@@ -1,5 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
+import game.destinyofthechosen.exception.UserNotFoundException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
@@ -47,18 +48,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        String.format("User with username %s does not exist.", username)));
-    }
-
-    @Override
-    public boolean userHasNoSelectedHero(String username) {
-        return getUserByUsername(username).getCurrentHeroId() == null;
-    }
-
-    @Override
     public UserHeroSelectViewModel getUserWithOwnedHeroes(String username) {
         UserEntity user = getUserByUsername(username);
 
@@ -71,6 +60,18 @@ public class UserServiceImpl implements UserService {
                         .sorted((h1, h2) -> h2.getLevel() - h1.getLevel())
                         .map(hero -> modelMapper.map(hero, HeroSelectViewModel.class))
                         .collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean userHasNoSelectedHero(String username) {
+        return getUserByUsername(username).getCurrentHeroId() == null;
+    }
+
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("User with username %s does not exist.", username)));
     }
 
     @Override

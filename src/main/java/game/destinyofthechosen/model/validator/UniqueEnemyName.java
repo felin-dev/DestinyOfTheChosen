@@ -1,4 +1,4 @@
-package game.destinyofthechosen.validator;
+package game.destinyofthechosen.model.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
