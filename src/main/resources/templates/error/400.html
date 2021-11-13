@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/head::head"></head>
+
+<body>
+<header th:replace="/fragments/navigation::navigation"></header>
+<main class="main-background">
+    <br>
+    <section class="d-flex mx-auto col-md-6 mt-5 pt-4 pb-1
+             text-secondary text-center justify-content-center
+             bg-opacity-75 bg-primary border-3 rounded-3 row">
+        <p class="fs-1">Bad request.</p>
+        <p class="fs-5">You've sent a bad request.</p>
+        <a class="main-link fs-3" th:href="@{/}">back to homepage</a>
+    </section>
+    <br>
+</main>
+<footer th:replace="/fragments/footer::footer"></footer>
+</body>
+
+</html>
