@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class HeroServiceImpl implements HeroService {
 
+    private static final String WARRIOR_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/warrior-f.png";
+    private static final String HUNTER_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/hunter-f.png";
+    private static final String MAGE_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/mage-f.png";
+
+
     private final HeroRepository heroRepository;
     private final UserService userService;
 
@@ -55,7 +60,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(5)
                 .setBaseEnergy(4)
                 .setBaseVitality(6)
-                .setImageUrl("hunter.jpg");
+                .setImageUrl(HUNTER_IMAGE);
     }
 
     private void createWarrior(HeroEntity warrior) {
@@ -69,7 +74,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(6)
                 .setBaseEnergy(5)
                 .setBaseVitality(9)
-                .setImageUrl("warrior.jpg");
+                .setImageUrl(WARRIOR_IMAGE);
     }
 
     private void createMage(HeroEntity mage) {
@@ -83,7 +88,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(4)
                 .setBaseEnergy(12)
                 .setBaseVitality(5)
-                .setImageUrl("mage.jpg");
+                .setImageUrl(MAGE_IMAGE);
     }
 
     @Override

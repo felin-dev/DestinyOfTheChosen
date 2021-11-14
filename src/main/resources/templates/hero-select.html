@@ -26,18 +26,7 @@
                                        required>
                                 <br/>
                                 <span th:text="|${hero.heroRole.getHeroRole()} lvl ${hero.level}|"></span>
-                                <span th:utext="${hero.name} +
-                            ' br lvl ' + ${hero.level} + ' ' + ${hero.heroRole.getHeroRole()} +
-                            ' br Experience: ' + ${hero.experience} +
-                            ' br Health: ' + ${hero.baseHealth} +
-                            ' br Mana: ' + ${hero.baseMana} +
-                            ' br Attack: ' + ${hero.baseAttack} +
-                            ' br Magic Power: ' + ${hero.baseMagicPower} +
-                            ' br Defense: ' + ${hero.baseDefense} +
-                            ' br Vitality: ' + ${hero.baseVitality} +
-                            ' br Strength: ' + ${hero.baseStrength} +
-                            ' br Dexterity: ' + ${hero.baseDexterity} +
-                            ' br Energy: ' + ${hero.baseEnergy}" class="hidden" th:classappend="${hero.heroId}"></span>
+                                <span th:text="${hero.heroInfo()}" class="hidden" th:classappend="${hero.heroId}"></span>
                             </label>
                             <a class="btn border-secondary main-link my-2 fs-3" th:href="@{create}">
                                 Create hero
@@ -45,7 +34,7 @@
                         </div>
                     </div>
                     <div class="col-xl-4 mt-5 mb-2 pb-3">
-                        <img th:src="${user.currentHero.imageUrl}"
+                        <img src=""
                              id="hero-image" class="rounded mx-auto d-block hero-image" alt="">
                     </div>
                     <div class="col-xl-4 my-2 py-3 mt-5 fs-4">
@@ -54,14 +43,14 @@
                 </div>
                 <div class="pb-3 form-group row justify-content-center">
                     <div>
-                        <input class="btn text-secondary border-secondary fs-3" type="submit" value="Select hero"/>
-                        <input id="delete-hero-btn" class="btn text-secondary border-secondary fs-3" type="submit"
-                               value="Delete hero"/>
+                        <button class="btn text-secondary border-secondary fs-3" type="submit">Select hero</button>
+                        <button id="delete-modal-btn" data-toggle="modal" data-target="#heroDeletionModal"
+                                class="btn text-secondary border-secondary fs-3" type="button">
+                            Delete hero</button>
                     </div>
                 </div>
             </section>
         </form>
-        <!--  TODO Modal before deleting  -->
         <form th:method="DELETE"
               th:action="@{/heroes/delete}"
               id="hero-delete-form"
@@ -72,6 +61,26 @@
             </label>
             <input class="btn text-secondary border-secondary fs-3" type="submit" value="Delete hero"/>
         </form>
+        <!-- Modal -->
+        <div class="modal fade" id="heroDeletionModal" tabindex="-1" role="dialog" aria-labelledby="heroDeletionModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content bg-primary border-1 border-secondary">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-2 text-secondary" id="heroDeletionModalLabel">Hero Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body fs-3 text-secondary">
+                        Are you sure you want to delete this hero?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn border-2 border-secondary text-secondary" data-dismiss="modal">Cancel</button>
+                        <button id="delete-hero-btn" type="button" class="btn btn-danger">Delete hero</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <br>
 </main>

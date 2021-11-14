@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteHero(String username, HeroSelectServiceModel heroModel) {
         UserEntity user = getUserByUsername(username);
-        if (user.getCurrentHeroId().equals(heroModel.getId())) user.setCurrentHeroId(null);
+        if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId())) user.setCurrentHeroId(null);
 
         user.getHeroes().remove(heroRepository.findHeroById(heroModel.getId()).orElseThrow(
                 () -> new ObjectNotFoundException("You are trying to delete hero that does not exist.")));

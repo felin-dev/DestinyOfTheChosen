@@ -156,4 +156,11 @@ public class HeroSelectViewModel {
         this.baseEnergy = baseEnergy;
         return this;
     }
+
+    public String heroInfo() {
+        if (heroId == null) return "";
+        return String.format("%s <br> lvl %d %s <br> Experience: %d <br> Health: %d <br> Mana: %d <br> Attack: %d <br> Magic Power: %d <br> Defense: %d <br> Vitality: %d <br> Strength: %d <br> Dexterity: %d <br> Energy: %d"
+                , name, level, heroRole.getHeroRole(), experience, baseHealth, baseMana, baseAttack, baseMagicPower,
+                baseDefense, baseVitality, baseStrength, baseDexterity, baseEnergy);
+    }
 }
