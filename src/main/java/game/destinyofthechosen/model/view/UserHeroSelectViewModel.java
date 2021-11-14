@@ -5,23 +5,23 @@ import java.util.List;
 
 public class UserHeroSelectViewModel {
 
-    private HeroSelectViewModel currentHero;
-    private List<HeroSelectViewModel> heroes = new ArrayList<>();
+    private HeroInfoViewModel currentHero;
+    private List<HeroInfoViewModel> heroes = new ArrayList<>();
 
-    public HeroSelectViewModel getCurrentHero() {
+    public HeroInfoViewModel getCurrentHero() {
         return currentHero;
     }
 
-    public UserHeroSelectViewModel setCurrentHero(HeroSelectViewModel currentHero) {
+    public UserHeroSelectViewModel setCurrentHero(HeroInfoViewModel currentHero) {
         this.currentHero = currentHero;
         return this;
     }
 
-    public List<HeroSelectViewModel> getHeroes() {
+    public List<HeroInfoViewModel> getHeroes() {
         return heroes;
     }
 
-    public UserHeroSelectViewModel setHeroes(List<HeroSelectViewModel> heroes) {
+    public UserHeroSelectViewModel setHeroes(List<HeroInfoViewModel> heroes) {
         this.heroes = heroes;
         return this;
     }

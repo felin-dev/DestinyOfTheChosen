@@ -4,7 +4,7 @@ import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 
 import java.util.UUID;
 
-public class HeroSelectViewModel {
+public class HeroInfoViewModel {
 
     private UUID heroId;
     private String name;
@@ -26,7 +26,7 @@ public class HeroSelectViewModel {
         return heroId;
     }
 
-    public HeroSelectViewModel setHeroId(UUID heroId) {
+    public HeroInfoViewModel setHeroId(UUID heroId) {
         this.heroId = heroId;
         return this;
     }
@@ -35,7 +35,7 @@ public class HeroSelectViewModel {
         return name;
     }
 
-    public HeroSelectViewModel setName(String name) {
+    public HeroInfoViewModel setName(String name) {
         this.name = name;
         return this;
     }
@@ -44,7 +44,7 @@ public class HeroSelectViewModel {
         return heroRole;
     }
 
-    public HeroSelectViewModel setHeroRole(HeroRoleEnum heroRole) {
+    public HeroInfoViewModel setHeroRole(HeroRoleEnum heroRole) {
         this.heroRole = heroRole;
         return this;
     }
@@ -53,7 +53,7 @@ public class HeroSelectViewModel {
         return imageUrl;
     }
 
-    public HeroSelectViewModel setImageUrl(String imageUrl) {
+    public HeroInfoViewModel setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -62,7 +62,7 @@ public class HeroSelectViewModel {
         return level;
     }
 
-    public HeroSelectViewModel setLevel(Integer level) {
+    public HeroInfoViewModel setLevel(Integer level) {
         this.level = level;
         return this;
     }
@@ -71,7 +71,7 @@ public class HeroSelectViewModel {
         return experience;
     }
 
-    public HeroSelectViewModel setExperience(Integer experience) {
+    public HeroInfoViewModel setExperience(Integer experience) {
         this.experience = experience;
         return this;
     }
@@ -80,7 +80,7 @@ public class HeroSelectViewModel {
         return baseHealth;
     }
 
-    public HeroSelectViewModel setBaseHealth(Integer baseHealth) {
+    public HeroInfoViewModel setBaseHealth(Integer baseHealth) {
         this.baseHealth = baseHealth;
         return this;
     }
@@ -89,7 +89,7 @@ public class HeroSelectViewModel {
         return baseMana;
     }
 
-    public HeroSelectViewModel setBaseMana(Integer baseMana) {
+    public HeroInfoViewModel setBaseMana(Integer baseMana) {
         this.baseMana = baseMana;
         return this;
     }
@@ -98,7 +98,7 @@ public class HeroSelectViewModel {
         return baseAttack;
     }
 
-    public HeroSelectViewModel setBaseAttack(Integer baseAttack) {
+    public HeroInfoViewModel setBaseAttack(Integer baseAttack) {
         this.baseAttack = baseAttack;
         return this;
     }
@@ -107,7 +107,7 @@ public class HeroSelectViewModel {
         return baseMagicPower;
     }
 
-    public HeroSelectViewModel setBaseMagicPower(Integer baseMagicPower) {
+    public HeroInfoViewModel setBaseMagicPower(Integer baseMagicPower) {
         this.baseMagicPower = baseMagicPower;
         return this;
     }
@@ -116,7 +116,7 @@ public class HeroSelectViewModel {
         return baseDefense;
     }
 
-    public HeroSelectViewModel setBaseDefense(Integer baseDefense) {
+    public HeroInfoViewModel setBaseDefense(Integer baseDefense) {
         this.baseDefense = baseDefense;
         return this;
     }
@@ -125,7 +125,7 @@ public class HeroSelectViewModel {
         return baseVitality;
     }
 
-    public HeroSelectViewModel setBaseVitality(Integer baseVitality) {
+    public HeroInfoViewModel setBaseVitality(Integer baseVitality) {
         this.baseVitality = baseVitality;
         return this;
     }
@@ -134,7 +134,7 @@ public class HeroSelectViewModel {
         return baseStrength;
     }
 
-    public HeroSelectViewModel setBaseStrength(Integer baseStrength) {
+    public HeroInfoViewModel setBaseStrength(Integer baseStrength) {
         this.baseStrength = baseStrength;
         return this;
     }
@@ -143,7 +143,7 @@ public class HeroSelectViewModel {
         return baseDexterity;
     }
 
-    public HeroSelectViewModel setBaseDexterity(Integer baseDexterity) {
+    public HeroInfoViewModel setBaseDexterity(Integer baseDexterity) {
         this.baseDexterity = baseDexterity;
         return this;
     }
@@ -152,7 +152,7 @@ public class HeroSelectViewModel {
         return baseEnergy;
     }
 
-    public HeroSelectViewModel setBaseEnergy(Integer baseEnergy) {
+    public HeroInfoViewModel setBaseEnergy(Integer baseEnergy) {
         this.baseEnergy = baseEnergy;
         return this;
     }

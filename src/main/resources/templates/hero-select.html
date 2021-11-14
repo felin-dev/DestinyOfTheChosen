@@ -28,7 +28,7 @@
                                 <span th:text="|${hero.heroRole.getHeroRole()} lvl ${hero.level}|"></span>
                                 <span th:text="${hero.heroInfo()}" class="hidden" th:classappend="${hero.heroId}"></span>
                             </label>
-                            <a class="btn border-secondary main-link my-2 fs-3" th:href="@{create}">
+                            <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/heroes/create}">
                                 Create hero
                             </a>
                         </div>

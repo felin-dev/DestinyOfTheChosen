@@ -1,15 +1,11 @@
 package game.destinyofthechosen.service;
 
-import game.destinyofthechosen.model.binding.HeroSelectBindingModel;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
-import game.destinyofthechosen.model.view.HeroSelectViewModel;
+import game.destinyofthechosen.model.view.HeroSelectedViewModel;
 import game.destinyofthechosen.model.view.UserHeroSelectViewModel;
-
-import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
 
@@ -32,4 +28,6 @@ public interface UserService {
     boolean ownsThisHero(String username, HeroSelectServiceModel selectedHero);
 
     void deleteHero(String name, HeroSelectServiceModel map);
+
+    HeroSelectedViewModel getCurrentHero(String username);
 }

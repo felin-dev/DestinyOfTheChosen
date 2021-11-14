@@ -6,7 +6,8 @@ import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
-import game.destinyofthechosen.model.view.HeroSelectViewModel;
+import game.destinyofthechosen.model.view.HeroInfoViewModel;
+import game.destinyofthechosen.model.view.HeroSelectedViewModel;
 import game.destinyofthechosen.model.view.UserHeroSelectViewModel;
 import game.destinyofthechosen.repository.HeroRepository;
 import game.destinyofthechosen.repository.UserRepository;
@@ -50,6 +51,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public HeroSelectedViewModel getCurrentHero(String username) {
+        return modelMapper.map(
+                heroRepository.findHeroById(getUserByUsername(username).getCurrentHeroId())
+                        .orElseThrow(
+                                () -> new ObjectNotFoundException("Selected hero does not exist.")),
+                HeroSelectedViewModel.class);
+    }
+
+    @Override
     public boolean userHasNoSelectedHero(String username) {
         return getUserByUsername(username).getCurrentHeroId() == null;
     }
@@ -63,7 +73,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteHero(String username, HeroSelectServiceModel heroModel) {
         UserEntity user = getUserByUsername(username);
-        if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId())) user.setCurrentHeroId(null);
+        if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId()))
+            user.setCurrentHeroId(null);
 
         user.getHeroes().remove(heroRepository.findHeroById(heroModel.getId()).orElseThrow(
                 () -> new ObjectNotFoundException("You are trying to delete hero that does not exist.")));
@@ -86,12 +97,12 @@ public class UserServiceImpl implements UserService {
 
         return new UserHeroSelectViewModel()
                 .setCurrentHero(modelMapper.map(heroRepository.
-                        findHeroById(user.getCurrentHeroId()).orElse(new HeroEntity()), HeroSelectViewModel.class))
+                        findHeroById(user.getCurrentHeroId()).orElse(new HeroEntity()), HeroInfoViewModel.class))
                 .setHeroes(user
                         .getHeroes()
                         .stream()
                         .sorted((h1, h2) -> h2.getLevel() - h1.getLevel())
-                        .map(hero -> modelMapper.map(hero, HeroSelectViewModel.class))
+                        .map(hero -> modelMapper.map(hero, HeroInfoViewModel.class))
                         .collect(Collectors.toList()));
     }
 
