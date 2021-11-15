@@ -17,6 +17,7 @@ public class EnemyCreationServiceModel {
     private Integer goldDropUpperThreshold;
     private Integer goldDropLowerThreshold;
     private List<ItemNameEnum> dropList = new ArrayList<>();
+    private String zoneName;
 
     public String getName() {
         return name;
@@ -96,6 +97,15 @@ public class EnemyCreationServiceModel {
 
     public EnemyCreationServiceModel setDropList(List<ItemNameEnum> dropList) {
         this.dropList = dropList;
+        return this;
+    }
+
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public EnemyCreationServiceModel setZoneName(String zoneName) {
+        this.zoneName = zoneName;
         return this;
     }
 

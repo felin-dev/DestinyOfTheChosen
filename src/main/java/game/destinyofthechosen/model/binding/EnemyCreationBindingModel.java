@@ -48,6 +48,9 @@ public class EnemyCreationBindingModel {
 
     private List<ItemNameEnum> dropList = new ArrayList<>();
 
+    @NotNull
+    private String zoneName;
+
     public String getName() {
         return name;
     }
@@ -126,6 +129,15 @@ public class EnemyCreationBindingModel {
 
     public EnemyCreationBindingModel setDropList(List<ItemNameEnum> dropList) {
         this.dropList = dropList;
+        return this;
+    }
+
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public EnemyCreationBindingModel setZoneName(String zoneName) {
+        this.zoneName = zoneName;
         return this;
     }
 }

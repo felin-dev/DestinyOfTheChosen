@@ -25,7 +25,11 @@
                     <div class="dropdown-menu text-secondary bg-primary rounded-3" aria-labelledby="dropdownMenuButton">
                         <a class="nav-link main-link no-select" th:href="@{/users/profile}">Profile</a>
                         <a class="nav-link main-link no-select" th:href="@{/users/inventory}">Inventory</a>
-                        <div class="dropdown-divider border-2 border-secondary" sec:authorize="hasRole('ROLE_ADMIN')"></div>
+                        <div class="dropdown-divider border-2 border-secondary"
+                             sec:authorize="hasRole('ROLE_ADMIN')">
+                        </div>
+                        <a class="nav-link main-link no-select" sec:authorize="hasRole('ROLE_ADMIN')"
+                           th:href="@{/admin/zones/create}">Create zone</a>
                         <a class="nav-link main-link no-select" sec:authorize="hasRole('ROLE_ADMIN')"
                            th:href="@{/admin/enemies/create}">Create enemy</a>
                     </div>

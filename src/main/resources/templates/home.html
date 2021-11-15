@@ -19,7 +19,7 @@
             </div>
             <div class="col-xl-4 my-2 py-3 align-self-end border-bottom border-secondary">
                 <p class="fs-4">Fight enemies in your hero's level range, get loot and gain experience</p>
-                <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/enemies/find}">
+                <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/enemies/{level}/find(level = ${currentHero.level})}">
                     Find Enemies
                 </a>
             </div>

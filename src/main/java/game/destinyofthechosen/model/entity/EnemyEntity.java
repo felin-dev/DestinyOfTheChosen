@@ -35,6 +35,9 @@ public class EnemyEntity extends BaseEntity {
     @OneToMany(mappedBy = "enemy", fetch = FetchType.EAGER)
     private List<DropListEntity> dropList = new ArrayList<>();
 
+    @ManyToOne
+    private ZoneEntity zone;
+
     public String getName() {
         return name;
     }
@@ -109,6 +112,15 @@ public class EnemyEntity extends BaseEntity {
 
     public List<DropListEntity> getDropList() {
         return dropList;
+    }
+
+    public ZoneEntity getZone() {
+        return zone;
+    }
+
+    public EnemyEntity setZone(ZoneEntity zone) {
+        this.zone = zone;
+        return this;
     }
 
     public EnemyEntity setDropList(List<DropListEntity> dropList) {

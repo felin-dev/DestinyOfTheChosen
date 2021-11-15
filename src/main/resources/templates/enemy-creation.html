@@ -21,15 +21,12 @@
                 <label for="name" class="fs-5 pt-3">Name</label>
                 <input th:field="*{name}"
                        id="name"
-                       type="text" minlength="3" maxlength="35" required
+                       type="text" minlength="2" maxlength="16" required
                        class="form-control"
                        placeholder="Enemy name"/>
                 <p th:if="${#fields.hasErrors('name')}"
                    th:errors="*{name}"
                    class="errors alert alert-danger"></p>
-                <p th:if="${enemyNameIsTaken}" class="errors alert alert-danger">
-                    Enemy name is taken.
-                </p>
             </div>
             <div class="form-group">
                 <label for="image" class="fs-5 pt-3">Image</label>
@@ -118,7 +115,7 @@
                 <label class="fs-5 pt-3">Drop list</label>
                 <div class="dropdown">
                     <button class="btn btn-primary text-secondary dropdown-toggle" type="button"
-                            id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            id="dropdownMenuItems" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Items
                     </button>
                     <div class="dropdown-menu text-secondary bg-primary rounded-3" aria-labelledby="dropdownMenuButton">
@@ -134,6 +131,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="form-group">
+                <label class="fs-5 pt-3">Zones list</label>
+                <label for="zoneSelect"></label>
+                <select th:field="*{zoneName}" class="custom-select" id="zoneSelect">
+                    <option th:each="zone : ${zones}"
+                            th:value="${zone.name}"
+                            th:text="|${zone.name} - level requirement ${zone.levelRequirement}|"
+                            class="fs-5"
+                    ></option>
+                </select>
             </div>
 
             <input class="btn btn-primary bg-opacity-100 main-link fs-3 py-2 btn-lg mb-3"
