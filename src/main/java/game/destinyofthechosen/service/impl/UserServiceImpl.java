@@ -1,6 +1,7 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
+import game.destinyofthechosen.exception.UserHasNoPermissionToAccessException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
@@ -81,6 +82,14 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         heroRepository.deleteById(heroModel.getId());
+    }
+
+    @Override
+    public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
+        HeroEntity heroEntity = heroRepository.findHeroById(getUserByUsername(username).getCurrentHeroId())
+                .orElseThrow(() -> new UserHasNoPermissionToAccessException("User has no selected hero."));
+
+        return heroEntity.getLevel() >= levelRequirement;
     }
 
     @Override

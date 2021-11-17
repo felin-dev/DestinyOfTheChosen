@@ -6,8 +6,23 @@
 
 <body>
 <header th:replace="/fragments/navigation::navigation"></header>
-<main class="main-background">
-    <!-- TODO -->
+<main th:object="${zone}" th:style="'background: url(' + *{imageUrl} + ') no-repeat center fixed;'">
+    <br>
+    <div class="container-sm my-5">
+        <div class="row justify-content-center">
+            <div th:each="enemy : *{enemies}" class="text-center justify-content-center
+               bg-primary bg-opacity-75 text-secondary rounded-3 p-3 m-3"
+                 style="width: 18rem;">
+                <img class="card-img-top" th:src="${enemy.imageUrl}" alt="Enemy image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="|${enemy.name} ${enemy.level}|"></h5>
+                    <p class="card-text" th:utext="|Health: ${enemy.health}<br>Attack: ${enemy.attack}|"></p>
+                    <a th:href="@{/enemies/{id}/attack(id = ${enemy.id})}" class="btn bg-primary main-link">Attack</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
 </main>
 <footer th:replace="/fragments/footer::footer"></footer>
 </body>

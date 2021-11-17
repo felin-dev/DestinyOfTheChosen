@@ -30,4 +30,6 @@ public interface UserService {
     void deleteHero(String name, HeroSelectServiceModel map);
 
     HeroSelectedViewModel getCurrentHero(String username);
+
+    boolean isOverTheLevelRequirement(String username, Integer levelRequirement);
 }
