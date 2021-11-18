@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,16 +38,27 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public ZoneWithEnemiesViewModel getZoneByLevelRequirement(String username, Integer levelRequirement) {
+    public List<ZoneViewModel> getZonesInHeroLevelRange(String username, Integer levelRequirement) {
 
-        if (!userService.isOverTheLevelRequirement(username, levelRequirement))
-            throw new UserHasNoPermissionToAccessException("User's level is too low for that zone.");
+        userIsOverTheLevelRequirement(username, levelRequirement);
 
         List<ZoneEntity> zoneEntities = zoneRepository.findByLevelLowerOrEqual(levelRequirement)
                 .orElseThrow(() -> new ObjectNotFoundException("There is no levels within that level requirement."));
 
-        // TODO get the exact zone when zone view is ready
-        ZoneEntity zoneEntity = zoneEntities.get(0);
+        return zoneEntities
+                .stream()
+                .sorted(Comparator.comparingInt(ZoneEntity::getLevelRequirement))
+                .map(zoneEntity -> modelMapper.map(zoneEntity, ZoneViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ZoneWithEnemiesViewModel getZoneById(String username, UUID id) {
+
+        ZoneEntity zoneEntity = zoneRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("There is no zone with such id."));
+
+        userIsOverTheLevelRequirement(username, zoneEntity.getLevelRequirement());
 
         ZoneWithEnemiesViewModel zoneViewModel = modelMapper.map(zoneEntity, ZoneWithEnemiesViewModel.class);
         zoneViewModel
@@ -84,5 +96,10 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public boolean isZoneNameFree(String zoneName) {
         return !zoneRepository.existsByName(zoneName);
+    }
+
+    private void userIsOverTheLevelRequirement(String username, Integer levelRequirement) {
+        if (!userService.isOverTheLevelRequirement(username, levelRequirement))
+            throw new UserHasNoPermissionToAccessException("User's level is too low for that zone.");
     }
 }

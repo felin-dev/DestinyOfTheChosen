@@ -18,10 +18,10 @@ public class EnemyController {
         this.zoneService = zoneService;
     }
 
-    @GetMapping("/enemies/{level}/find")
-    public String findEnemies(@PathVariable Integer level, Principal principal, Model model) {
+    @GetMapping("/enemies/{id}/find")
+    public String findEnemies(@PathVariable UUID id, Principal principal, Model model) {
 
-        model.addAttribute("zone", zoneService.getZoneByLevelRequirement(principal.getName(), level));
+        model.addAttribute("zone", zoneService.getZoneById(principal.getName(), id));
 
         return "enemies";
     }
