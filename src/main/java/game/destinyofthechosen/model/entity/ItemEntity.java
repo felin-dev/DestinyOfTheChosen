@@ -19,7 +19,7 @@ public class ItemEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ItemTypeEnum type;
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "item")
     private List<StatEntity> stats = new ArrayList<>();
 
     @Column(nullable = false)

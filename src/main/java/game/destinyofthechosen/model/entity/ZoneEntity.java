@@ -17,7 +17,7 @@ public class ZoneEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer levelRequirement;
 
-    @OneToMany(mappedBy = "zone", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "zone")
     private Set<EnemyEntity> enemies = new LinkedHashSet<>();
 
     public String getName() {

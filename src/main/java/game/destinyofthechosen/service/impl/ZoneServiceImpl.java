@@ -16,6 +16,7 @@ import game.destinyofthechosen.service.ZoneService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -53,6 +54,7 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
+    @Transactional
     public ZoneWithEnemiesViewModel getZoneById(String username, UUID id) {
 
         ZoneEntity zoneEntity = zoneRepository.findById(id)
