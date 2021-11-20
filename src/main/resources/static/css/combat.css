@@ -1,0 +1,56 @@
+.hero-fight-card {
+    width: 50vh;
+}
+
+.enemy-fight-card {
+    width: 70vh;
+}
+
+.hero-fight-image {
+    transform: scale(-1, 1);
+    width: 33vh;
+}
+
+.hero-fight-image {
+    width: 33vh;
+}
+
+.status-bar {
+    background: rgba(79, 80, 80, 0.53);
+    height: 4vh;
+    margin: 1vh 0 1vh 0;
+    border-radius: 1vh;
+    overflow: hidden;
+}
+
+.status-bar-value {
+    font-weight: bolder;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#hero-health-bar-fill {
+    width: 100%;
+    background: #baf508;
+    transition: width 0.5s;
+}
+
+#hero-health-bar-value {
+    color: #0d6efd;
+}
+
+#hero-mana-bar-fill {
+    width: 100%;
+    background: #baf508;
+    transition: width 0.5s;
+}
+
+#enemy-health-bar-fill {
+    width: 100%;
+    background: #baf508;
+    transition: width 0.5s;
+}
+
+#enemy-health-bar-value {
+    color: #0d6efd;
+}

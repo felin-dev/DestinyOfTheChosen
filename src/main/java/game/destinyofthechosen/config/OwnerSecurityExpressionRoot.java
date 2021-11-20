@@ -2,9 +2,7 @@ package game.destinyofthechosen.config;
 
 import game.destinyofthechosen.exception.UserNotLoggedInException;
 import game.destinyofthechosen.model.binding.HeroSelectBindingModel;
-import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
@@ -13,11 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class OwnerSecurityExpressionRoot extends SecurityExpressionRoot implements
         MethodSecurityExpressionOperations {
 
-    private final ModelMapper modelMapper = new ModelMapper();
-
     private UserService userService;
     private Object filterObject;
     private Object returnObject;
+
     /**
      * Creates a new instance
      *
@@ -31,7 +28,7 @@ public class OwnerSecurityExpressionRoot extends SecurityExpressionRoot implemen
         if (heroSelect.getCurrentHeroId() == null) return false;
 
         return userService.ownsThisHero(currentUsername(),
-                modelMapper.map(heroSelect, HeroSelectServiceModel.class));
+                heroSelect.getCurrentHeroId());
     }
 
     public void setUserService(UserService userService) {
@@ -41,7 +38,7 @@ public class OwnerSecurityExpressionRoot extends SecurityExpressionRoot implemen
     public String currentUsername() {
         Authentication auth = getAuthentication();
 
-        if (auth.getPrincipal() instanceof UserDetails) return ((UserDetails)auth.getPrincipal()).getUsername();
+        if (auth.getPrincipal() instanceof UserDetails) return ((UserDetails) auth.getPrincipal()).getUsername();
 
         throw new UserNotLoggedInException("You must be logged in.");
     }

@@ -1,12 +1,15 @@
 package game.destinyofthechosen.service.impl;
 
+import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
 import game.destinyofthechosen.repository.HeroRepository;
+import game.destinyofthechosen.repository.UserRepository;
 import game.destinyofthechosen.service.HeroService;
-import game.destinyofthechosen.service.UserService;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class HeroServiceImpl implements HeroService {
@@ -17,23 +20,27 @@ public class HeroServiceImpl implements HeroService {
 
 
     private final HeroRepository heroRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public HeroServiceImpl(HeroRepository heroRepository, UserService userService) {
+    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository) {
         this.heroRepository = heroRepository;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void createNewHero(HeroCreationServiceModel heroModel, String username) {
 
-        UserEntity userEntity = userService.getUserByUsername(username);
+        UserEntity userEntity = getUserByUsername(username);
 
         HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
         newHeroEntity.setUser(userEntity);
         heroRepository.save(newHeroEntity);
+    }
 
-        userService.addNewHero(userEntity, newHeroEntity);
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException(
+                        String.format("User with username %s does not exist.", username)));
     }
 
     private HeroEntity createNewHeroEntity(HeroCreationServiceModel heroModel) {
@@ -94,5 +101,16 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public boolean isHeroNameFree(String heroName) {
         return !heroRepository.existsByName(heroName);
+    }
+
+    @Override
+    public HeroEntity getById(UUID id) {
+        return heroRepository.findHeroById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("There is no hero with such id."));
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        heroRepository.deleteById(id);
     }
 }

@@ -1,5 +1,7 @@
 package game.destinyofthechosen.web;
 
+import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.UserService;
 import game.destinyofthechosen.service.ZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +14,14 @@ import java.util.UUID;
 @Controller
 public class EnemyController {
 
+    private final UserService userService;
     private final ZoneService zoneService;
+    private final EnemyService enemyService;
 
-    public EnemyController(ZoneService zoneService) {
+    public EnemyController(UserService userService, ZoneService zoneService, EnemyService enemyService) {
+        this.userService = userService;
         this.zoneService = zoneService;
+        this.enemyService = enemyService;
     }
 
     @GetMapping("/enemies/{id}/find")
@@ -26,10 +32,13 @@ public class EnemyController {
         return "enemies";
     }
 
-    // TODO attack enemies
     @GetMapping("/enemies/{id}/attack")
     public String attackEnemy(@PathVariable UUID id, Principal principal, Model model) {
 
-        return "enemies";
+        userService.setCurrentEnemy(id);
+        model.addAttribute("enemy", enemyService.findById(id));
+        model.addAttribute("hero", userService.getCurrentHeroForCombat(principal.getName()));
+
+        return "fight-enemy";
     }
 }

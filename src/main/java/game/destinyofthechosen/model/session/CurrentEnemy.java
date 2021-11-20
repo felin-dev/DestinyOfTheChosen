@@ -1,26 +1,31 @@
-package game.destinyofthechosen.model.view;
+package game.destinyofthechosen.model.session;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.UUID;
 
-public class EnemyViewModel {
-
+@Component
+@SessionScope
+public class CurrentEnemy {
     private UUID id;
     private String name;
     private String imageUrl;
     private Integer level;
+    private Integer experience;
     private Integer health;
     private Integer currentHealth;
-    private Integer Attack;
-    private String zoneImageUrl;
+    private Integer attack;
     private Integer goldDropUpperThreshold;
     private Integer goldDropLowerThreshold;
     // TODO   private List<DropListEntity> dropList;
+    private String zoneImageUrl;
 
     public UUID getId() {
         return id;
     }
 
-    public EnemyViewModel setId(UUID id) {
+    public CurrentEnemy setId(UUID id) {
         this.id = id;
         return this;
     }
@@ -29,7 +34,7 @@ public class EnemyViewModel {
         return name;
     }
 
-    public EnemyViewModel setName(String name) {
+    public CurrentEnemy setName(String name) {
         this.name = name;
         return this;
     }
@@ -38,7 +43,7 @@ public class EnemyViewModel {
         return imageUrl;
     }
 
-    public EnemyViewModel setImageUrl(String imageUrl) {
+    public CurrentEnemy setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -47,8 +52,17 @@ public class EnemyViewModel {
         return level;
     }
 
-    public EnemyViewModel setLevel(Integer level) {
+    public CurrentEnemy setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public CurrentEnemy setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 
@@ -56,7 +70,11 @@ public class EnemyViewModel {
         return health;
     }
 
-    public EnemyViewModel setHealth(Integer health) {
+    public Integer getBaseHealth() {
+        return health;
+    }
+
+    public CurrentEnemy setHealth(Integer health) {
         this.health = health;
         return this;
     }
@@ -65,26 +83,17 @@ public class EnemyViewModel {
         return currentHealth;
     }
 
-    public EnemyViewModel setCurrentHealth(Integer currentHealth) {
+    public CurrentEnemy setCurrentHealth(Integer currentHealth) {
         this.currentHealth = currentHealth;
         return this;
     }
 
     public Integer getAttack() {
-        return Attack;
+        return attack;
     }
 
-    public EnemyViewModel setAttack(Integer attack) {
-        Attack = attack;
-        return this;
-    }
-
-    public String getZoneImageUrl() {
-        return zoneImageUrl;
-    }
-
-    public EnemyViewModel setZoneImageUrl(String zoneImageUrl) {
-        this.zoneImageUrl = zoneImageUrl;
+    public CurrentEnemy setAttack(Integer attack) {
+        this.attack = attack;
         return this;
     }
 
@@ -92,7 +101,7 @@ public class EnemyViewModel {
         return goldDropUpperThreshold;
     }
 
-    public EnemyViewModel setGoldDropUpperThreshold(Integer goldDropUpperThreshold) {
+    public CurrentEnemy setGoldDropUpperThreshold(Integer goldDropUpperThreshold) {
         this.goldDropUpperThreshold = goldDropUpperThreshold;
         return this;
     }
@@ -101,8 +110,17 @@ public class EnemyViewModel {
         return goldDropLowerThreshold;
     }
 
-    public EnemyViewModel setGoldDropLowerThreshold(Integer goldDropLowerThreshold) {
+    public CurrentEnemy setGoldDropLowerThreshold(Integer goldDropLowerThreshold) {
         this.goldDropLowerThreshold = goldDropLowerThreshold;
+        return this;
+    }
+
+    public String getZoneImageUrl() {
+        return zoneImageUrl;
+    }
+
+    public CurrentEnemy setZoneImageUrl(String zoneImageUrl) {
+        this.zoneImageUrl = zoneImageUrl;
         return this;
     }
 }

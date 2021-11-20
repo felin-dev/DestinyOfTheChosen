@@ -11,12 +11,11 @@
     <div class="container-sm my-5">
         <div class="row justify-content-center">
             <div th:each="zone : ${zones}" class="text-center justify-content-center
-               bg-primary bg-opacity-75 text-secondary rounded-3 p-3 m-3"
-                 style="width: 85vh;">
+               bg-primary bg-opacity-75 text-secondary rounded-3 p-3 m-3 zone-card">
                 <img class="card-img-top" th:src="${zone.imageUrl}" alt="Zone image">
                 <div class="card-body">
                     <h5 class="card-title" th:text="|${zone.name} - level: ${zone.levelRequirement}|"></h5>
-                    <a th:href="@{/enemies/{id}/find(id = ${zone.id})}" class="btn bg-primary main-link">Enter</a>
+                    <a th:href="@{/enemies/{id}/find(id = ${zone.id})}" class="btn bg-primary main-link">Enter Zone</a>
                 </div>
             </div>
         </div>

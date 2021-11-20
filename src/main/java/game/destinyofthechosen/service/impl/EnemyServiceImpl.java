@@ -7,6 +7,7 @@ import game.destinyofthechosen.model.entity.ZoneEntity;
 import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
+import game.destinyofthechosen.model.view.EnemyViewModel;
 import game.destinyofthechosen.repository.DropListRepository;
 import game.destinyofthechosen.repository.EnemyRepository;
 import game.destinyofthechosen.repository.ZoneRepository;
@@ -15,10 +16,9 @@ import game.destinyofthechosen.service.EnemyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EnemyServiceImpl implements EnemyService {
@@ -64,6 +64,21 @@ public class EnemyServiceImpl implements EnemyService {
                                 new DropListEntity()
                                         .setItemName(dropItem)
                                         .setEnemy(enemyEntity)));
+    }
+
+    @Override
+    public EnemyViewModel findById(UUID id) {
+        EnemyEntity enemyEntity = enemyRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("There is no enemy with such id."));
+
+        EnemyViewModel enemyView = modelMapper.map(enemyEntity,
+                EnemyViewModel.class);
+
+        enemyView
+                .setZoneImageUrl(enemyEntity.getZone().getImageUrl())
+                .setCurrentHealth(enemyView.getHealth());
+
+        return enemyView;
     }
 
     @Override

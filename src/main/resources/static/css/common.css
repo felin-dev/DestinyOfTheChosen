@@ -20,14 +20,6 @@ body {
     min-height: 100vh;
 }
 
-.character-creation-background {
-    background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/character-creation-background.webp);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 100vh;
-}
-
 .main-link {
     color: #B2DB34 !important;
 }
@@ -35,11 +27,6 @@ body {
 .main-link:hover {
     color: #baf508 !important;
     cursor: pointer;
-}
-
-.hero-image {
-    background-repeat: no-repeat;
-    width: 350px;
 }
 
 .no-select {

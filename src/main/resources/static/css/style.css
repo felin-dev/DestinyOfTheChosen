@@ -1,4 +1,7 @@
-@import 'login-register.css';
 @import 'common.css';
 @import 'home.css';
+@import 'character-creation.css';
+@import 'zone.css';
+@import 'enemy.css';
+@import 'combat.css';
 @import 'spinner.css';

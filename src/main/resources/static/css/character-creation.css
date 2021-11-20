@@ -1,0 +1,12 @@
+.character-creation-background {
+    background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/character-creation-background.webp);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.hero-image {
+    background-repeat: no-repeat;
+    width: 350px;
+}

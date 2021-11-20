@@ -11,13 +11,14 @@
     <div class="container-sm my-5">
         <div class="row justify-content-center">
             <div th:each="enemy : *{enemies}" class="text-center justify-content-center
-               bg-primary bg-opacity-75 text-secondary rounded-3 p-3 m-3"
-                 style="width: 18rem;">
+               text-secondary p-3 m-3 enemy-card">
                 <img class="card-img-top" th:src="${enemy.imageUrl}" alt="Enemy image">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="|${enemy.name} ${enemy.level}|"></h5>
-                    <p class="card-text" th:utext="|Health: ${enemy.health}<br>Attack: ${enemy.attack}|"></p>
-                    <a th:href="@{/enemies/{id}/attack(id = ${enemy.id})}" class="btn bg-primary main-link">Attack</a>
+                <div class="card-body bg-primary bg-opacity-75 rounded-3 no-select">
+                    <h3 class="card-title" th:text="${enemy.name}"></h3>
+                    <h3 class="card-title border-bottom border-secondary" th:text="|level: ${enemy.level}|"></h3>
+                    <h5 class="card-text" th:text="|Health: ${enemy.health}|"></h5>
+                    <h5 class="card-text" th:text="|Attack: ${enemy.attack}|"></h5>
+                    <a th:href="@{/enemies/{id}/attack(id = ${enemy.id})}" class="btn bg-primary main-link mt-2 fs-5">Attack</a>
                 </div>
             </div>
         </div>

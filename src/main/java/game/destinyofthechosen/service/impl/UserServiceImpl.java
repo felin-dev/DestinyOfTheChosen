@@ -7,11 +7,12 @@ import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
-import game.destinyofthechosen.model.view.HeroInfoViewModel;
-import game.destinyofthechosen.model.view.HeroSelectedViewModel;
-import game.destinyofthechosen.model.view.UserHeroSelectViewModel;
-import game.destinyofthechosen.repository.HeroRepository;
+import game.destinyofthechosen.model.session.CurrentEnemy;
+import game.destinyofthechosen.model.session.CurrentHero;
+import game.destinyofthechosen.model.view.*;
 import game.destinyofthechosen.repository.UserRepository;
+import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserRoleService;
 import game.destinyofthechosen.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -23,21 +24,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final HeroRepository heroRepository;
+    private final EnemyService enemyService;
+    private final HeroService heroService;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
     private final SecurityUserServiceImpl securityUserService;
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, HeroRepository heroRepository, UserRoleService userRoleService, PasswordEncoder passwordEncoder, SecurityUserServiceImpl securityUserService, ModelMapper modelMapper) {
+    private CurrentHero currentHero;
+    private CurrentEnemy currentEnemy;
+
+    public UserServiceImpl(UserRepository userRepository, EnemyService enemyService, HeroService heroService, UserRoleService userRoleService, PasswordEncoder passwordEncoder, SecurityUserServiceImpl securityUserService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
-        this.heroRepository = heroRepository;
+        this.enemyService = enemyService;
+        this.heroService = heroService;
         this.userRoleService = userRoleService;
         this.passwordEncoder = passwordEncoder;
         this.securityUserService = securityUserService;
@@ -45,19 +52,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void selectNewHero(String username, HeroSelectServiceModel selectedHero) {
-        UserEntity user = getUserByUsername(username);
-        user.setCurrentHeroId(selectedHero.getId());
-        userRepository.save(user);
+    public void setCurrentEnemy(UUID id) {
+        currentEnemy = modelMapper.map(enemyService.findById(id), CurrentEnemy.class);
+        currentEnemy
+                .setCurrentHealth(currentEnemy.getHealth());
     }
 
     @Override
-    public HeroSelectedViewModel getCurrentHero(String username) {
-        return modelMapper.map(
-                heroRepository.findHeroById(getUserByUsername(username).getCurrentHeroId())
-                        .orElseThrow(
-                                () -> new ObjectNotFoundException("Selected hero does not exist.")),
-                HeroSelectedViewModel.class);
+    public CombatStatusViewModel performAttackOnEnemy(String username) {
+
+        if (currentHero.getName() == null) setCurrentHero(username);
+        checkIfTheCurrentEntityIsNull(currentEnemy.getName() == null, "There is no selected enemy.");
+
+        CombatStatusViewModel combatStatusViewModel = new CombatStatusViewModel();
+        combatStatusViewModel.setHero(modelMapper.map(currentHero, HeroCombatViewModel.class));
+        combatStatusViewModel.setEnemy(modelMapper.map(currentEnemy, EnemyViewModel.class));
+
+        return combatStatusViewModel;
+    }
+
+    private void setCurrentHero(String username) {
+        UUID currentHeroId = getUserByUsername(username)
+                .getCurrentHeroId();
+
+        checkIfTheCurrentEntityIsNull(currentHeroId == null, "There is no selected hero.");
+        currentHero = modelMapper.map(heroService.getById(currentHeroId), CurrentHero.class);
+        currentHero
+                .setCurrentHealth(currentHero.getBaseHealth())
+                .setCurrentMana(currentHero.getBaseMana());
+    }
+
+    private void checkIfTheCurrentEntityIsNull(Boolean condition, String message) {
+        if (condition) throw new UserHasNoPermissionToAccessException(message);
+    }
+
+    @Override
+    public void selectNewHero(String username, HeroSelectServiceModel selectedHero) {
+        UserEntity userEntity = getUserByUsername(username);
+
+        userEntity.setCurrentHeroId(selectedHero.getId());
+        userRepository.save(userEntity);
+
+        setCurrentHero(username);
     }
 
     @Override
@@ -66,47 +102,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addNewHero(UserEntity userEntity, HeroEntity newHeroEntity) {
-        userEntity.addNewHero(newHeroEntity);
-        userRepository.save(userEntity);
-    }
-
-    @Override
     public void deleteHero(String username, HeroSelectServiceModel heroModel) {
         UserEntity user = getUserByUsername(username);
         if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId()))
             user.setCurrentHeroId(null);
 
-        user.getHeroes().remove(heroRepository.findHeroById(heroModel.getId()).orElseThrow(
-                () -> new ObjectNotFoundException("You are trying to delete hero that does not exist.")));
+        user.getHeroes().remove(heroService.getById(heroModel.getId()));
 
         userRepository.save(user);
-        heroRepository.deleteById(heroModel.getId());
+        heroService.deleteById(heroModel.getId());
+    }
+
+    @Override
+    public HeroSelectedViewModel getCurrentHero(String username) {
+        return mapCurrentHeroToViewModel(username, HeroSelectedViewModel.class);
+    }
+
+    @Override
+    public HeroCombatViewModel getCurrentHeroForCombat(String username) {
+        HeroCombatViewModel heroCombatViewModel = mapCurrentHeroToViewModel(username, HeroCombatViewModel.class);
+        heroCombatViewModel
+                .setCurrentHealth(heroCombatViewModel.getBaseHealth())
+                .setCurrentMana(heroCombatViewModel.getBaseMana());
+
+        return heroCombatViewModel;
+    }
+
+    private <T> T mapCurrentHeroToViewModel(String username, Class<T> viewClass) {
+        return modelMapper.map(
+                heroService.getById(getUserByUsername(username).getCurrentHeroId()),
+                viewClass);
     }
 
     @Override
     public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
-        HeroEntity heroEntity = heroRepository.findHeroById(getUserByUsername(username).getCurrentHeroId())
-                .orElseThrow(() -> new UserHasNoPermissionToAccessException("User has no selected hero."));
+        HeroEntity heroEntity = heroService.getById(getUserByUsername(username).getCurrentHeroId());
 
         return heroEntity.getLevel() >= levelRequirement;
     }
 
     @Override
-    public boolean ownsThisHero(String username, HeroSelectServiceModel selectedHero) {
+    public boolean ownsThisHero(String username, UUID selectedHeroId) {
         return getUserByUsername(username)
                 .getHeroes()
                 .stream()
-                .anyMatch(hero -> hero.getId().equals(selectedHero.getId()));
+                .anyMatch(hero -> hero.getId().equals(selectedHeroId));
     }
 
     @Override
     public UserHeroSelectViewModel getUserWithOwnedHeroes(String username) {
         UserEntity user = getUserByUsername(username);
+        HeroEntity heroEntity = new HeroEntity();
+        try {
+            heroEntity = heroService.
+                    getById(user.getCurrentHeroId());
+        } catch (Exception ignore) {}
 
         return new UserHeroSelectViewModel()
-                .setCurrentHero(modelMapper.map(heroRepository.
-                        findHeroById(user.getCurrentHeroId()).orElse(new HeroEntity()), HeroInfoViewModel.class))
+                .setCurrentHero(modelMapper.map(heroEntity, HeroInfoViewModel.class))
                 .setHeroes(user
                         .getHeroes()
                         .stream()

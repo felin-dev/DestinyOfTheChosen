@@ -3,10 +3,16 @@
     const heroInformationElement = document.getElementById('hero-information');
     const heroDeleteFormElement = document.getElementById('hero-delete-form');
     const heroDeleteElement = document.getElementById('hero-to-delete');
-    const heroSelectionBtnElement = document.querySelector("#hero-selection input");
+    const heroSelectBtn = document.getElementById('hero-select-btn');
+    const heroDeleteBtn = document.getElementById('hero-delete-btn');
+    const selectedHeroElement = document.querySelector("#hero-selection input");
 
     window.addEventListener('load', () => {
-        if (heroSelectionBtnElement) heroSelectionBtnElement.click();
+        if (selectedHeroElement) {
+            selectedHeroElement.click();
+            heroSelectBtn.classList.remove("disabled");
+            heroDeleteBtn.classList.remove("disabled");
+        }
     })
 
     const WARRIOR_IMAGE = 'https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/warrior-f.png';

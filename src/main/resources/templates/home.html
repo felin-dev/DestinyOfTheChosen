@@ -10,22 +10,24 @@
     <br>
     <section class="container my-5 text-center justify-content-center px-5
                         bg-primary bg-opacity-75 text-secondary rounded-3">
-        <div class="row">
+        <div class="row no-select">
             <div class="col-xl-4  my-2 py-3 align-self-end border-bottom border-secondary">
-                <p class="fs-4">Buy random items from the shop in your hero's level range and get lucky</p>
+                <p class="fs-3">Feeling lucky?</p>
+                <p class="fs-4">Buy boxes from the shop containing random items in your hero's level range and get lucky</p>
                 <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/shop/buy}">
                     Buy items
                 </a>
             </div>
             <div class="col-xl-4 my-2 py-3 align-self-end border-bottom border-secondary">
-                <p class="fs-4">Fight enemies in your hero's level range, get loot and gain experience</p>
+                <p class="fs-3">Get stronger!</p>
+                <p class="fs-4">Find zones in your hero's level range, fight enemies, get loot and gain experience</p>
                 <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/zones/{level}/find(level = ${currentHero.level})}">
-                    Find Enemies
+                    Find Zones
                 </a>
             </div>
             <div class="col-xl-4 my-2 py-3 align-self-end border-bottom border-secondary">
                 <div>
-                    <p class="fs-4">Your hero</p>
+                    <p class="fs-3">Your selected hero is:</p>
                     <p class="fs-4" th:text="${currentHero.name}"></p>
                     <p class="fs-4" th:text="|lvl ${currentHero.level} ${currentHero.heroRole.getHeroRole()}|"></p>
                 </div>
