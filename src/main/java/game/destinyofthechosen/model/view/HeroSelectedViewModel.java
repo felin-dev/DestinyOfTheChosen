@@ -7,6 +7,7 @@ public class HeroSelectedViewModel {
     private String name;
     private HeroRoleEnum heroRole;
     private Integer level;
+    private Integer experience;
 
     public String getName() {
         return name;
@@ -32,6 +33,15 @@ public class HeroSelectedViewModel {
 
     public HeroSelectedViewModel setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public HeroSelectedViewModel setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 }

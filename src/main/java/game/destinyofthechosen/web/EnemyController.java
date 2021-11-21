@@ -35,6 +35,7 @@ public class EnemyController {
     @GetMapping("/enemies/{id}/attack")
     public String attackEnemy(@PathVariable UUID id, Principal principal, Model model) {
 
+        userService.setCurrentHero(principal.getName());
         userService.setCurrentEnemy(id);
         model.addAttribute("enemy", enemyService.findById(id));
         model.addAttribute("hero", userService.getCurrentHeroForCombat(principal.getName()));

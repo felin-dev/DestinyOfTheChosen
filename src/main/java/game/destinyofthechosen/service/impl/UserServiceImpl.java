@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,26 +53,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setCurrentEnemy(UUID id) {
-        currentEnemy = modelMapper.map(enemyService.findById(id), CurrentEnemy.class);
-        currentEnemy
-                .setCurrentHealth(currentEnemy.getHealth());
-    }
-
-    @Override
     public CombatStatusViewModel performAttackOnEnemy(String username) {
 
-        if (currentHero.getName() == null) setCurrentHero(username);
-        checkIfTheCurrentEntityIsNull(currentEnemy.getName() == null, "There is no selected enemy.");
+        if (currentHero == null) setCurrentHero(username);
+        checkIfTheCurrentEntityIsNull(currentEnemy == null, "There is no selected enemy.");
 
+        return attackEnemy(username);
+    }
+
+    private CombatStatusViewModel attackEnemy(String username) {
+        if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
+
+        if (currentHero.getCurrentHealth() > 0) {
+            currentEnemy.setCurrentHealth(Math.max(0, currentEnemy.getCurrentHealth() - currentHero.getBaseAttack()));
+        }
+        if (currentEnemy.getCurrentHealth() > 0) {
+            currentHero.setCurrentHealth(
+                    Math.max(0, currentHero.getCurrentHealth() - Math.max(0, currentEnemy.getAttack() - currentHero.getBaseDefense())));
+        }
+
+        if (currentEnemy.getCurrentHealth() <= 0) uponEnemyDeath(username);
+        if (currentHero.getCurrentHealth() <= 0) uponHeroDeath();
+
+        return createCombatStatusView();
+    }
+
+    private void uponEnemyDeath(String username) {
+        currentEnemy.setIsAlive(false);
+        earnGold(username);
+
+        heroService.gainExperience(currentHero.getId(), currentEnemy.getExperience());
+        if (currentHero.getLevel() < heroService.getById(currentHero.getId()).getLevel()) updateCurrentHero(username);
+    }
+
+    private void earnGold(String username) {
+        Integer goldDrop = ThreadLocalRandom.current().nextInt(currentEnemy.getGoldDropLowerThreshold(), currentEnemy.getGoldDropUpperThreshold() + 1);
+        UserEntity userEntity = getUserByUsername(username);
+        userEntity.setGold(userEntity.getGold() + goldDrop);
+        userRepository.save(userEntity);
+    }
+
+    private void uponHeroDeath() {
+        currentHero.setIsAlive(false);
+    }
+
+    private CombatStatusViewModel createCombatStatusView() {
         CombatStatusViewModel combatStatusViewModel = new CombatStatusViewModel();
         combatStatusViewModel.setHero(modelMapper.map(currentHero, HeroCombatViewModel.class));
         combatStatusViewModel.setEnemy(modelMapper.map(currentEnemy, EnemyViewModel.class));
-
         return combatStatusViewModel;
     }
 
-    private void setCurrentHero(String username) {
+    @Override
+    public void setCurrentHero(String username) {
         UUID currentHeroId = getUserByUsername(username)
                 .getCurrentHeroId();
 
@@ -82,8 +116,29 @@ public class UserServiceImpl implements UserService {
                 .setCurrentMana(currentHero.getBaseMana());
     }
 
+    @Override
+    public void updateCurrentHero(String username) {
+        setCurrentHero(username);
+    }
+
+    @Override
+    public void setCurrentEnemy(UUID id) {
+        currentEnemy = modelMapper.map(enemyService.findById(id), CurrentEnemy.class);
+        currentEnemy
+                .setCurrentHealth(currentEnemy.getHealth());
+    }
+
+    @Override
+    public String resetCurrentEnemy() {
+        currentEnemy
+                .setIsAlive(true)
+                .setCurrentHealth(currentEnemy.getHealth());
+
+        return currentEnemy.getName();
+    }
+
     private void checkIfTheCurrentEntityIsNull(Boolean condition, String message) {
-        if (condition) throw new UserHasNoPermissionToAccessException(message);
+        if (condition) throw new ObjectNotFoundException(message);
     }
 
     @Override
@@ -156,7 +211,8 @@ public class UserServiceImpl implements UserService {
         try {
             heroEntity = heroService.
                     getById(user.getCurrentHeroId());
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         return new UserHeroSelectViewModel()
                 .setCurrentHero(modelMapper.map(heroEntity, HeroInfoViewModel.class))

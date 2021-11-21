@@ -9,6 +9,8 @@ import game.destinyofthechosen.repository.UserRepository;
 import game.destinyofthechosen.service.HeroService;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -17,7 +19,7 @@ public class HeroServiceImpl implements HeroService {
     private static final String WARRIOR_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/warrior-f.png";
     private static final String HUNTER_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/hunter-f.png";
     private static final String MAGE_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/mage-f.png";
-
+    private static final Map<Integer, Integer> LEVELING = new LinkedHashMap<>();
 
     private final HeroRepository heroRepository;
     private final UserRepository userRepository;
@@ -25,6 +27,28 @@ public class HeroServiceImpl implements HeroService {
     public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public void gainExperience(UUID id, Integer experience) {
+        HeroEntity heroEntity = getById(id);
+        heroEntity.setExperience(heroEntity.getExperience() + experience);
+        checkIfHeroHasToLevelUp(heroEntity);
+
+        heroRepository.save(heroEntity);
+    }
+
+    private void checkIfHeroHasToLevelUp(HeroEntity heroEntity) {
+        Integer currentLevel = heroEntity.getLevel();
+        if (currentLevel == 20) return;
+
+        Integer experienceNeededForLevelingUp = LEVELING.get(currentLevel + 1);
+        if (heroEntity.getExperience() >= experienceNeededForLevelingUp) heroLeveledUp(heroEntity);
+    }
+
+    private void heroLeveledUp(HeroEntity heroEntity) {
+        heroEntity
+                .levelUp();
     }
 
     @Override
@@ -48,26 +72,12 @@ public class HeroServiceImpl implements HeroService {
         HeroEntity heroEntity = new HeroEntity(heroModel.getName(), heroModel.getHeroRole());
 
         switch (heroEntity.getHeroRole()) {
-            case HUNTER -> createHunter(heroEntity);
             case WARRIOR -> createWarrior(heroEntity);
+            case HUNTER -> createHunter(heroEntity);
             case MAGE -> createMage(heroEntity);
         }
 
         return heroEntity;
-    }
-
-    private void createHunter(HeroEntity hunter) {
-        hunter
-                .setBaseHealth(120)     // vitality x20
-                .setBaseMana(80)        // energy x20
-                .setBaseAttack(25)      // dexterity x2 + strength x1
-                .setBaseMagicPower(4)   // energy x1
-                .setBaseDefense(10)     // base defense increases with items
-                .setBaseDexterity(10)
-                .setBaseStrength(5)
-                .setBaseEnergy(4)
-                .setBaseVitality(6)
-                .setImageUrl(HUNTER_IMAGE);
     }
 
     private void createWarrior(HeroEntity warrior) {
@@ -82,6 +92,20 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseEnergy(5)
                 .setBaseVitality(9)
                 .setImageUrl(WARRIOR_IMAGE);
+    }
+
+    private void createHunter(HeroEntity hunter) {
+        hunter
+                .setBaseHealth(120)     // vitality x20
+                .setBaseMana(80)        // energy x20
+                .setBaseAttack(25)      // dexterity x2 + strength x1
+                .setBaseMagicPower(4)   // energy x1
+                .setBaseDefense(10)     // base defense increases with items
+                .setBaseDexterity(10)
+                .setBaseStrength(5)
+                .setBaseEnergy(4)
+                .setBaseVitality(6)
+                .setImageUrl(HUNTER_IMAGE);
     }
 
     private void createMage(HeroEntity mage) {
@@ -112,5 +136,14 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public void deleteById(UUID id) {
         heroRepository.deleteById(id);
+    }
+
+    static {
+        Integer experience = 1200;
+
+        for (int i = 2; i <= 20; i++) {
+            LEVELING.put(i, experience);
+            experience += experience;
+        }
     }
 }

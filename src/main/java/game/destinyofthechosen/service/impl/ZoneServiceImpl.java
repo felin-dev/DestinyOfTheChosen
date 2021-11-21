@@ -78,6 +78,7 @@ public class ZoneServiceImpl implements ZoneService {
     public List<ZoneViewModel> getAllZones() {
         return zoneRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparingInt(ZoneEntity::getLevelRequirement))
                 .map(zoneEntity -> modelMapper.map(zoneEntity, ZoneViewModel.class))
                 .collect(Collectors.toList());
     }

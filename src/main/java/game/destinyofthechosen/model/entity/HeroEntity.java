@@ -234,4 +234,71 @@ public class HeroEntity extends BaseEntity {
         this.user = user;
         return this;
     }
+
+    public HeroEntity levelUp() {
+        level += 1;
+        stats += 8;
+        switch (heroRole) {
+            case WARRIOR -> {
+//                setBaseHealth(180)     // vitality x20
+//                setBaseMana(100)       // energy x20
+//                setBaseAttack(17)      // strength x2 + dexterity x1
+//                setBaseMagicPower(5)   // energy x1
+//                setBaseDefense(12)     // base defense increases with items
+//                setBaseDexterity(5)
+//                setBaseStrength(6)
+//                setBaseEnergy(5)
+                baseHealth += 40;
+                baseMana += 20;
+                baseAttack += 5;
+                baseMagicPower += 1;
+                baseDefense += 2;
+                baseStrength += 2;
+                baseDexterity += 1;
+                baseEnergy += 1;
+                baseVitality += 2;
+            }
+            case HUNTER ->  {
+                //.setBaseHealth(120)     // vitality x20
+                //.setBaseMana(80)        // energy x20
+                //.setBaseAttack(25)      // dexterity x2 + strength x1
+                //.setBaseMagicPower(4)   // energy x1
+                //.setBaseDefense(10)     // base defense increases with items
+                //.setBaseDexterity(10)
+                //.setBaseStrength(5)
+                //.setBaseEnergy(4)
+                //.setBaseVitality(6)
+                baseHealth += 20;
+                baseMana += 20;
+                baseAttack += 8;
+                baseMagicPower += 2;
+                baseDefense += 1;
+                baseStrength += 2;
+                baseDexterity += 3;
+                baseEnergy += 1;
+                baseVitality += 1;
+            }
+            case MAGE -> {
+                //.setBaseHealth(100)     // vitality x20
+                //.setBaseMana(240)       // energy x20
+                //.setBaseAttack(8)       // dexterity x1 + strength x1
+                //.setBaseMagicPower(24)  // energy x2
+                //.setBaseDefense(8)      // base defense increases with items
+                //.setBaseDexterity(4)
+                //.setBaseStrength(4)
+                //.setBaseEnergy(12)
+                //.setBaseVitality(5)
+                baseHealth += 20;
+                baseMana += 80;
+                baseAttack += 2;
+                baseMagicPower += 8;
+                baseDefense += 1;
+                baseStrength += 1;
+                baseDexterity += 1;
+                baseEnergy += 4;
+                baseVitality += 1;
+            }
+        }
+        return this;
+    }
 }

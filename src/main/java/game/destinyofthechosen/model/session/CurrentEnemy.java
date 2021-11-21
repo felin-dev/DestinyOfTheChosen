@@ -8,6 +8,7 @@ import java.util.UUID;
 @Component
 @SessionScope
 public class CurrentEnemy {
+
     private UUID id;
     private String name;
     private String imageUrl;
@@ -20,6 +21,7 @@ public class CurrentEnemy {
     private Integer goldDropLowerThreshold;
     // TODO   private List<DropListEntity> dropList;
     private String zoneImageUrl;
+    private Boolean isAlive = true;
 
     public UUID getId() {
         return id;
@@ -122,5 +124,31 @@ public class CurrentEnemy {
     public CurrentEnemy setZoneImageUrl(String zoneImageUrl) {
         this.zoneImageUrl = zoneImageUrl;
         return this;
+    }
+
+    public Boolean getIsAlive() {
+        return isAlive;
+    }
+
+    public CurrentEnemy setIsAlive(Boolean isAlive) {
+        this.isAlive = isAlive;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrentEnemy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", level=" + level +
+                ", experience=" + experience +
+                ", health=" + health +
+                ", currentHealth=" + currentHealth +
+                ", attack=" + attack +
+                ", goldDropUpperThreshold=" + goldDropUpperThreshold +
+                ", goldDropLowerThreshold=" + goldDropLowerThreshold +
+                ", zoneImageUrl='" + zoneImageUrl + '\'' +
+                '}';
     }
 }

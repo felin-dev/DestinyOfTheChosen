@@ -38,5 +38,11 @@ public interface UserService {
 
     CombatStatusViewModel performAttackOnEnemy(String username);
 
+    void setCurrentHero(String username);
+
+    void updateCurrentHero(String username);
+
     void setCurrentEnemy(UUID id);
+
+    String resetCurrentEnemy();
 }

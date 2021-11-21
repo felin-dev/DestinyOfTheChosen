@@ -14,4 +14,6 @@ public interface HeroService {
     HeroEntity getById(UUID id);
 
     void deleteById(UUID id);
+
+    void gainExperience(UUID id, Integer experience);
 }

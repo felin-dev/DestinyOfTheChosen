@@ -8,6 +8,7 @@ public class EnemyViewModel {
     private String name;
     private String imageUrl;
     private Integer level;
+    private Integer experience;
     private Integer health;
     private Integer currentHealth;
     private Integer Attack;
@@ -49,6 +50,15 @@ public class EnemyViewModel {
 
     public EnemyViewModel setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getExperience() {
+        return experience;
+    }
+
+    public EnemyViewModel setExperience(Integer experience) {
+        this.experience = experience;
         return this;
     }
 

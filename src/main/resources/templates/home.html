@@ -30,6 +30,7 @@
                     <p class="fs-3">Your selected hero is:</p>
                     <p class="fs-4" th:text="${currentHero.name}"></p>
                     <p class="fs-4" th:text="|lvl ${currentHero.level} ${currentHero.heroRole.getHeroRole()}|"></p>
+                    <p class="fs-4" th:text="|Experience ${currentHero.experience}|"></p>
                 </div>
                 <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/heroes/select}">
                     Select New Hero

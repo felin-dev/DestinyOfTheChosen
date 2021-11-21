@@ -1,17 +1,16 @@
 package game.destinyofthechosen.model.session;
 
-import game.destinyofthechosen.model.entity.ItemEntity;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
 @SessionScope
 public class CurrentHero {
 
+    private UUID id;
     private String name;
     private HeroRoleEnum heroRole;
     private String imageUrl;
@@ -30,7 +29,18 @@ public class CurrentHero {
     private Integer baseDexterity;
     private Integer baseEnergy;
     private UUID equippedWeapon;
+    private Boolean isAlive = true;
     // TODO   private List<ItemEntity> items;
+
+
+    public UUID getId() {
+        return id;
+    }
+
+    public CurrentHero setId(UUID id) {
+        this.id = id;
+        return this;
+    }
 
     public String getName() {
         return name;
@@ -192,5 +202,38 @@ public class CurrentHero {
     public CurrentHero setEquippedWeapon(UUID equippedWeapon) {
         this.equippedWeapon = equippedWeapon;
         return this;
+    }
+
+    public Boolean getIsAlive() {
+        return isAlive;
+    }
+
+    public CurrentHero setIsAlive(Boolean isAlive) {
+        this.isAlive = isAlive;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrentHero{" +
+                "name='" + name + '\'' +
+                ", heroRole=" + heroRole +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", level=" + level +
+                ", stats=" + stats +
+                ", experience=" + experience +
+                ", baseHealth=" + baseHealth +
+                ", baseMana=" + baseMana +
+                ", currentHealth=" + currentHealth +
+                ", currentMana=" + currentMana +
+                ", baseAttack=" + baseAttack +
+                ", baseMagicPower=" + baseMagicPower +
+                ", baseDefense=" + baseDefense +
+                ", baseVitality=" + baseVitality +
+                ", baseStrength=" + baseStrength +
+                ", baseDexterity=" + baseDexterity +
+                ", baseEnergy=" + baseEnergy +
+                ", equippedWeapon=" + equippedWeapon +
+                '}';
     }
 }

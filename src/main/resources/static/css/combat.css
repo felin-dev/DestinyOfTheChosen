@@ -48,7 +48,7 @@
 #enemy-health-bar-fill {
     width: 100%;
     background: #baf508;
-    transition: width 0.5s;
+    transition: width 0.8s;
 }
 
 #enemy-health-bar-value {
