@@ -37,8 +37,9 @@ public class CombatApiController {
     }
 
     @GetMapping("/enemies/attack/new-enemy")
-    public ResponseEntity<String> attackNewEnemy() {
+    public ResponseEntity<String> attackNewEnemy(Principal principal) {
 
+        userService.setCurrentHero(principal.getName());
         String enemyName = userService.resetCurrentEnemy();
 
         return ResponseEntity

@@ -8,11 +8,11 @@
 
 .hero-fight-image {
     transform: scale(-1, 1);
-    width: 33vh;
+    width: 35vh;
 }
 
-.hero-fight-image {
-    width: 33vh;
+.enemy-fight-image {
+    width: 55vh;
 }
 
 .status-bar {
