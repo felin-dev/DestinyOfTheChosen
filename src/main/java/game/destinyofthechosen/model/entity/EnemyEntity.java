@@ -32,7 +32,7 @@ public class EnemyEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer goldDropLowerThreshold;
 
-    @OneToMany
+    @OneToMany(mappedBy = "enemy")
     private List<DropListEntity> dropList = new ArrayList<>();
 
     @ManyToOne

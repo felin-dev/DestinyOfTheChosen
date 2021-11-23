@@ -59,8 +59,15 @@ public class HeroEntity extends BaseEntity {
     @Type(type = "uuid-char")
     private UUID equippedWeapon;
 
-    @OneToMany(mappedBy = "hero", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hero")
     private List<ItemEntity> items = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "heroes_skills",
+            joinColumns = @JoinColumn(name = "hero_id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_skill_id")
+    )
+    private List<SkillEntity> skills = new ArrayList<>();
 
     @ManyToOne
     private UserEntity user;
@@ -223,6 +230,15 @@ public class HeroEntity extends BaseEntity {
 
     public HeroEntity setItems(List<ItemEntity> items) {
         this.items = items;
+        return this;
+    }
+
+    public List<SkillEntity> getSkills() {
+        return skills;
+    }
+
+    public HeroEntity setSkills(List<SkillEntity> skills) {
+        this.skills = skills;
         return this;
     }
 

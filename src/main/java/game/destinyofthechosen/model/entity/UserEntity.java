@@ -28,13 +28,13 @@ public class UserEntity extends BaseEntity {
     @Type(type = "uuid-char")
     private UUID currentHeroId;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<HeroEntity> heroes = new ArrayList<>();
 
     @Column(nullable = false)
     private Integer gold = 0;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<ItemEntity> stash = new ArrayList<>();
 
     public UserEntity() {

@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -157,6 +158,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteHero(String username, HeroSelectServiceModel heroModel) {
         UserEntity user = getUserByUsername(username);
         if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId()))
@@ -197,6 +199,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean ownsThisHero(String username, UUID selectedHeroId) {
         return getUserByUsername(username)
                 .getHeroes()
@@ -205,6 +208,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserHeroSelectViewModel getUserWithOwnedHeroes(String username) {
         UserEntity user = getUserByUsername(username);
         HeroEntity heroEntity = new HeroEntity();

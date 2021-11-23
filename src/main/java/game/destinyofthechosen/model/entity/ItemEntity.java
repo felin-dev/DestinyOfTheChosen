@@ -11,6 +11,7 @@ import java.util.List;
 @Table(name = "items")
 public class ItemEntity extends BaseEntity {
 
+    // TODO change the enumeration with string to be more flexible
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ItemNameEnum itemNameEnum;
