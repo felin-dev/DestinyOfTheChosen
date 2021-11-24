@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface HeroRepository extends JpaRepository<HeroEntity, UUID> {
-    boolean existsByName(String heroName);
+    boolean existsByHeroName(String heroName);
 
     Optional<HeroEntity> findHeroById(UUID id);
 }

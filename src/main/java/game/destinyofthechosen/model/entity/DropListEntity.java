@@ -1,8 +1,11 @@
 package game.destinyofthechosen.model.entity;
 
-import game.destinyofthechosen.model.enumeration.ItemNameEnum;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -10,18 +13,18 @@ import java.util.UUID;
 public class DropListEntity extends BaseEntity {
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ItemNameEnum ItemName;
+    @Type(type = "uuid-char")
+    private UUID itemId;
 
     @ManyToOne
     private EnemyEntity enemy;
 
-    public ItemNameEnum getItemName() {
-        return ItemName;
+    public UUID getItemName() {
+        return itemId;
     }
 
-    public DropListEntity setItemName(ItemNameEnum itemName) {
-        ItemName = itemName;
+    public DropListEntity setItemName(UUID itemId) {
+        this.itemId = itemId;
         return this;
     }
 

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/head::head"></head>
+
+<body>
+<header th:replace="/fragments/navigation::navigation"></header>
+<main class="main-background">
+    <br>
+    <section class="container-sm my-5">
+        <form th:object="${itemCreationBindingModel}"
+              th:action="@{/admin/items/create}"
+              th:method="POST"
+              enctype="multipart/form-data"
+              class="main-form text-center justify-content-center
+               mx-auto col-md-6 bg-primary bg-opacity-75 text-secondary rounded-3">
+            <h2 class="border-bottom border-secondary border-2
+            text-center text-secondary fs-3 fw-bolder py-3">Create Item</h2>
+            <div class="form-group">
+                <label for="itemName" class="fs-5 pt-3">Name</label>
+                <input th:field="*{itemName}"
+                       id="itemName"
+                       type="text"
+                       class="form-control"
+                       placeholder="Item name"/>
+                <p th:if="${#fields.hasErrors('itemName')}"
+                   th:errors="*{itemName}"
+                   class="errors alert alert-danger"></p>
+            </div>
+            <div class="form-group">
+                <label for="image" class="fs-5 pt-3">Image</label>
+                <input th:field="*{image}"
+                       id="image"
+                       type="file"
+                       class="form-control"/>
+                <p th:if="${#fields.hasErrors('image')}"
+                   th:errors="*{image}"
+                   class="errors alert alert-danger"></p>
+                <p th:if="${imageNotSupported}" class="errors alert alert-danger">
+                    Image not supported.
+                </p>
+            </div>
+            <div class="form-group">
+                <label class="fs-5 pt-3">Item Types</label>
+                <label for="itemTypeSelect"></label>
+                <select th:field="*{type}" class="custom-select" id="itemTypeSelect" >
+                    <option th:each="type : ${T(game.destinyofthechosen.model.enumeration.ItemTypeEnum).values()}"
+                            th:value="${type}"
+                            th:text="${type.getName()}"
+                            class="fs-5"
+                    ></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="levelRequirement" class="fs-5 pt-3">Level Requirement</label>
+                <input th:field="*{levelRequirement}"
+                       id="levelRequirement"
+                       type="number"
+                       class="form-control"
+                       placeholder="Level"/>
+                <p th:if="${#fields.hasErrors('levelRequirement')}"
+                   th:errors="*{levelRequirement}"
+                   class="errors alert alert-danger"></p>
+            </div>
+            <div class="form-group">
+                <label for="stats" class="fs-5 pt-3">Stats</label>
+                <div class="container">
+                    <div class="row">
+                        <div th:each="stat : *{stats.entrySet()}">
+                            <div class="form-group" id="stats">
+                                <label class="col-6" th:for="*{stats[__${stat.key}__]}" th:text="${stat.key.getType()}"></label>
+                                <label>
+                                    <input type="text" class="form-control col-6" th:field="*{stats[__${stat.key}__]}"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input class="btn btn-primary bg-opacity-100 main-link fs-3 py-2 btn-lg mb-3"
+                   type="submit"
+                   value="Create"/>
+        </form>
+    </section>
+    <br>
+</main>
+<footer th:replace="/fragments/footer::footer"></footer>
+</body>
+
+</html>

@@ -4,16 +4,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ZoneCreationServiceModel {
 
-    private String name;
+    private String zoneName;
     private MultipartFile image;
     private Integer levelRequirement;
 
-    public String getName() {
-        return name;
+    public String getZoneName() {
+        return zoneName;
     }
 
-    public ZoneCreationServiceModel setName(String name) {
-        this.name = name;
+    public ZoneCreationServiceModel setZoneName(String zoneName) {
+        this.zoneName = zoneName;
         return this;
     }
 

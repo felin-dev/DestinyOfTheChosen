@@ -11,7 +11,7 @@ import java.util.*;
 public class HeroEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 16)
-    private String name;
+    private String heroName;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -59,7 +59,11 @@ public class HeroEntity extends BaseEntity {
     @Type(type = "uuid-char")
     private UUID equippedWeapon;
 
-    @OneToMany(mappedBy = "hero")
+    @ManyToMany
+    @JoinTable(name = "heroes_items",
+            joinColumns = @JoinColumn(name = "hero_id"),
+            inverseJoinColumns = @JoinColumn(name = "hero_item_id")
+    )
     private List<ItemEntity> items = new ArrayList<>();
 
     @ManyToMany
@@ -72,20 +76,20 @@ public class HeroEntity extends BaseEntity {
     @ManyToOne
     private UserEntity user;
 
-    public String getName() {
-        return name;
+    public String getHeroName() {
+        return heroName;
     }
 
-    public HeroEntity setName(String name) {
-        this.name = name;
+    public HeroEntity setHeroName(String heroName) {
+        this.heroName = heroName;
         return this;
     }
 
     public HeroEntity() {
     }
 
-    public HeroEntity(String name, HeroRoleEnum heroRole) {
-        this.name = name;
+    public HeroEntity(String heroName, HeroRoleEnum heroRole) {
+        this.heroName = heroName;
         this.heroRole = heroRole;
     }
 

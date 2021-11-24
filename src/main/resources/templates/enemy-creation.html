@@ -18,14 +18,14 @@
             <h2 class="border-bottom border-secondary border-2
             text-center text-secondary fs-3 fw-bolder py-3">Create Enemy</h2>
             <div class="form-group">
-                <label for="name" class="fs-5 pt-3">Name</label>
-                <input th:field="*{name}"
-                       id="name"
+                <label for="enemyName" class="fs-5 pt-3">Name</label>
+                <input th:field="*{enemyName}"
+                       id="enemyName"
                        type="text" minlength="2" maxlength="16" required
                        class="form-control"
                        placeholder="Enemy name"/>
-                <p th:if="${#fields.hasErrors('name')}"
-                   th:errors="*{name}"
+                <p th:if="${#fields.hasErrors('enemyName')}"
+                   th:errors="*{enemyName}"
                    class="errors alert alert-danger"></p>
             </div>
             <div class="form-group">
@@ -119,12 +119,12 @@
                         Items
                     </button>
                     <div class="dropdown-menu text-secondary bg-primary rounded-3" aria-labelledby="dropdownMenuButton">
-                        <div class="form-check mx-3" th:each="i : ${items}">
+                        <div class="form-check mx-3" th:each="item : ${items}">
                             <label>
                                 <input th:field="*{dropList}"
-                                       th:aria-label="${i.getItemName()}"
-                                       th:value="${i.name()}"
-                                       th:text="${i.getItemName()}"
+                                       th:aria-label="${item.itemName}"
+                                       th:value="${item.id}"
+                                       th:text="${item.itemName}"
                                        class="form-check-input"
                                        type="checkbox">
                             </label>
@@ -137,8 +137,8 @@
                 <label for="zoneSelect"></label>
                 <select th:field="*{zoneName}" class="custom-select" id="zoneSelect">
                     <option th:each="zone : ${zones}"
-                            th:value="${zone.name}"
-                            th:text="|${zone.name} - level requirement ${zone.levelRequirement}|"
+                            th:value="${zone.zoneName}"
+                            th:text="|${zone.zoneName} - level requirement ${zone.levelRequirement}|"
                             class="fs-5"
                     ></option>
                 </select>

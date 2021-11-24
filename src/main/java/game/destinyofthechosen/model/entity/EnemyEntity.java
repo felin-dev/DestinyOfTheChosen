@@ -9,7 +9,7 @@ import java.util.List;
 public class EnemyEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 16)
-    private String name;
+    private String enemyName;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -38,12 +38,12 @@ public class EnemyEntity extends BaseEntity {
     @ManyToOne
     private ZoneEntity zone;
 
-    public String getName() {
-        return name;
+    public String getEnemyName() {
+        return enemyName;
     }
 
-    public EnemyEntity setName(String name) {
-        this.name = name;
+    public EnemyEntity setEnemyName(String enemyName) {
+        this.enemyName = enemyName;
         return this;
     }
 
@@ -131,7 +131,7 @@ public class EnemyEntity extends BaseEntity {
     @Override
     public String toString() {
         return "EnemyEntity{" +
-                "name='" + name + '\'' +
+                "name='" + enemyName + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", level=" + level +
                 ", health=" + health +

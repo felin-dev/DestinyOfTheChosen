@@ -1,11 +1,13 @@
 package game.destinyofthechosen.web;
 
 import game.destinyofthechosen.model.binding.EnemyCreationBindingModel;
+import game.destinyofthechosen.model.binding.ItemCreationBindingModel;
 import game.destinyofthechosen.model.binding.ZoneCreationBindingModel;
-import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
+import game.destinyofthechosen.model.service.ItemCreationServiceModel;
 import game.destinyofthechosen.model.service.ZoneCreationServiceModel;
 import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.ItemService;
 import game.destinyofthechosen.service.ZoneService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -24,11 +26,13 @@ public class AdminController {
 
     private final EnemyService enemyService;
     private final ZoneService zoneService;
+    private final ItemService itemService;
     private final ModelMapper modelMapper;
 
-    public AdminController(EnemyService enemyService, ZoneService zoneService, ModelMapper modelMapper) {
+    public AdminController(EnemyService enemyService, ZoneService zoneService, ItemService itemService, ModelMapper modelMapper) {
         this.enemyService = enemyService;
         this.zoneService = zoneService;
+        this.itemService = itemService;
         this.modelMapper = modelMapper;
     }
 
@@ -68,6 +72,42 @@ public class AdminController {
         return "redirect:/home";
     }
 
+    @ModelAttribute("itemCreationBindingModel")
+    public ItemCreationBindingModel itemCreationBindingModel() {
+        return new ItemCreationBindingModel();
+    }
+
+    @GetMapping("/admin/items/create")
+    public String createItem() {
+
+        return "item-creation";
+    }
+
+    @PostMapping("/admin/items/create")
+    public String createItemConfirm(@Valid ItemCreationBindingModel itemCreationBindingModel,
+                                    BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes
+                    .addFlashAttribute("itemCreationBindingModel", itemCreationBindingModel)
+                    .addFlashAttribute("org.springframework.validation.BindingResult.itemCreationBindingModel", bindingResult);
+
+            return "redirect:create";
+        }
+
+        try {
+            itemService.create(modelMapper.map(itemCreationBindingModel, ItemCreationServiceModel.class));
+        } catch (IOException imageNotSupported) {
+            redirectAttributes
+                    .addFlashAttribute("itemCreationBindingModel", itemCreationBindingModel)
+                    .addFlashAttribute("imageNotSupported", true);
+
+            return "redirect:create";
+        }
+
+        return "redirect:/home";
+    }
+
     @ModelAttribute("enemyCreationBindingModel")
     public EnemyCreationBindingModel enemyCreationBindingModel() {
         return new EnemyCreationBindingModel();
@@ -86,7 +126,7 @@ public class AdminController {
     @GetMapping("/admin/enemies/create")
     public String createEnemy(Model model) {
 
-        model.addAttribute("items", ItemNameEnum.values());
+        model.addAttribute("items", itemService.getAllItems());
         model.addAttribute("zones", zoneService.getAllZones());
 
         return "enemy-creation";

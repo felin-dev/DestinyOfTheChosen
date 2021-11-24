@@ -69,7 +69,7 @@ public class HeroServiceImpl implements HeroService {
 
     private HeroEntity createNewHeroEntity(HeroCreationServiceModel heroModel) {
 
-        HeroEntity heroEntity = new HeroEntity(heroModel.getName(), heroModel.getHeroRole());
+        HeroEntity heroEntity = new HeroEntity(heroModel.getHeroName(), heroModel.getHeroRole());
 
         switch (heroEntity.getHeroRole()) {
             case WARRIOR -> createWarrior(heroEntity);
@@ -124,7 +124,7 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public boolean isHeroNameFree(String heroName) {
-        return !heroRepository.existsByName(heroName);
+        return !heroRepository.existsByHeroName(heroName);
     }
 
     @Override

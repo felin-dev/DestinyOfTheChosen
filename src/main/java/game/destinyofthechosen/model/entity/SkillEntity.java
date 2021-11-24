@@ -10,7 +10,10 @@ import javax.persistence.*;
 public class SkillEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 16)
-    private String name;
+    private String skillName;
+
+    @Column(nullable = false)
+    private String imageUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -32,12 +35,21 @@ public class SkillEntity extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-    public String getName() {
-        return name;
+    public String getSkillName() {
+        return skillName;
     }
 
-    public SkillEntity setName(String name) {
-        this.name = name;
+    public SkillEntity setSkillName(String skillName) {
+        this.skillName = skillName;
+        return this;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public SkillEntity setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
         return this;
     }
 

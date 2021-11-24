@@ -98,7 +98,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public boolean isZoneNameFree(String zoneName) {
-        return !zoneRepository.existsByName(zoneName);
+        return !zoneRepository.existsByZoneName(zoneName);
     }
 
     private void userIsOverTheLevelRequirement(String username, Integer levelRequirement) {

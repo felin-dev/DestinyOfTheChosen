@@ -34,7 +34,11 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer gold = 0;
 
-    @OneToMany(mappedBy = "user")
+    @ManyToMany
+    @JoinTable(name = "users_items",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_item_id")
+    )
     private List<ItemEntity> stash = new ArrayList<>();
 
     public UserEntity() {

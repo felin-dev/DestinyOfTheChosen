@@ -1,6 +1,5 @@
 package game.destinyofthechosen.model.binding;
 
-import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.validator.NotNullFile;
 import game.destinyofthechosen.model.validator.UniqueEnemyName;
 import org.hibernate.validator.constraints.Length;
@@ -11,13 +10,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EnemyCreationBindingModel {
 
     @UniqueEnemyName
     @NotBlank(message = "Enemy name is required and must not be blank.")
     @Length(min = 2, max = 16, message = "Enemy name should be between 2 and 16 characters.")
-    private String name;
+    private String enemyName;
 
     @NotNullFile
     private MultipartFile image;
@@ -46,17 +46,17 @@ public class EnemyCreationBindingModel {
     @Positive(message = "The gold lower threshold must be a positive number.")
     private Integer goldDropLowerThreshold;
 
-    private List<ItemNameEnum> dropList = new ArrayList<>();
+    private List<UUID> dropList = new ArrayList<>();
 
     @NotNull
     private String zoneName;
 
-    public String getName() {
-        return name;
+    public String getEnemyName() {
+        return enemyName;
     }
 
-    public EnemyCreationBindingModel setName(String name) {
-        this.name = name;
+    public EnemyCreationBindingModel setEnemyName(String enemyName) {
+        this.enemyName = enemyName;
         return this;
     }
 
@@ -123,11 +123,11 @@ public class EnemyCreationBindingModel {
         return this;
     }
 
-    public List<ItemNameEnum> getDropList() {
+    public List<UUID> getDropList() {
         return dropList;
     }
 
-    public EnemyCreationBindingModel setDropList(List<ItemNameEnum> dropList) {
+    public EnemyCreationBindingModel setDropList(List<UUID> dropList) {
         this.dropList = dropList;
         return this;
     }

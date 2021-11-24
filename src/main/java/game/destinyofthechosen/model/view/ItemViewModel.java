@@ -1,36 +1,34 @@
-package game.destinyofthechosen.model.entity;
+package game.destinyofthechosen.model.view;
 
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
-@Entity
-@Table(name = "items")
-public class ItemEntity extends BaseEntity {
+public class ItemViewModel {
 
-    @Column(nullable = false, unique = true, length = 16)
+    private UUID id;
     private String itemName;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private ItemTypeEnum type;
-
-    @OneToMany(mappedBy = "item")
-    private List<StatEntity> stats = new ArrayList<>();
-
-    @Column(nullable = false)
+    private Map<String, Integer> stats = new LinkedHashMap<>();
     private String imageUrl;
-
-    @Column(nullable = false)
     private Integer levelRequirement;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public ItemViewModel setId(UUID id) {
+        this.id = id;
+        return this;
+    }
 
     public String getItemName() {
         return itemName;
     }
 
-    public ItemEntity setItemName(String itemName) {
+    public ItemViewModel setItemName(String itemName) {
         this.itemName = itemName;
         return this;
     }
@@ -39,16 +37,16 @@ public class ItemEntity extends BaseEntity {
         return type;
     }
 
-    public ItemEntity setType(ItemTypeEnum type) {
+    public ItemViewModel setType(ItemTypeEnum type) {
         this.type = type;
         return this;
     }
 
-    public List<StatEntity> getStats() {
+    public Map<String, Integer> getStats() {
         return stats;
     }
 
-    public ItemEntity setStats(List<StatEntity> stats) {
+    public ItemViewModel setStats(Map<String, Integer> stats) {
         this.stats = stats;
         return this;
     }
@@ -57,7 +55,7 @@ public class ItemEntity extends BaseEntity {
         return imageUrl;
     }
 
-    public ItemEntity setImageUrl(String imageUrl) {
+    public ItemViewModel setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -66,7 +64,7 @@ public class ItemEntity extends BaseEntity {
         return levelRequirement;
     }
 
-    public ItemEntity setLevelRequirement(Integer levelRequirement) {
+    public ItemViewModel setLevelRequirement(Integer levelRequirement) {
         this.levelRequirement = levelRequirement;
         return this;
     }

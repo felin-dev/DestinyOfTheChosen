@@ -12,17 +12,17 @@ public class HeroCreationBindingModel {
     @UniqueHeroName
     @NotBlank(message = "Hero name is required and must not be blank.")
     @Length(min = 2, max = 16, message = "Hero name should be between 2 and 16 characters.")
-    private String name;
+    private String heroName;
 
     @NotNull(message = "Please select a hero class.")
     private HeroRoleEnum heroRole;
 
-    public String getName() {
-        return name;
+    public String getHeroName() {
+        return heroName;
     }
 
-    public HeroCreationBindingModel setName(String name) {
-        this.name = name;
+    public HeroCreationBindingModel setHeroName(String heroName) {
+        this.heroName = heroName;
         return this;
     }
 

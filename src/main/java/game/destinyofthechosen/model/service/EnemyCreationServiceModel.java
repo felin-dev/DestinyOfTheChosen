@@ -1,14 +1,14 @@
 package game.destinyofthechosen.model.service;
 
-import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EnemyCreationServiceModel {
 
-    private String name;
+    private String enemyName;
     private MultipartFile image;
     private Integer level;
     private Integer experience;
@@ -16,15 +16,15 @@ public class EnemyCreationServiceModel {
     private Integer attack;
     private Integer goldDropUpperThreshold;
     private Integer goldDropLowerThreshold;
-    private List<ItemNameEnum> dropList = new ArrayList<>();
+    private List<UUID> dropList = new ArrayList<>();
     private String zoneName;
 
-    public String getName() {
-        return name;
+    public String getEnemyName() {
+        return enemyName;
     }
 
-    public EnemyCreationServiceModel setName(String name) {
-        this.name = name;
+    public EnemyCreationServiceModel setEnemyName(String enemyName) {
+        this.enemyName = enemyName;
         return this;
     }
 
@@ -91,11 +91,11 @@ public class EnemyCreationServiceModel {
         return this;
     }
 
-    public List<ItemNameEnum> getDropList() {
+    public List<UUID> getDropList() {
         return dropList;
     }
 
-    public EnemyCreationServiceModel setDropList(List<ItemNameEnum> dropList) {
+    public EnemyCreationServiceModel setDropList(List<UUID> dropList) {
         this.dropList = dropList;
         return this;
     }
@@ -112,7 +112,7 @@ public class EnemyCreationServiceModel {
     @Override
     public String toString() {
         return "EnemyCreationServiceModel{" +
-                "name='" + name + '\'' +
+                "name='" + enemyName + '\'' +
                 ", image=" + image +
                 ", level=" + level +
                 ", health=" + health +

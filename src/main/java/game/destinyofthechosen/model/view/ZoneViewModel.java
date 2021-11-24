@@ -5,7 +5,7 @@ import java.util.UUID;
 public class ZoneViewModel {
 
     private UUID id;
-    private String name;
+    private String zoneName;
     private String imageUrl;
     private Integer levelRequirement;
 
@@ -18,12 +18,12 @@ public class ZoneViewModel {
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getZoneName() {
+        return zoneName;
     }
 
-    public ZoneViewModel setName(String name) {
-        this.name = name;
+    public ZoneViewModel setZoneName(String zoneName) {
+        this.zoneName = zoneName;
         return this;
     }
 

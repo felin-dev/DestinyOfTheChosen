@@ -11,9 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface ZoneRepository extends JpaRepository<ZoneEntity, UUID> {
-    boolean existsByName(String zoneName);
 
-    Optional<ZoneEntity> findByName(String zoneName);
+    boolean existsByZoneName(String zoneName);
+
+    Optional<ZoneEntity> findByZoneName(String zoneName);
 
     @Query("SELECT z FROM ZoneEntity z WHERE z.levelRequirement <= :levelRequirement")
     Optional<List<ZoneEntity>> findByLevelLowerOrEqual(Integer levelRequirement);

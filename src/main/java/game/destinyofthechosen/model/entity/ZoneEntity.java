@@ -9,7 +9,7 @@ import java.util.Set;
 public class ZoneEntity extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 32)
-    private String name;
+    private String zoneName;
 
     @Column(nullable = false)
     private String imageUrl;
@@ -20,12 +20,12 @@ public class ZoneEntity extends BaseEntity {
     @OneToMany(mappedBy = "zone")
     private Set<EnemyEntity> enemies = new LinkedHashSet<>();
 
-    public String getName() {
-        return name;
+    public String getZoneName() {
+        return zoneName;
     }
 
-    public ZoneEntity setName(String name) {
-        this.name = name;
+    public ZoneEntity setZoneName(String zoneName) {
+        this.zoneName = zoneName;
         return this;
     }
 

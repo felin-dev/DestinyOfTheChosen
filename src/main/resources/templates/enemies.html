@@ -11,7 +11,7 @@
     <div class="container-sm my-5">
         <div class="row justify-content-center">
             <div th:each="enemy : *{enemies}" class="text-center justify-content-center
-               text-secondary p-3 m-3 enemy-card">
+               text-secondary p-3 m-3 enemy-card align-self-end">
                 <img class="card-img-top" th:src="${enemy.imageUrl}" alt="Enemy image">
                 <div class="card-body bg-primary bg-opacity-75 rounded-3 no-select">
                     <h3 class="card-title" th:text="${enemy.name}"></h3>

@@ -4,15 +4,15 @@ import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 
 public class HeroCreationServiceModel {
 
-    private String name;
+    private String heroName;
     private HeroRoleEnum heroRole;
 
-    public String getName() {
-        return name;
+    public String getHeroName() {
+        return heroName;
     }
 
-    public HeroCreationServiceModel setName(String name) {
-        this.name = name;
+    public HeroCreationServiceModel setHeroName(String heroName) {
+        this.heroName = heroName;
         return this;
     }
 

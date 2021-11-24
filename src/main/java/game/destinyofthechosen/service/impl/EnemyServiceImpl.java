@@ -4,7 +4,6 @@ import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.DropListEntity;
 import game.destinyofthechosen.model.entity.EnemyEntity;
 import game.destinyofthechosen.model.entity.ZoneEntity;
-import game.destinyofthechosen.model.enumeration.ItemNameEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
 import game.destinyofthechosen.model.view.EnemyViewModel;
@@ -48,7 +47,7 @@ public class EnemyServiceImpl implements EnemyService {
         enemyEntity.setImageUrl(cloudinaryImage.getUrl());
 
         ZoneEntity zone = zoneRepository
-                .findByName(enemyModel.getZoneName())
+                .findByZoneName(enemyModel.getZoneName())
                 .orElseThrow(() -> new ObjectNotFoundException("There is no zone with such name."));
 
         enemyEntity.setZone(zone);
@@ -57,12 +56,12 @@ public class EnemyServiceImpl implements EnemyService {
         makeDropListEntities(enemyModel.getDropList(), enemyEntity);
     }
 
-    private void makeDropListEntities(List<ItemNameEnum> dropList, EnemyEntity enemyEntity) {
+    private void makeDropListEntities(List<UUID> dropList, EnemyEntity enemyEntity) {
         dropList
-                .forEach(dropItem -> dropListRepository
+                .forEach(itemDropId -> dropListRepository
                         .save(
                                 new DropListEntity()
-                                        .setItemName(dropItem)
+                                        .setItemName(itemDropId)
                                         .setEnemy(enemyEntity)));
     }
 
@@ -83,6 +82,6 @@ public class EnemyServiceImpl implements EnemyService {
 
     @Override
     public boolean isTheNameFree(String name) {
-        return !enemyRepository.existsByName(name);
+        return !enemyRepository.existsByEnemyName(name);
     }
 }

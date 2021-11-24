@@ -45,13 +45,13 @@
             <div class="pb-3 form-group row justify-content-center">
                 <div class="col-md-4">
                     <label id="hero-name">
-                        <input th:field="*{name}"
+                        <input th:field="*{heroName}"
                                class="bg-dark form-control text-secondary border-secondary fs-3"
                                type="text" minlength="2" maxlength="16" required
                                placeholder="Hero name">
                     </label>
-                    <p th:if="${#fields.hasErrors('name')}"
-                       th:errors="*{name}"
+                    <p th:if="${#fields.hasErrors('heroName')}"
+                       th:errors="*{heroName}"
                        class="errors alert alert-danger"></p>
                     <p th:if="${#fields.hasErrors('heroRole')}"
                        th:errors="*{heroRole}"
