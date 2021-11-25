@@ -43,12 +43,11 @@ public class ZoneServiceImpl implements ZoneService {
 
         userIsOverTheLevelRequirement(username, levelRequirement);
 
-        List<ZoneEntity> zoneEntities = zoneRepository.findByLevelLowerOrEqual(levelRequirement)
+        List<ZoneEntity> zoneEntities = zoneRepository.findByLevelLowerOrEqualOrdered(levelRequirement)
                 .orElseThrow(() -> new ObjectNotFoundException("There is no levels within that level requirement."));
 
         return zoneEntities
                 .stream()
-                .sorted(Comparator.comparingInt(ZoneEntity::getLevelRequirement))
                 .map(zoneEntity -> modelMapper.map(zoneEntity, ZoneViewModel.class))
                 .collect(Collectors.toList());
     }

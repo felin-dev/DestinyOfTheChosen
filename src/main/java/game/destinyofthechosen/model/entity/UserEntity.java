@@ -1,7 +1,5 @@
 package game.destinyofthechosen.model.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -25,7 +23,7 @@ public class UserEntity extends BaseEntity {
     )
     private Set<RoleEntity> userRoles = new HashSet<>();
 
-    @Type(type = "uuid-char")
+    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID currentHeroId;
 
     @OneToMany(mappedBy = "user")

@@ -1,7 +1,5 @@
 package game.destinyofthechosen.model.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -12,7 +10,7 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue
-    @Type(type = "uuid-char")
+    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     public UUID getId() {

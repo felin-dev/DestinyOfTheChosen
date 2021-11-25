@@ -82,43 +82,31 @@ public class HeroServiceImpl implements HeroService {
 
     private void createWarrior(HeroEntity warrior) {
         warrior
-                .setBaseHealth(180)     // vitality x20
-                .setBaseMana(100)       // energy x20
-                .setBaseAttack(17)      // strength x2 + dexterity x1
-                .setBaseMagicPower(5)   // energy x1
-                .setBaseDefense(12)     // base defense increases with items
-                .setBaseDexterity(5)
-                .setBaseStrength(6)
-                .setBaseEnergy(5)
-                .setBaseVitality(9)
+                .setBaseDefense(12)     // base defense increases with items and levels
+                .setBaseDexterity(5)    // attack = dexterity x1
+                .setBaseStrength(6)     // attack = strength x2
+                .setBaseEnergy(5)       // mana = energy x20, magic power = energy x1
+                .setBaseVitality(9)     // health = vitality x20
                 .setImageUrl(WARRIOR_IMAGE);
     }
 
     private void createHunter(HeroEntity hunter) {
         hunter
-                .setBaseHealth(120)     // vitality x20
-                .setBaseMana(80)        // energy x20
-                .setBaseAttack(25)      // dexterity x2 + strength x1
-                .setBaseMagicPower(4)   // energy x1
-                .setBaseDefense(10)     // base defense increases with items
-                .setBaseDexterity(10)
-                .setBaseStrength(5)
-                .setBaseEnergy(4)
-                .setBaseVitality(6)
+                .setBaseDefense(10)     // base defense increases with items and levels
+                .setBaseDexterity(10)   // attack = dexterity x2
+                .setBaseStrength(5)     // attack = strength x1
+                .setBaseEnergy(4)       // mana = energy x20, magic power = energy x1
+                .setBaseVitality(6)     // health = vitality x20
                 .setImageUrl(HUNTER_IMAGE);
     }
 
     private void createMage(HeroEntity mage) {
         mage
-                .setBaseHealth(100)     // vitality x20
-                .setBaseMana(240)       // energy x20
-                .setBaseAttack(8)       // dexterity x1 + strength x1
-                .setBaseMagicPower(24)  // energy x2
-                .setBaseDefense(8)      // base defense increases with items
-                .setBaseDexterity(4)
-                .setBaseStrength(4)
-                .setBaseEnergy(12)
-                .setBaseVitality(5)
+                .setBaseDefense(8)      // base defense increases with items and levels
+                .setBaseDexterity(4)    // attack = dexterity x1
+                .setBaseStrength(4)     // attack = strength x1
+                .setBaseEnergy(12)      // mana = energy x20, magic power = energy x2
+                .setBaseVitality(5)     // health = vitality x20
                 .setImageUrl(MAGE_IMAGE);
     }
 

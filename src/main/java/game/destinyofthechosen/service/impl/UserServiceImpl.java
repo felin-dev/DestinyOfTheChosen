@@ -215,8 +215,7 @@ public class UserServiceImpl implements UserService {
         try {
             heroEntity = heroService.
                     getById(user.getCurrentHeroId());
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
 
         return new UserHeroSelectViewModel()
                 .setCurrentHero(modelMapper.map(heroEntity, HeroInfoViewModel.class))

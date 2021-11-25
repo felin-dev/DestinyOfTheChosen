@@ -1,7 +1,5 @@
 package game.destinyofthechosen.model.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -13,7 +11,7 @@ import java.util.UUID;
 public class DropListEntity extends BaseEntity {
 
     @Column(nullable = false)
-    @Type(type = "uuid-char")
+    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID itemId;
 
     @ManyToOne

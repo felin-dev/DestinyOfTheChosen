@@ -16,6 +16,6 @@ public interface ZoneRepository extends JpaRepository<ZoneEntity, UUID> {
 
     Optional<ZoneEntity> findByZoneName(String zoneName);
 
-    @Query("SELECT z FROM ZoneEntity z WHERE z.levelRequirement <= :levelRequirement")
-    Optional<List<ZoneEntity>> findByLevelLowerOrEqual(Integer levelRequirement);
+    @Query("SELECT z FROM ZoneEntity z WHERE z.levelRequirement <= :levelRequirement ORDER BY z.levelRequirement")
+    Optional<List<ZoneEntity>> findByLevelLowerOrEqualOrdered(Integer levelRequirement);
 }

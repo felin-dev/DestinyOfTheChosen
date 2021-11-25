@@ -1,8 +1,8 @@
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/destiny_of_the_chosen"
-    username: postgres
+    url: "jdbc:postgresql://localhost:5432/destiny_of_the_chosen?currentSchema=destiny_of_the_chosen"
+    username: destiny_of_the_chosen
     password: ${POSTGRE_SQL_PASSWORD}
   sql:
     init:
@@ -13,7 +13,7 @@ spring:
       max-request-size: 10MB
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
