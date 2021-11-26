@@ -45,4 +45,7 @@ public interface UserService {
     void setCurrentEnemy(UUID id);
 
     String resetCurrentEnemy();
+
+    void initialize();
+
 }

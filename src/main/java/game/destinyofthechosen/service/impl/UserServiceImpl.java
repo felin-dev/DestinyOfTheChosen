@@ -1,7 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
-import game.destinyofthechosen.exception.UserHasNoPermissionToAccessException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
@@ -24,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -215,7 +215,8 @@ public class UserServiceImpl implements UserService {
         try {
             heroEntity = heroService.
                     getById(user.getCurrentHeroId());
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         return new UserHeroSelectViewModel()
                 .setCurrentHero(modelMapper.map(heroEntity, HeroInfoViewModel.class))
@@ -270,5 +271,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isEmailFree(String email) {
         return !userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void initialize() {
+        if (userRepository.count() != 0) return;
+
+        List<UserEntity> userEntities = List.of(new UserEntity(
+                "felin",
+                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
+                System.getenv("FELIN_EMAIL"),
+                Set.of(userRoleService.findByUserRole(UserRoleEnum.ADMIN),
+                        userRoleService.findByUserRole(UserRoleEnum.USER))
+        ), new UserEntity(
+                "felixi",
+                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
+                System.getenv("FELIXI_EMAIL"),
+                Set.of(userRoleService.findByUserRole(UserRoleEnum.USER))
+        ));
+
+        userRepository.saveAll(userEntities);
     }
 }
