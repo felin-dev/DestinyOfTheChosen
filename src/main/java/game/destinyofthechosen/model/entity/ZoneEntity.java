@@ -20,6 +20,15 @@ public class ZoneEntity extends BaseEntity {
     @OneToMany(mappedBy = "zone")
     private Set<EnemyEntity> enemies = new LinkedHashSet<>();
 
+    public ZoneEntity() {
+    }
+
+    public ZoneEntity(String zoneName, String imageUrl, Integer levelRequirement) {
+        this.zoneName = zoneName;
+        this.imageUrl = imageUrl;
+        this.levelRequirement = levelRequirement;
+    }
+
     public String getZoneName() {
         return zoneName;
     }

@@ -104,4 +104,19 @@ public class ZoneServiceImpl implements ZoneService {
         if (!userService.isOverTheLevelRequirement(username, levelRequirement))
             throw new UserHasNoPermissionToAccessException("User's level is too low for that zone.");
     }
+
+    @Override
+    public void initialize() {
+        if (zoneRepository.count() != 0) return;
+
+        List<ZoneEntity> zones = List.of(
+                new ZoneEntity("Forest", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/Forest.jpg", 1),
+                new ZoneEntity("Jungle", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/Jungle.jpg", 5),
+                new ZoneEntity("The Bridge", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/TheBridge.jpg", 10),
+                new ZoneEntity("Dark Pass", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/DarkPass.jpg", 15),
+                new ZoneEntity("Graveyard", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/Graveyard.jpg", 18)
+                );
+
+        zoneRepository.saveAll(zones);
+    }
 }

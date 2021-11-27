@@ -13,4 +13,6 @@ public interface ItemService {
     void create(ItemCreationServiceModel map) throws IOException;
 
     boolean isItemNameFree(String itemName);
+
+    void initialize();
 }

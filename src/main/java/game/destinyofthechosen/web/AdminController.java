@@ -97,7 +97,7 @@ public class AdminController {
 
         try {
             itemService.create(modelMapper.map(itemCreationBindingModel, ItemCreationServiceModel.class));
-        } catch (IOException imageNotSupported) {
+        } catch (IOException | RuntimeException imageNotSupported) {
             redirectAttributes
                     .addFlashAttribute("itemCreationBindingModel", itemCreationBindingModel)
                     .addFlashAttribute("imageNotSupported", true);
@@ -154,7 +154,7 @@ public class AdminController {
 
         try {
             enemyService.createEnemy(modelMapper.map(enemyCreationBindingModel, EnemyCreationServiceModel.class));
-        } catch (IOException imageNotSupported) {
+        } catch (IOException | RuntimeException imageNotSupported) {
             redirectAttributes
                     .addFlashAttribute("enemyCreationBindingModel", enemyCreationBindingModel)
                     .addFlashAttribute("imageNotSupported", true);

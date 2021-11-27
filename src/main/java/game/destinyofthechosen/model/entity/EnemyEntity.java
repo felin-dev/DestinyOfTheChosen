@@ -38,6 +38,22 @@ public class EnemyEntity extends BaseEntity {
     @ManyToOne
     private ZoneEntity zone;
 
+    public EnemyEntity() {
+    }
+
+    public EnemyEntity(String enemyName, String imageUrl, Integer level, Integer experience, Integer health,
+                       Integer attack, Integer goldDropLowerThreshold, Integer goldDropUpperThreshold, ZoneEntity zone) {
+        this.enemyName = enemyName;
+        this.imageUrl = imageUrl;
+        this.level = level;
+        this.experience = experience;
+        this.health = health;
+        this.attack = attack;
+        this.goldDropLowerThreshold = goldDropLowerThreshold;
+        this.goldDropUpperThreshold = goldDropUpperThreshold;
+        this.zone = zone;
+    }
+
     public String getEnemyName() {
         return enemyName;
     }

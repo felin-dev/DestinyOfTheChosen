@@ -28,13 +28,12 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public CloudinaryImage upload(MultipartFile multipartFile) throws IOException {
+    public CloudinaryImage upload(MultipartFile multipartFile) throws IOException, RuntimeException {
 
         File tempFile = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
         fileOutputStream.write(multipartFile.getBytes());
         fileOutputStream.close();
-
         try {
             @SuppressWarnings("unchecked")
             Map<String, String> uploadResult = cloudinary

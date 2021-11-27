@@ -26,6 +26,16 @@ public class ItemEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer levelRequirement;
 
+    public ItemEntity() {
+    }
+
+    public ItemEntity(String itemName, ItemTypeEnum type, String imageUrl, Integer levelRequirement) {
+        this.itemName = itemName;
+        this.type = type;
+        this.imageUrl = imageUrl;
+        this.levelRequirement = levelRequirement;
+    }
+
     public String getItemName() {
         return itemName;
     }

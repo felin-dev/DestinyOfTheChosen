@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "skills")
 public class SkillEntity extends BaseEntity {
 
-    @Column(nullable = false, unique = true, length = 16)
+    @Column(nullable = false, length = 16)
     private String skillName;
 
     @Column(nullable = false)
@@ -29,11 +29,29 @@ public class SkillEntity extends BaseEntity {
     @Column(nullable = false)
     private Integer level;
 
+    @Column(nullable = false)
+    private Integer manaRequired;
+
     @Column(nullable = false, name = "cool_down")
     private Integer coolDown;
 
     @Column(nullable = false)
     private String description;
+
+    public SkillEntity() {
+    }
+
+    public SkillEntity(String skillName, String imageUrl, HeroRoleEnum role, SkillTypeEnum type, Integer skillValue, Integer level, Integer manaRequired, Integer coolDown, String description) {
+        this.skillName = skillName;
+        this.imageUrl = imageUrl;
+        this.role = role;
+        this.type = type;
+        this.skillValue = skillValue;
+        this.level = level;
+        this.manaRequired = manaRequired;
+        this.coolDown = coolDown;
+        this.description = description;
+    }
 
     public String getSkillName() {
         return skillName;
@@ -86,6 +104,15 @@ public class SkillEntity extends BaseEntity {
 
     public SkillEntity setLevel(Integer level) {
         this.level = level;
+        return this;
+    }
+
+    public Integer getManaRequired() {
+        return manaRequired;
+    }
+
+    public SkillEntity setManaRequired(Integer manaRequired) {
+        this.manaRequired = manaRequired;
         return this;
     }
 

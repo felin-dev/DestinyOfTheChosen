@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         earnGold(username);
 
         heroService.gainExperience(currentHero.getId(), currentEnemy.getExperience());
-        if (currentHero.getLevel() < heroService.getById(currentHero.getId()).getLevel()) updateCurrentHero(username);
+        if (currentHero.getLevel() < heroService.findHeroById(currentHero.getId()).getLevel()) updateCurrentHero(username);
     }
 
     private void earnGold(String username) {
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
                 .getCurrentHeroId();
 
         checkIfTheCurrentEntityIsNull(currentHeroId == null, "There is no selected hero.");
-        currentHero = modelMapper.map(heroService.getById(currentHeroId), CurrentHero.class);
+        currentHero = modelMapper.map(heroService.findHeroById(currentHeroId), CurrentHero.class);
         currentHero
                 .setCurrentHealth(currentHero.getBaseHealth())
                 .setCurrentMana(currentHero.getBaseMana());
@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
         if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId()))
             user.setCurrentHeroId(null);
 
-        user.getHeroes().remove(heroService.getById(heroModel.getId()));
+        user.getHeroes().remove(heroService.findHeroById(heroModel.getId()));
 
         userRepository.save(user);
         heroService.deleteById(heroModel.getId());
@@ -187,13 +187,13 @@ public class UserServiceImpl implements UserService {
 
     private <T> T mapCurrentHeroToViewModel(String username, Class<T> viewClass) {
         return modelMapper.map(
-                heroService.getById(getUserByUsername(username).getCurrentHeroId()),
+                heroService.findHeroById(getUserByUsername(username).getCurrentHeroId()),
                 viewClass);
     }
 
     @Override
     public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
-        HeroEntity heroEntity = heroService.getById(getUserByUsername(username).getCurrentHeroId());
+        HeroEntity heroEntity = heroService.findHeroById(getUserByUsername(username).getCurrentHeroId());
 
         return heroEntity.getLevel() >= levelRequirement;
     }
@@ -214,7 +214,7 @@ public class UserServiceImpl implements UserService {
         HeroEntity heroEntity = new HeroEntity();
         try {
             heroEntity = heroService.
-                    getById(user.getCurrentHeroId());
+                    findHeroById(user.getCurrentHeroId());
         } catch (Exception ignore) {
         }
 

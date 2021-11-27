@@ -11,9 +11,11 @@ public interface HeroService {
 
     boolean isHeroNameFree(String heroName);
 
-    HeroEntity getById(UUID id);
+    HeroEntity findHeroById(UUID id);
 
     void deleteById(UUID id);
 
     void gainExperience(UUID id, Integer experience);
+
+    void initialize();
 }

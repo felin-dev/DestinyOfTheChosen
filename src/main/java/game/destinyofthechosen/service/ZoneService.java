@@ -1,5 +1,6 @@
 package game.destinyofthechosen.service;
 
+import game.destinyofthechosen.model.entity.ZoneEntity;
 import game.destinyofthechosen.model.service.ZoneCreationServiceModel;
 import game.destinyofthechosen.model.view.ZoneViewModel;
 import game.destinyofthechosen.model.view.ZoneWithEnemiesViewModel;
@@ -19,4 +20,6 @@ public interface ZoneService {
     ZoneWithEnemiesViewModel getZoneById(String username, UUID id);
 
     List<ZoneViewModel> getZonesInHeroLevelRange(String name, Integer level);
+
+    void initialize();
 }

@@ -13,4 +13,6 @@ public interface EnemyService {
     void createEnemy(EnemyCreationServiceModel enemyModel) throws IOException;
 
     EnemyViewModel findById(UUID id);
+
+    void initialize();
 }

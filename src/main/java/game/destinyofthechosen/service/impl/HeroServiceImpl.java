@@ -3,13 +3,16 @@ package game.destinyofthechosen.service.impl;
 import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
+import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
 import game.destinyofthechosen.repository.HeroRepository;
 import game.destinyofthechosen.repository.UserRepository;
 import game.destinyofthechosen.service.HeroService;
+import game.destinyofthechosen.service.SkillService;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,15 +26,17 @@ public class HeroServiceImpl implements HeroService {
 
     private final HeroRepository heroRepository;
     private final UserRepository userRepository;
+    private final SkillService skillService;
 
-    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository) {
+    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, SkillService skillService) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
+        this.skillService = skillService;
     }
 
     @Override
     public void gainExperience(UUID id, Integer experience) {
-        HeroEntity heroEntity = getById(id);
+        HeroEntity heroEntity = findHeroById(id);
         heroEntity.setExperience(heroEntity.getExperience() + experience);
         checkIfHeroHasToLevelUp(heroEntity);
 
@@ -43,12 +48,7 @@ public class HeroServiceImpl implements HeroService {
         if (currentLevel == 20) return;
 
         Integer experienceNeededForLevelingUp = LEVELING.get(currentLevel + 1);
-        if (heroEntity.getExperience() >= experienceNeededForLevelingUp) heroLeveledUp(heroEntity);
-    }
-
-    private void heroLeveledUp(HeroEntity heroEntity) {
-        heroEntity
-                .levelUp();
+        if (heroEntity.getExperience() >= experienceNeededForLevelingUp) heroEntity.levelUp();
     }
 
     @Override
@@ -59,6 +59,9 @@ public class HeroServiceImpl implements HeroService {
         HeroEntity newHeroEntity = createNewHeroEntity(heroModel);
         newHeroEntity.setUser(userEntity);
         heroRepository.save(newHeroEntity);
+
+        userEntity.setCurrentHeroId(newHeroEntity.getId());
+        userRepository.save(userEntity);
     }
 
     public UserEntity getUserByUsername(String username) {
@@ -87,7 +90,8 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(6)     // attack = strength x2
                 .setBaseEnergy(5)       // mana = energy x20, magic power = energy x1
                 .setBaseVitality(9)     // health = vitality x20
-                .setImageUrl(WARRIOR_IMAGE);
+                .setImageUrl(WARRIOR_IMAGE)
+                .setSkills(List.of(skillService.findByNameAndLevel("Shield Bash", 1)));
     }
 
     private void createHunter(HeroEntity hunter) {
@@ -97,7 +101,8 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(5)     // attack = strength x1
                 .setBaseEnergy(4)       // mana = energy x20, magic power = energy x1
                 .setBaseVitality(6)     // health = vitality x20
-                .setImageUrl(HUNTER_IMAGE);
+                .setImageUrl(HUNTER_IMAGE)
+                .setSkills(List.of(skillService.findByNameAndLevel("Double Arrow", 1)));
     }
 
     private void createMage(HeroEntity mage) {
@@ -107,7 +112,8 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseStrength(4)     // attack = strength x1
                 .setBaseEnergy(12)      // mana = energy x20, magic power = energy x2
                 .setBaseVitality(5)     // health = vitality x20
-                .setImageUrl(MAGE_IMAGE);
+                .setImageUrl(MAGE_IMAGE)
+                .setSkills(List.of(skillService.findByNameAndLevel("Fireball", 1)));
     }
 
     @Override
@@ -116,7 +122,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public HeroEntity getById(UUID id) {
+    public HeroEntity findHeroById(UUID id) {
         return heroRepository.findHeroById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("There is no hero with such id."));
     }
@@ -133,5 +139,20 @@ public class HeroServiceImpl implements HeroService {
             LEVELING.put(i, experience);
             experience += experience;
         }
+    }
+
+    @Override
+    public void initialize() {
+        if (heroRepository.count() != 0) return;
+        HeroEntity hunter = new HeroEntity("Felixi", HeroRoleEnum.HUNTER).setUser(getUserByUsername("felin"));
+        createHunter(hunter);
+        HeroEntity warrior = new HeroEntity("Jessica", HeroRoleEnum.WARRIOR).setUser(getUserByUsername("felin"));
+        createWarrior(warrior);
+        HeroEntity mage = new HeroEntity("SpiritOfTheElder", HeroRoleEnum.MAGE).setUser(getUserByUsername("felin"));
+        createMage(mage);
+
+        List<HeroEntity> heroEntities = List.of(hunter, warrior, mage);
+
+        heroRepository.saveAll(heroEntities);
     }
 }

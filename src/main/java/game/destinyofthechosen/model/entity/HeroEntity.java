@@ -273,25 +273,25 @@ public class HeroEntity extends BaseEntity {
         statPoints += 8;
         switch (heroRole) {
             case WARRIOR -> {
-                setBaseDefense(baseDefense += 2);
-                setBaseStrength(baseStrength += 2);
-                setBaseDexterity(baseDexterity += 1);
-                setBaseEnergy(baseEnergy += 1);
-                setBaseVitality(baseVitality += 2);
+                setBaseDefense(2);
+                setBaseStrength(2);
+                setBaseDexterity(1);
+                setBaseEnergy(1);
+                setBaseVitality(2);
             }
             case HUNTER -> {
-                setBaseDefense(baseDefense += 1);
-                setBaseStrength(baseStrength += 2);
-                setBaseDexterity(baseDexterity += 3);
-                setBaseEnergy(baseEnergy += 1);
-                setBaseVitality(baseVitality += 1);
+                setBaseDefense(1);
+                setBaseStrength(2);
+                setBaseDexterity(3);
+                setBaseEnergy(1);
+                setBaseVitality(1);
             }
             case MAGE -> {
-                setBaseDefense(baseDefense += 1);
-                setBaseStrength(baseStrength += 1);
-                setBaseDexterity(baseDexterity += 1);
-                setBaseEnergy(baseEnergy += 4);
-                setBaseVitality(baseVitality += 1);
+                setBaseDefense(1);
+                setBaseStrength(1);
+                setBaseDexterity(1);
+                setBaseEnergy(4);
+                setBaseVitality(1);
             }
         }
     }
