@@ -17,5 +17,7 @@ public interface HeroService {
 
     void gainExperience(UUID id, Integer experience);
 
+    boolean isOverTheLevelRequirement(String username, Integer levelRequirement);
+
     void initialize();
 }

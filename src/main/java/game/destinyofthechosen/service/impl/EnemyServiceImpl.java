@@ -1,34 +1,41 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
-import game.destinyofthechosen.model.entity.DropListEntity;
-import game.destinyofthechosen.model.entity.EnemyEntity;
-import game.destinyofthechosen.model.entity.ZoneEntity;
+import game.destinyofthechosen.model.entity.*;
+import game.destinyofthechosen.model.enumeration.StatEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
 import game.destinyofthechosen.model.view.EnemyViewModel;
+import game.destinyofthechosen.model.view.ItemViewModel;
 import game.destinyofthechosen.repository.DropListRepository;
 import game.destinyofthechosen.repository.EnemyRepository;
 import game.destinyofthechosen.repository.ZoneRepository;
 import game.destinyofthechosen.service.CloudinaryService;
 import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.ItemService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class EnemyServiceImpl implements EnemyService {
 
+    private final ItemService itemService;
     private final EnemyRepository enemyRepository;
     private final ZoneRepository zoneRepository;
     private final DropListRepository dropListRepository;
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
-    public EnemyServiceImpl(EnemyRepository enemyRepository, ZoneRepository zoneRepository, DropListRepository dropListRepository, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
+    public EnemyServiceImpl(ItemService itemService, EnemyRepository enemyRepository, ZoneRepository zoneRepository, DropListRepository dropListRepository, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
+        this.itemService = itemService;
         this.enemyRepository = enemyRepository;
         this.zoneRepository = zoneRepository;
         this.dropListRepository = dropListRepository;
@@ -59,11 +66,12 @@ public class EnemyServiceImpl implements EnemyService {
                 .forEach(itemDropId -> dropListRepository
                         .save(
                                 new DropListEntity()
-                                        .setItemName(itemDropId)
+                                        .setItemId(itemDropId)
                                         .setEnemy(enemyEntity)));
     }
 
     @Override
+    @Transactional
     public EnemyViewModel findById(UUID id) {
         EnemyEntity enemyEntity = enemyRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("There is no enemy with such id."));
@@ -72,8 +80,26 @@ public class EnemyServiceImpl implements EnemyService {
                 EnemyViewModel.class);
 
         enemyView
+                .setZoneName(enemyEntity.getZone().getZoneName())
+                .setZoneLevelRequirement(enemyEntity.getZone().getLevelRequirement())
                 .setZoneImageUrl(enemyEntity.getZone().getImageUrl())
-                .setCurrentHealth(enemyView.getHealth());
+                .setCurrentHealth(enemyView.getHealth())
+                .setDropList(enemyEntity
+                        .getDropList()
+                        .stream()
+                        .map(dropListEntity -> {
+                            ItemEntity itemEntity = itemService.getItemById(dropListEntity.getItemId());
+
+                            ItemViewModel itemView = modelMapper.map(itemEntity, ItemViewModel.class);
+                            itemView.setStats(itemEntity
+                                    .getStats()
+                                    .stream()
+                                    .collect(Collectors.toMap(stat -> stat.getStat().getType(), StatEntity::getValue)));
+
+                            return itemView;
+                        })
+                        .collect(Collectors.toList())
+                );
 
         return enemyView;
     }

@@ -15,4 +15,8 @@ public enum StatEnum {
     public String getType() {
         return statName;
     }
+
+    public static String getTypeOfEnum(StatEnum statEnum) {
+        return statEnum.getType();
+    }
 }

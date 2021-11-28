@@ -21,6 +21,8 @@ public class CurrentEnemy {
     private Integer goldDropLowerThreshold;
     // TODO   private List<DropListEntity> dropList;
     private String zoneImageUrl;
+    private String zoneName;
+    private Integer zoneLevelRequirement;
     private Boolean isAlive = true;
 
     public UUID getId() {
@@ -132,6 +134,24 @@ public class CurrentEnemy {
 
     public CurrentEnemy setIsAlive(Boolean isAlive) {
         this.isAlive = isAlive;
+        return this;
+    }
+
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public CurrentEnemy setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+        return this;
+    }
+
+    public Integer getZoneLevelRequirement() {
+        return zoneLevelRequirement;
+    }
+
+    public CurrentEnemy setZoneLevelRequirement(Integer zoneLevelRequirement) {
+        this.zoneLevelRequirement = zoneLevelRequirement;
         return this;
     }
 

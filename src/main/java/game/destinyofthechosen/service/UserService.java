@@ -34,9 +34,9 @@ public interface UserService {
 
     HeroCombatViewModel getCurrentHeroForCombat(String username);
 
-    boolean isOverTheLevelRequirement(String username, Integer levelRequirement);
-
     CombatStatusViewModel performAttackOnEnemy(String username);
+
+    CombatStatusViewModel castSkillOnEnemy(String username, String skillName);
 
     void setCurrentHero(String username);
 
@@ -44,8 +44,9 @@ public interface UserService {
 
     void setCurrentEnemy(UUID id);
 
-    String resetCurrentEnemy();
+    CombatStatusViewModel resetCurrentEnemy();
 
     void initialize();
 
+    void heroIsOverTheLevelRequirementForThatZone();
 }

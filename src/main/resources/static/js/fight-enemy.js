@@ -9,11 +9,26 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
     const enemyHealthBarValueElement = document.getElementById('enemy-health-bar-value');
     const attackBtn = document.getElementById('attack-btn');
 
+    document.getElementById('skills')
+        .addEventListener('click', async (event) => {
+            if (event.target.tagName === 'IMG' && attackBtn.textContent !== 'Attack New Enemy' &&  attackBtn.textContent !== 'Try Again') {
+                const castedSkill = event.target.parentNode.parentNode.querySelector('.casted-skill').textContent;
+                const token = await performGetRequest('http://localhost:8080/csrf');
+                const combatStatus = await performPostRequest('http://localhost:8080/enemies/skill/attack', {
+                    [token.headerName]: [token.csrf]
+                }, { skillName: castedSkill });
+
+                updateCombatStatus(combatStatus);
+            }
+        })
+
     attackBtn
         .addEventListener('click', async () => {
-            if (attackBtn.textContent === 'Attack Again') {
+            if (attackBtn.textContent === 'Attack New Enemy' || attackBtn.textContent === 'Try Again') {
                 attackBtn.textContent = 'Attack';
-                await performGetRequest('http://localhost:8080/enemies/attack/new-enemy');
+                const newCombatStatus = await performGetRequest('http://localhost:8080/enemies/attack/new-enemy');
+                updateCombatStatus(newCombatStatus);
+                return;
             }
 
             const token = await performGetRequest('http://localhost:8080/csrf');
@@ -21,9 +36,15 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
                 [token.headerName]: [token.csrf]
             });
 
-            updateEnemyStatus(combatStatus);
-            setTimeout(function () { updateHeroStatus(combatStatus) }, 700);
+            updateCombatStatus(combatStatus);
         })
+
+    function updateCombatStatus(combatStatus) {
+        updateEnemyStatus(combatStatus);
+        setTimeout(function () {
+            updateHeroStatus(combatStatus)
+        }, 700);
+    }
 
     function updateHeroStatus(combatStatus) {
         const hero = combatStatus.hero;
@@ -43,6 +64,10 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
 
         heroHealthBarValueElement.textContent = hero.currentHealth + '/' + hero.baseHealth;
         heroManaBarValueElement.textContent = hero.currentMana + '/' + hero.baseMana;
+
+        if (heroHpPercentage === 0) {
+            attackBtn.textContent = 'Try Again'
+        }
     }
 
     function updateEnemyStatus(combatStatus) {
@@ -60,7 +85,9 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         enemyHealthBarFillElement.style.width = enemyHpPercentage + '%';
         enemyHealthBarValueElement.textContent = enemy.currentHealth + '/' + enemy.health;
 
-        if (enemyHpPercentage === 0) { attackBtn.textContent = 'Attack Again' }
+        if (enemyHpPercentage === 0) {
+            attackBtn.textContent = 'Attack New Enemy'
+        }
     }
 })()
 

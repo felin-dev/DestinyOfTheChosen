@@ -2,7 +2,7 @@ package game.destinyofthechosen.model.enumeration;
 
 public enum SkillTypeEnum {
 
-    DAMAGE("Damage"), BUFF("Buff"), HEAL("Heal"), IMMOBILIZE("Immobilize");
+    DAMAGE("Damage"), DEFENSE_BUFF("Defense Buff"), HEAL("Heal"), IMMOBILIZE("Immobilize");
 
     private final String skillType;
 

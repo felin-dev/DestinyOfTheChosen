@@ -1,5 +1,6 @@
 package game.destinyofthechosen.model.view;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EnemyViewModel {
@@ -13,9 +14,11 @@ public class EnemyViewModel {
     private Integer currentHealth;
     private Integer Attack;
     private String zoneImageUrl;
+    private String zoneName;
+    private Integer zoneLevelRequirement;
     private Integer goldDropUpperThreshold;
     private Integer goldDropLowerThreshold;
-    // TODO   private List<DropListEntity> dropList;
+    private List<ItemViewModel> dropList;
 
     public UUID getId() {
         return id;
@@ -98,6 +101,24 @@ public class EnemyViewModel {
         return this;
     }
 
+    public String getZoneName() {
+        return zoneName;
+    }
+
+    public EnemyViewModel setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+        return this;
+    }
+
+    public Integer getZoneLevelRequirement() {
+        return zoneLevelRequirement;
+    }
+
+    public EnemyViewModel setZoneLevelRequirement(Integer zoneLevelRequirement) {
+        this.zoneLevelRequirement = zoneLevelRequirement;
+        return this;
+    }
+
     public Integer getGoldDropUpperThreshold() {
         return goldDropUpperThreshold;
     }
@@ -113,6 +134,15 @@ public class EnemyViewModel {
 
     public EnemyViewModel setGoldDropLowerThreshold(Integer goldDropLowerThreshold) {
         this.goldDropLowerThreshold = goldDropLowerThreshold;
+        return this;
+    }
+
+    public List<ItemViewModel> getDropList() {
+        return dropList;
+    }
+
+    public EnemyViewModel setDropList(List<ItemViewModel> dropList) {
+        this.dropList = dropList;
         return this;
     }
 }

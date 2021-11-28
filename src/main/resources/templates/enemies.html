@@ -18,6 +18,11 @@
                     <h3 class="card-title border-bottom border-secondary" th:text="|level: ${enemy.level}|"></h3>
                     <h5 class="card-text" th:text="|Health: ${enemy.health}|"></h5>
                     <h5 class="card-text" th:text="|Attack: ${enemy.attack}|"></h5>
+                    <div th:if="${enemy.dropList.size() > 0}">
+                        <h5 class="card-text">Drop List:</h5>
+                        <p th:each="item : ${enemy.dropList}" class="card-text my-1 fw-normal"
+                            th:text="|${item.type.getName()}: ${item.itemName}|"></p>
+                    </div>
                     <a th:href="@{/enemies/{id}/attack(id = ${enemy.id})}" class="btn bg-primary main-link mt-2 fs-5">Attack</a>
                 </div>
             </div>

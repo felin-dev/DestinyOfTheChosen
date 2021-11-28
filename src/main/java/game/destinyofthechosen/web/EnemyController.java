@@ -37,6 +37,8 @@ public class EnemyController {
 
         userService.setCurrentHero(principal.getName());
         userService.setCurrentEnemy(id);
+        userService.heroIsOverTheLevelRequirementForThatZone();
+
         model.addAttribute("enemy", enemyService.findById(id));
         model.addAttribute("hero", userService.getCurrentHeroForCombat(principal.getName()));
 

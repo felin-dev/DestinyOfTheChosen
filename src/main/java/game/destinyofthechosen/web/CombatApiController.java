@@ -1,5 +1,6 @@
 package game.destinyofthechosen.web;
 
+import game.destinyofthechosen.model.dto.SkillDto;
 import game.destinyofthechosen.model.view.CombatStatusViewModel;
 import game.destinyofthechosen.model.view.CsrfTokenViewModel;
 import game.destinyofthechosen.service.UserService;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,13 +38,22 @@ public class CombatApiController {
                 .ok(combatStatus);
     }
 
-    @GetMapping("/enemies/attack/new-enemy")
-    public ResponseEntity<String> attackNewEnemy(Principal principal) {
+    @PostMapping("/enemies/skill/attack")
+    public ResponseEntity<CombatStatusViewModel> skillAttackEnemy(@RequestBody SkillDto skillDto, Principal principal) {
 
-        userService.setCurrentHero(principal.getName());
-        String enemyName = userService.resetCurrentEnemy();
+        CombatStatusViewModel combatStatus = userService.castSkillOnEnemy(principal.getName(), skillDto.getSkillName());
 
         return ResponseEntity
-                .ok(enemyName + " came to fight.");
+                .ok(combatStatus);
+    }
+
+    @GetMapping("/enemies/attack/new-enemy")
+    public ResponseEntity<CombatStatusViewModel> attackNewEnemy(Principal principal) {
+
+        userService.setCurrentHero(principal.getName());
+        CombatStatusViewModel combatStatus = userService.resetCurrentEnemy();
+
+        return ResponseEntity
+                .ok(combatStatus);
     }
 }

@@ -142,6 +142,13 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
+    public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
+        HeroEntity heroEntity = findHeroById(getUserByUsername(username).getCurrentHeroId());
+
+        return heroEntity.getLevel() >= levelRequirement;
+    }
+
+    @Override
     public void initialize() {
         if (heroRepository.count() != 0) return;
         HeroEntity hunter = new HeroEntity("Felixi", HeroRoleEnum.HUNTER).setUser(getUserByUsername("felin"));

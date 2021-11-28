@@ -54,3 +54,50 @@
 #enemy-health-bar-value {
     color: #0d6efd;
 }
+
+.skill-border {
+    position: relative;
+    display: inline-block;
+    border-radius: 20%;
+    padding: 0.2rem;
+    background-color: #0d6efd;
+    margin-top: 5px;
+}
+
+.skill-border:hover {
+    cursor: pointer;
+    background-color: #0a48aa;
+}
+
+.skill-border:hover ~ .skill-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.skill-border:hover > .skill-icon {
+    transform: scale(1.045);
+}
+
+.skill-icon {
+    margin: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 20%;
+    transition: 200ms transform ease-in-out;
+}
+
+.skill-dropdown {
+    opacity: 0;
+    padding: 5px;
+    width: 10rem;
+    border-radius: 5%;
+    position: absolute;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 5px;
+    z-index: 100;
+    pointer-events: none;
+    transition: 300ms opacity ease-in-out;
+}

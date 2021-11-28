@@ -1,7 +1,9 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
+import game.destinyofthechosen.exception.UserHasNoPermissionToAccessException;
 import game.destinyofthechosen.model.entity.HeroEntity;
+import game.destinyofthechosen.model.entity.SkillEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -54,23 +57,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public CombatStatusViewModel performAttackOnEnemy(String username) {
 
         if (currentHero == null) setCurrentHero(username);
         checkIfTheCurrentEntityIsNull(currentEnemy == null, "There is no selected enemy.");
 
-        return attackEnemy(username);
+        return attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, false);
     }
 
-    private CombatStatusViewModel attackEnemy(String username) {
+    @Override
+    @Transactional
+    public CombatStatusViewModel castSkillOnEnemy(String username, String skillName) {
         if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
 
-        if (currentHero.getCurrentHealth() > 0) {
-            currentEnemy.setCurrentHealth(Math.max(0, currentEnemy.getCurrentHealth() - currentHero.getBaseAttack()));
+        SkillViewModel skill = currentHero
+                .getSkillList().stream()
+                .filter(skillViewModel -> skillViewModel.getSkillName().equals(skillName))
+                .findFirst()
+                .orElseThrow(() -> new ObjectNotFoundException("There is no skill with name: " + skillName));
+
+        switch (skill.getType()) {
+            case DAMAGE -> attackEnemy(username, currentHero.getBaseAttack() + currentHero.getBaseMagicPower() + skill.getSkillValue(), currentHero.getBaseDefense(), false, false);
+            case DEFENSE_BUFF -> attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense() + skill.getSkillValue(), false, false);
+            case HEAL -> {
+                currentHero.setCurrentHealth(Math.min(currentHero.getBaseHealth(), currentHero.getCurrentHealth() + skill.getSkillValue()));
+                attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, true);
+            }
+            case IMMOBILIZE -> attackEnemy(username, currentHero.getBaseAttack() + skill.getSkillValue(), currentHero.getBaseDefense(), true, false);
         }
-        if (currentEnemy.getCurrentHealth() > 0) {
+
+        return createCombatStatusView();
+    }
+
+    private CombatStatusViewModel attackEnemy(String username, Integer heroDamage, Integer heroDefense, Boolean immobilized, Boolean healing) {
+        if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
+
+        if (currentHero.getCurrentHealth() > 0 && !healing) {
+            currentEnemy.setCurrentHealth(Math.max(0, currentEnemy.getCurrentHealth() - heroDamage));
+        }
+
+        if (currentEnemy.getCurrentHealth() > 0 && !immobilized) {
             currentHero.setCurrentHealth(
-                    Math.max(0, currentHero.getCurrentHealth() - Math.max(0, currentEnemy.getAttack() - currentHero.getBaseDefense())));
+                    Math.max(0, currentHero.getCurrentHealth() - Math.max(0, currentEnemy.getAttack() - heroDefense)));
         }
 
         if (currentEnemy.getCurrentHealth() <= 0) uponEnemyDeath(username);
@@ -102,22 +131,32 @@ public class UserServiceImpl implements UserService {
         CombatStatusViewModel combatStatusViewModel = new CombatStatusViewModel();
         combatStatusViewModel.setHero(modelMapper.map(currentHero, HeroCombatViewModel.class));
         combatStatusViewModel.setEnemy(modelMapper.map(currentEnemy, EnemyViewModel.class));
+
         return combatStatusViewModel;
     }
 
     @Override
+    @Transactional
     public void setCurrentHero(String username) {
         UUID currentHeroId = getUserByUsername(username)
                 .getCurrentHeroId();
 
         checkIfTheCurrentEntityIsNull(currentHeroId == null, "There is no selected hero.");
-        currentHero = modelMapper.map(heroService.findHeroById(currentHeroId), CurrentHero.class);
+        HeroEntity heroEntity = heroService.findHeroById(currentHeroId);
+        currentHero = modelMapper.map(heroEntity, CurrentHero.class);
         currentHero
                 .setCurrentHealth(currentHero.getBaseHealth())
-                .setCurrentMana(currentHero.getBaseMana());
+                .setCurrentMana(currentHero.getBaseMana())
+                .setSkillList(heroEntity
+                        .getSkills()
+                        .stream()
+                        .sorted(Comparator.comparing(SkillEntity::getLevel))
+                        .map(skillEntity -> modelMapper.map(skillEntity, SkillViewModel.class).setCurrentCoolDown(0))
+                        .collect(Collectors.toList()));
     }
 
     @Override
+    @Transactional
     public void updateCurrentHero(String username) {
         setCurrentHero(username);
     }
@@ -130,12 +169,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String resetCurrentEnemy() {
+    public CombatStatusViewModel resetCurrentEnemy() {
         currentEnemy
                 .setIsAlive(true)
                 .setCurrentHealth(currentEnemy.getHealth());
+        currentHero
+                .setIsAlive(true)
+                .setCurrentHealth(currentHero.getBaseHealth());
 
-        return currentEnemy.getName();
+        return createCombatStatusView();
     }
 
     private void checkIfTheCurrentEntityIsNull(Boolean condition, String message) {
@@ -143,10 +185,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void selectNewHero(String username, HeroSelectServiceModel selectedHero) {
+    @Transactional
+    public void selectNewHero(String username, HeroSelectServiceModel selectedHeroId) {
         UserEntity userEntity = getUserByUsername(username);
 
-        userEntity.setCurrentHeroId(selectedHero.getId());
+        userEntity.setCurrentHeroId(selectedHeroId.getId());
         userRepository.save(userEntity);
 
         setCurrentHero(username);
@@ -171,31 +214,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public HeroSelectedViewModel getCurrentHero(String username) {
-        return mapCurrentHeroToViewModel(username, HeroSelectedViewModel.class);
+        return mapCurrentHeroToViewModel(HeroSelectedViewModel.class, username);
     }
 
     @Override
+    public void heroIsOverTheLevelRequirementForThatZone() {
+        if (currentHero.getLevel() < currentEnemy.getZoneLevelRequirement())
+            throw new UserHasNoPermissionToAccessException("Current hero level is too low for that instance.");
+    }
+
+    @Override
+    @Transactional
     public HeroCombatViewModel getCurrentHeroForCombat(String username) {
-        HeroCombatViewModel heroCombatViewModel = mapCurrentHeroToViewModel(username, HeroCombatViewModel.class);
-        heroCombatViewModel
-                .setCurrentHealth(heroCombatViewModel.getBaseHealth())
-                .setCurrentMana(heroCombatViewModel.getBaseMana());
-
-        return heroCombatViewModel;
+        return mapCurrentHeroToViewModel(HeroCombatViewModel.class, username);
     }
 
-    private <T> T mapCurrentHeroToViewModel(String username, Class<T> viewClass) {
+    private <T> T mapCurrentHeroToViewModel(Class<T> viewClass, String username) {
+        if (currentHero == null) setCurrentHero(username);
         return modelMapper.map(
-                heroService.findHeroById(getUserByUsername(username).getCurrentHeroId()),
+                currentHero,
                 viewClass);
-    }
-
-    @Override
-    public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
-        HeroEntity heroEntity = heroService.findHeroById(getUserByUsername(username).getCurrentHeroId());
-
-        return heroEntity.getLevel() >= levelRequirement;
     }
 
     @Override

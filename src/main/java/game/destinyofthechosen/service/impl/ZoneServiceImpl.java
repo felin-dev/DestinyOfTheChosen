@@ -6,12 +6,12 @@ import game.destinyofthechosen.model.entity.EnemyEntity;
 import game.destinyofthechosen.model.entity.ZoneEntity;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.ZoneCreationServiceModel;
-import game.destinyofthechosen.model.view.EnemyViewModel;
 import game.destinyofthechosen.model.view.ZoneViewModel;
 import game.destinyofthechosen.model.view.ZoneWithEnemiesViewModel;
 import game.destinyofthechosen.repository.ZoneRepository;
 import game.destinyofthechosen.service.CloudinaryService;
-import game.destinyofthechosen.service.UserService;
+import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.ZoneService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,15 +27,30 @@ import java.util.stream.Collectors;
 public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
-    private final UserService userService;
+    private final HeroService heroService;
+    private final EnemyService enemyService;
     private final CloudinaryService cloudinaryService;
     private final ModelMapper modelMapper;
 
-    public ZoneServiceImpl(ZoneRepository zoneRepository, UserService userService, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
+    public ZoneServiceImpl(ZoneRepository zoneRepository, HeroService heroService, EnemyService enemyService, CloudinaryService cloudinaryService, ModelMapper modelMapper) {
         this.zoneRepository = zoneRepository;
-        this.userService = userService;
+        this.heroService = heroService;
+        this.enemyService = enemyService;
         this.cloudinaryService = cloudinaryService;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public void create(ZoneCreationServiceModel zoneModel) throws IOException {
+
+        CloudinaryImage cloudinaryImage = cloudinaryService
+                .setFolderName("zones")
+                .upload(zoneModel.getImage());
+
+        ZoneEntity zoneEntity = modelMapper.map(zoneModel, ZoneEntity.class);
+        zoneEntity.setImageUrl(cloudinaryImage.getUrl());
+
+        zoneRepository.save(zoneEntity);
     }
 
     @Override
@@ -67,7 +82,7 @@ public class ZoneServiceImpl implements ZoneService {
                         .getEnemies()
                         .stream()
                         .sorted(Comparator.comparingInt(EnemyEntity::getLevel))
-                        .map(enemyEntity -> modelMapper.map(enemyEntity, EnemyViewModel.class))
+                        .map(enemyEntity -> enemyService.findById(enemyEntity.getId()))
                         .collect(Collectors.toList()));
 
         return zoneViewModel;
@@ -82,27 +97,14 @@ public class ZoneServiceImpl implements ZoneService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void create(ZoneCreationServiceModel zoneModel) throws IOException {
-
-        CloudinaryImage cloudinaryImage = cloudinaryService
-                .setFolderName("zones")
-                .upload(zoneModel.getImage());
-
-        ZoneEntity zoneEntity = modelMapper.map(zoneModel, ZoneEntity.class);
-        zoneEntity.setImageUrl(cloudinaryImage.getUrl());
-
-        zoneRepository.save(zoneEntity);
+    private void userIsOverTheLevelRequirement(String username, Integer levelRequirement) {
+        if (!heroService.isOverTheLevelRequirement(username, levelRequirement))
+            throw new UserHasNoPermissionToAccessException("User's level is too low for that zone.");
     }
 
     @Override
     public boolean isZoneNameFree(String zoneName) {
         return !zoneRepository.existsByZoneName(zoneName);
-    }
-
-    private void userIsOverTheLevelRequirement(String username, Integer levelRequirement) {
-        if (!userService.isOverTheLevelRequirement(username, levelRequirement))
-            throw new UserHasNoPermissionToAccessException("User's level is too low for that zone.");
     }
 
     @Override
@@ -115,7 +117,7 @@ public class ZoneServiceImpl implements ZoneService {
                 new ZoneEntity("The Bridge", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/TheBridge.jpg", 10),
                 new ZoneEntity("Dark Pass", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/DarkPass.jpg", 15),
                 new ZoneEntity("Graveyard", "https://res.cloudinary.com/felin/image/upload/v1637008467/DestinyOfTheChosen/zones/Graveyard.jpg", 18)
-                );
+        );
 
         zoneRepository.saveAll(zones);
     }

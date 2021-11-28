@@ -68,4 +68,16 @@ public class ItemViewModel {
         this.levelRequirement = levelRequirement;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "ItemViewModel{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", type=" + type +
+                ", stats=" + stats +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", levelRequirement=" + levelRequirement +
+                '}';
+    }
 }

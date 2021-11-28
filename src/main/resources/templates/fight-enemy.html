@@ -31,8 +31,23 @@
                 </div>
                 <img class="card-img-top hero-fight-image" th:src="${hero.imageUrl}" alt="Hero image">
             </div>
-            <div class="col-lg-2 text-center py-5 align-self-lg-center">
-                <button id="attack-btn" class="btn bg-primary bg-opacity-75 rounded-3 main-link mt-2 fs-5">Attack</button>
+
+            <!-- Combat menu -->
+            <div id="combat-menu" class="col-lg-2 align-self-lg-center">
+                <div id="skills" class="row align-content-center">
+                    <div th:each="skill : ${hero.skillList}" class="col p-0">
+                        <div class="skill-border bg-opacity-75 no-select">
+                            <img th:src="${skill.imageUrl}" class="skill-icon" alt="skill-icon">
+                        </div>
+                        <p th:text="${skill.skillName}" class="casted-skill hidden invisible"></p>
+                        <p th:text="${skill.description}"
+                           class="skill-dropdown text-secondary bg-primary bg-opacity-75 no-select align-self-center"></p>
+                    </div>
+                </div>
+                <div class="text-center py-5">
+                    <button id="attack-btn" class="btn bg-primary bg-opacity-75 rounded-3 main-link mt-2 fs-5">Attack
+                    </button>
+                </div>
             </div>
 
             <div class="col-lg-6 enemy-fight-card align-self-end">

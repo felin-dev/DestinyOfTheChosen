@@ -1,5 +1,6 @@
 package game.destinyofthechosen.model.view;
 
+import java.util.List;
 import java.util.UUID;
 
 public class HeroCombatViewModel {
@@ -12,6 +13,7 @@ public class HeroCombatViewModel {
     private Integer baseMana;
     private Integer currentMana;
     private UUID equippedWeapon;
+    private List<SkillViewModel> skillList;
 
     public String getName() {
         return name;
@@ -82,6 +84,15 @@ public class HeroCombatViewModel {
 
     public HeroCombatViewModel setEquippedWeapon(UUID equippedWeapon) {
         this.equippedWeapon = equippedWeapon;
+        return this;
+    }
+
+    public List<SkillViewModel> getSkillList() {
+        return skillList;
+    }
+
+    public HeroCombatViewModel setSkillList(List<SkillViewModel> skillList) {
+        this.skillList = skillList;
         return this;
     }
 }

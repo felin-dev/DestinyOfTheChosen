@@ -164,7 +164,7 @@ public class HeroEntity extends BaseEntity {
     }
 
     public HeroEntity setBaseVitality(Integer baseVitality) {
-        baseHealth += baseVitality * 20;
+        baseHealth = baseVitality * 20;
         this.baseVitality = baseVitality;
         return this;
     }
@@ -214,12 +214,12 @@ public class HeroEntity extends BaseEntity {
     public HeroEntity setBaseEnergy(Integer baseEnergy) {
         switch (heroRole) {
             case WARRIOR, HUNTER -> {
-                baseMana += baseEnergy * 20;
+                baseMana = baseEnergy * 20;
                 baseMagicPower += baseEnergy;
                 this.baseEnergy = baseEnergy;
             }
             case MAGE -> {
-                baseMana += baseEnergy * 20;
+                baseMana = baseEnergy * 20;
                 baseMagicPower += baseEnergy * 2;
                 this.baseEnergy = baseEnergy;
             }
@@ -273,25 +273,25 @@ public class HeroEntity extends BaseEntity {
         statPoints += 8;
         switch (heroRole) {
             case WARRIOR -> {
-                setBaseDefense(2);
-                setBaseStrength(2);
-                setBaseDexterity(1);
-                setBaseEnergy(1);
-                setBaseVitality(2);
+                setBaseDefense(baseDefense + 2);
+                setBaseStrength(baseStrength + 2);
+                setBaseDexterity(baseDexterity + 1);
+                setBaseEnergy(baseEnergy + 1);
+                setBaseVitality(baseVitality + 2);
             }
             case HUNTER -> {
-                setBaseDefense(1);
-                setBaseStrength(2);
-                setBaseDexterity(3);
-                setBaseEnergy(1);
-                setBaseVitality(1);
+                setBaseDefense(baseDefense + 1);
+                setBaseStrength(baseStrength + 2);
+                setBaseDexterity(baseDexterity + 3);
+                setBaseEnergy(baseEnergy + 1);
+                setBaseVitality(baseVitality + 1);
             }
             case MAGE -> {
-                setBaseDefense(1);
-                setBaseStrength(1);
-                setBaseDexterity(1);
-                setBaseEnergy(4);
-                setBaseVitality(1);
+                setBaseDefense(baseDefense + 1);
+                setBaseStrength(baseStrength + 1);
+                setBaseDexterity(baseDexterity + 1);
+                setBaseEnergy(baseEnergy + 4);
+                setBaseVitality(baseVitality + 1);
             }
         }
     }

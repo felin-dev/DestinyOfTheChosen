@@ -17,11 +17,11 @@ public class DropListEntity extends BaseEntity {
     @ManyToOne
     private EnemyEntity enemy;
 
-    public UUID getItemName() {
+    public UUID getItemId() {
         return itemId;
     }
 
-    public DropListEntity setItemName(UUID itemId) {
+    public DropListEntity setItemId(UUID itemId) {
         this.itemId = itemId;
         return this;
     }

@@ -1,5 +1,6 @@
 package game.destinyofthechosen.service.impl;
 
+import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.ItemEntity;
 import game.destinyofthechosen.model.entity.StatEntity;
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +59,13 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
 
         statRepository.saveAll(stats);
+    }
+
+    @Override
+    public ItemEntity getItemById(UUID itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() ->
+                        new ObjectNotFoundException("Item with id: " + itemId + " is does not exist."));
     }
 
     @Override
