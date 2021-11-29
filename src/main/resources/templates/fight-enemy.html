@@ -37,8 +37,9 @@
                 <div id="skills" class="row align-content-center">
                     <div th:each="skill : ${hero.skillList}" class="col p-0">
                         <div class="skill-border bg-opacity-75 no-select">
-                            <img th:src="${skill.imageUrl}" class="skill-icon" alt="skill-icon">
+                            <img th:src="${skill.imageUrl}" class="skill-icon" th:classappend="${skill.currentCoolDown} != 0 ? ' inactive' : ''" alt="skill-icon">
                         </div>
+                        <div th:if="${skill.currentCoolDown} != 0" class="cool-down no-select text-secondary" th:text="${skill.currentCoolDown}"></div>
                         <p th:text="${skill.skillName}" class="casted-skill hidden invisible"></p>
                         <p th:text="${skill.description}"
                            class="skill-dropdown text-secondary bg-primary bg-opacity-75 no-select align-self-center"></p>

@@ -78,6 +78,12 @@
     transform: scale(1.045);
 }
 
+.skill-icon.inactive {
+    opacity: 50%;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .skill-icon {
     margin: 0;
     height: 2.5rem;
@@ -100,4 +106,14 @@
     z-index: 100;
     pointer-events: none;
     transition: 300ms opacity ease-in-out;
+}
+
+.cool-down {
+    position: absolute;
+    font-size: xxx-large;
+    font-weight: normal;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
 }

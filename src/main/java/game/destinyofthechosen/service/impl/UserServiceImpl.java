@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
                 .findFirst()
                 .orElseThrow(() -> new ObjectNotFoundException("There is no skill with name: " + skillName));
 
+        if (skill.getCurrentCoolDown() > 0) return createCombatStatusView();
+        if (currentHero.getCurrentMana() < skill.getManaRequired()) return createCombatStatusView();
+        skill.setCurrentCoolDown(skill.getCoolDown() + 1);
+        currentHero.setCurrentMana(currentHero.getCurrentMana() - skill.getManaRequired());
+
         switch (skill.getType()) {
             case DAMAGE -> attackEnemy(username, currentHero.getBaseAttack() + currentHero.getBaseMagicPower() + skill.getSkillValue(), currentHero.getBaseDefense(), false, false);
             case DEFENSE_BUFF -> attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense() + skill.getSkillValue(), false, false);
@@ -93,6 +98,9 @@ public class UserServiceImpl implements UserService {
     private CombatStatusViewModel attackEnemy(String username, Integer heroDamage, Integer heroDefense, Boolean immobilized, Boolean healing) {
         if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
 
+        recoverMana();
+        lowerCoolDowns();
+
         if (currentHero.getCurrentHealth() > 0 && !healing) {
             currentEnemy.setCurrentHealth(Math.max(0, currentEnemy.getCurrentHealth() - heroDamage));
         }
@@ -108,12 +116,30 @@ public class UserServiceImpl implements UserService {
         return createCombatStatusView();
     }
 
+    private void recoverMana() {
+        currentHero.setCurrentMana(Math.min(currentHero.getBaseMana(),
+                (int) (currentHero.getCurrentMana() + currentHero.getBaseMana() * 0.1)));
+    }
+
+    private void lowerCoolDowns() {
+        currentHero.getSkillList()
+                .stream()
+                .filter(skillViewModel -> skillViewModel.getCurrentCoolDown() > 0)
+                .forEach(skillViewModel -> skillViewModel.setCurrentCoolDown(skillViewModel.getCurrentCoolDown() - 1));
+    }
+
     private void uponEnemyDeath(String username) {
+        resetSkillCooDowns();
         currentEnemy.setIsAlive(false);
         earnGold(username);
 
-        heroService.gainExperience(currentHero.getId(), currentEnemy.getExperience());
+        heroService.gainExperience(currentHero.getId(),
+                currentHero.getLevel() > currentEnemy.getLevel() ? currentEnemy.getExperience() / 2 : currentEnemy.getExperience());
         if (currentHero.getLevel() < heroService.findHeroById(currentHero.getId()).getLevel()) updateCurrentHero(username);
+    }
+
+    private void resetSkillCooDowns() {
+        currentHero.getSkillList().forEach(skillViewModel -> skillViewModel.setCurrentCoolDown(0));
     }
 
     private void earnGold(String username) {
@@ -124,6 +150,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void uponHeroDeath() {
+        resetSkillCooDowns();
         currentHero.setIsAlive(false);
     }
 
