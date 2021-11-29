@@ -56,7 +56,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         const heroMpPercentage = Math.round(hero.currentMana / hero.baseMana * 100);
         const skills = [...hero.skillList];
 
-        renderSkills(skills);
+        renderSkills(skills, hero.currentMana);
 
         if (heroHpPercentage <= 20) {
             heroHealthBarFillElement.style.backgroundColor = 'red';
@@ -77,24 +77,25 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         }
     }
 
-    function renderSkills(skills) {
+    function renderSkills(skills, heroMana) {
         if (firstBattle) {
             skillsElement.innerHTML = '';
             firstBattle = !firstBattle;
         }
 
         const skillsTemplate = html`
-                ${skills.map(setSkillView)}
+                ${skills.map(skill => setSkillView(skill, heroMana))}
         `;
 
         render(skillsTemplate, skillsElement);
     }
 
-    function setSkillView(skill) {
+    function setSkillView(skill, heroMana) {
         return html`
                 <div class="col p-0">
                     <div class="skill-border bg-opacity-75 no-select">
-                        <img src="${skill.imageUrl}" class="skill-icon ${skill.currentCoolDown != 0 ? ' inactive' : ''}" alt="skill-icon">
+                        <img src="${skill.imageUrl}" class="skill-icon ${skill.currentCoolDown != 0 || heroMana < skill.manaRequired ?
+                                ' inactive' : ''}" alt="skill-icon">
                     </div>
                     ${skill.currentCoolDown != 0 ?
                     html`<div if="" class="cool-down no-select text-secondary">${skill.currentCoolDown}</div>` : ''}
