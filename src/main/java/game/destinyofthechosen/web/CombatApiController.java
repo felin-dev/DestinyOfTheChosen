@@ -3,6 +3,7 @@ package game.destinyofthechosen.web;
 import game.destinyofthechosen.model.dto.SkillDto;
 import game.destinyofthechosen.model.view.CombatStatusViewModel;
 import game.destinyofthechosen.model.view.CsrfTokenViewModel;
+import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -18,9 +19,11 @@ import java.security.Principal;
 public class CombatApiController {
 
     private final UserService userService;
+    private final HeroService heroService;
 
-    public CombatApiController(UserService userService) {
+    public CombatApiController(UserService userService, HeroService heroService) {
         this.userService = userService;
+        this.heroService = heroService;
     }
 
     @GetMapping("/csrf")
@@ -32,7 +35,7 @@ public class CombatApiController {
     @PostMapping("/enemies/attack")
     public ResponseEntity<CombatStatusViewModel> attackEnemy(Principal principal) {
 
-        CombatStatusViewModel combatStatus = userService.performAttackOnEnemy(principal.getName());
+        CombatStatusViewModel combatStatus = heroService.performAttackOnEnemy(principal.getName());
 
         return ResponseEntity
                 .ok(combatStatus);
@@ -41,7 +44,7 @@ public class CombatApiController {
     @PostMapping("/enemies/skill/attack")
     public ResponseEntity<CombatStatusViewModel> skillAttackEnemy(@RequestBody SkillDto skillDto, Principal principal) {
 
-        CombatStatusViewModel combatStatus = userService.castSkillOnEnemy(principal.getName(), skillDto.getSkillName());
+        CombatStatusViewModel combatStatus = heroService.castSkillOnEnemy(principal.getName(), skillDto.getSkillName());
 
         return ResponseEntity
                 .ok(combatStatus);
@@ -50,8 +53,8 @@ public class CombatApiController {
     @GetMapping("/enemies/attack/new-enemy")
     public ResponseEntity<CombatStatusViewModel> attackNewEnemy(Principal principal) {
 
-        userService.setCurrentHero(principal.getName());
-        CombatStatusViewModel combatStatus = userService.resetCurrentEnemy();
+        heroService.setCurrentHero(principal.getName());
+        CombatStatusViewModel combatStatus = heroService.resetCurrentEnemy();
 
         return ResponseEntity
                 .ok(combatStatus);

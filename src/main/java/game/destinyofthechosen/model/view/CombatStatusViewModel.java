@@ -6,6 +6,7 @@ public class CombatStatusViewModel {
     private EnemyViewModel enemy;
     private String itemDrop;
     private Integer moneyDrop;
+    private Integer leveledUp;
 
     public HeroCombatViewModel getHero() {
         return hero;
@@ -40,6 +41,15 @@ public class CombatStatusViewModel {
 
     public CombatStatusViewModel setMoneyDrop(Integer moneyDrop) {
         this.moneyDrop = moneyDrop;
+        return this;
+    }
+
+    public Integer getLeveledUp() {
+        return leveledUp;
+    }
+
+    public CombatStatusViewModel setLeveledUp(Integer leveledUp) {
+        this.leveledUp = leveledUp;
         return this;
     }
 }

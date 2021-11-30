@@ -38,6 +38,15 @@ public class SkillServiceImpl implements SkillService {
                         "Shoots two arrows, dealing damage."),
                 new SkillEntity("Fireball", "https://res.cloudinary.com/felin/image/upload/v1638047833/DestinyOfTheChosen/skills/Fireball.png",
                         HeroRoleEnum.MAGE, SkillTypeEnum.DAMAGE, 14, 1, 88, 1,
+                        "Shoots a fireball, dealing damage."),
+                new SkillEntity("Shield Bash", "https://res.cloudinary.com/felin/image/upload/v1638047887/DestinyOfTheChosen/skills/ShieldBash.jpg",
+                        HeroRoleEnum.WARRIOR, SkillTypeEnum.IMMOBILIZE, 48, 10, 105, 2,
+                        "Uses the shield to perform a basic attack, dealing damage and stunning the target."),
+                new SkillEntity("Double Arrow", "https://res.cloudinary.com/felin/image/upload/v1638047944/DestinyOfTheChosen/skills/DoubleArrow.jpg",
+                        HeroRoleEnum.HUNTER, SkillTypeEnum.DAMAGE, 168, 10, 85, 1,
+                        "Shoots two arrows, dealing damage."),
+                new SkillEntity("Fireball", "https://res.cloudinary.com/felin/image/upload/v1638047833/DestinyOfTheChosen/skills/Fireball.png",
+                        HeroRoleEnum.MAGE, SkillTypeEnum.DAMAGE, 128, 10, 175, 1,
                         "Shoots a fireball, dealing damage.")
         );
 

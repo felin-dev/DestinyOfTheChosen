@@ -1,5 +1,6 @@
 package game.destinyofthechosen.web;
 
+import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,11 @@ import java.security.Principal;
 public class HomeController {
 
     private final UserService userService;
+    private final HeroService heroService;
 
-    public HomeController(UserService userService) {
+    public HomeController(UserService userService, HeroService heroService) {
         this.userService = userService;
+        this.heroService = heroService;
     }
 
     @GetMapping("/")
@@ -34,7 +37,7 @@ public class HomeController {
         }
 
         model.addAttribute("currentHero",
-                userService.getCurrentHero(principal.getName()));
+                heroService.getCurrentHero(principal.getName()));
 
         return "home";
     }

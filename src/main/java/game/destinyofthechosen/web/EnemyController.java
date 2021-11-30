@@ -1,6 +1,7 @@
 package game.destinyofthechosen.web;
 
 import game.destinyofthechosen.service.EnemyService;
+import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import game.destinyofthechosen.service.ZoneService;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,13 @@ import java.util.UUID;
 public class EnemyController {
 
     private final UserService userService;
+    private final HeroService heroService;
     private final ZoneService zoneService;
     private final EnemyService enemyService;
 
-    public EnemyController(UserService userService, ZoneService zoneService, EnemyService enemyService) {
+    public EnemyController(UserService userService, HeroService heroService, ZoneService zoneService, EnemyService enemyService) {
         this.userService = userService;
+        this.heroService = heroService;
         this.zoneService = zoneService;
         this.enemyService = enemyService;
     }
@@ -35,12 +38,12 @@ public class EnemyController {
     @GetMapping("/enemies/{id}/attack")
     public String attackEnemy(@PathVariable UUID id, Principal principal, Model model) {
 
-        userService.setCurrentHero(principal.getName());
-        userService.setCurrentEnemy(id);
-        userService.heroIsOverTheLevelRequirementForThatZone();
+        heroService.setCurrentHero(principal.getName());
+        heroService.setCurrentEnemy(id);
+        heroService.heroIsOverTheLevelRequirementForThatZone();
 
         model.addAttribute("enemy", enemyService.findById(id));
-        model.addAttribute("hero", userService.getCurrentHeroForCombat(principal.getName()));
+        model.addAttribute("hero", heroService.getCurrentHeroForCombat(principal.getName()));
 
         return "fight-enemy";
     }

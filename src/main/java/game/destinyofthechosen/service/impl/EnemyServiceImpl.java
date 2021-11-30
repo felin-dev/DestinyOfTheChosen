@@ -2,7 +2,6 @@ package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.*;
-import game.destinyofthechosen.model.enumeration.StatEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
 import game.destinyofthechosen.model.service.EnemyCreationServiceModel;
 import game.destinyofthechosen.model.view.EnemyViewModel;
@@ -20,8 +19,6 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,10 +61,9 @@ public class EnemyServiceImpl implements EnemyService {
     private void makeDropListEntities(List<UUID> dropList, EnemyEntity enemyEntity) {
         dropList
                 .forEach(itemDropId -> dropListRepository
-                        .save(
-                                new DropListEntity()
-                                        .setItemId(itemDropId)
-                                        .setEnemy(enemyEntity)));
+                        .save(new DropListEntity()
+                                .setItemId(itemDropId)
+                                .setEnemy(enemyEntity)));
     }
 
     @Override
@@ -118,48 +114,64 @@ public class EnemyServiceImpl implements EnemyService {
                 new EnemyEntity("Baby Boar", "https://res.cloudinary.com/felin/image/upload/v1638026395/DestinyOfTheChosen/enemies/BabyBoar.png",
                         1, 280, 190, 24, 18, 26, findZoneByName("Forest")),
                 new EnemyEntity("Enraged Boar", "https://res.cloudinary.com/felin/image/upload/v1638026309/DestinyOfTheChosen/enemies/EnragedBoar.png",
-                        2, 320, 340, 27, 22, 31, findZoneByName("Forest")),
+                        2, 320, 430, 27, 22, 31, findZoneByName("Forest")),
                 new EnemyEntity("Pack Wolf", "https://res.cloudinary.com/felin/image/upload/v1638026038/DestinyOfTheChosen/enemies/PackWolf.png",
-                        3, 440, 510, 44, 34, 46, findZoneByName("Forest")),
+                        3, 440, 710, 44, 34, 46, findZoneByName("Forest")),
                 new EnemyEntity("Lone Wolf", "https://res.cloudinary.com/felin/image/upload/v1638025309/DestinyOfTheChosen/enemies/LoneWolf.png",
-                        4, 560, 750, 51, 44, 57, findZoneByName("Forest")),
+                        4, 560, 950, 51, 44, 57, findZoneByName("Forest")),
                 // Jungle enemies
                 new EnemyEntity("GrinusBeast", "https://res.cloudinary.com/felin/image/upload/v1638027533/DestinyOfTheChosen/enemies/GrinusBeast.png",
-                        5, 720, 890, 45, 77, 95, findZoneByName("Jungle")),
+                        5, 720, 1090, 45, 77, 95, findZoneByName("Jungle")),
                 new EnemyEntity("Death Claw", "https://res.cloudinary.com/felin/image/upload/v1638029169/DestinyOfTheChosen/enemies/DeathClaw.png",
-                        6, 840, 770, 65, 88, 115, findZoneByName("Jungle")),
+                        6, 840, 930, 65, 88, 115, findZoneByName("Jungle")),
                 new EnemyEntity("Drake", "https://res.cloudinary.com/felin/image/upload/v1638030552/DestinyOfTheChosen/enemies/Drake.png",
-                        7, 960, 910, 58, 112, 135, findZoneByName("Jungle")),
+                        7, 960, 1210, 58, 112, 135, findZoneByName("Jungle")),
                 new EnemyEntity("Jassau", "https://res.cloudinary.com/felin/image/upload/v1638030833/DestinyOfTheChosen/enemies/Jassau.png",
-                        8, 1280, 950, 78, 134, 158, findZoneByName("Jungle")),
+                        8, 1280, 1150, 78, 134, 158, findZoneByName("Jungle")),
                 new EnemyEntity("Meduntaag", "https://res.cloudinary.com/felin/image/upload/v1638031168/DestinyOfTheChosen/enemies/Meduntaag.png",
-                        9, 1500, 1320, 52, 152, 184, findZoneByName("Jungle")),
+                        9, 1500, 1520, 52, 152, 184, findZoneByName("Jungle")),
                 // Bridge enemies
                 new EnemyEntity("Saraquiel", "https://res.cloudinary.com/felin/image/upload/v1638032241/DestinyOfTheChosen/enemies/Saraquiel.png",
-                        10, 1840, 1580, 64, 201, 226, findZoneByName("The Bridge")),
+                        10, 1840, 1780, 64, 201, 226, findZoneByName("The Bridge")),
                 new EnemyEntity("Bormiel", "https://res.cloudinary.com/felin/image/upload/v1638031545/DestinyOfTheChosen/enemies/Bormiel.png",
-                        11, 2060, 1790, 52, 252, 286, findZoneByName("The Bridge")),
+                        11, 2060, 2190, 52, 252, 286, findZoneByName("The Bridge")),
                 new EnemyEntity("Tearney", "https://res.cloudinary.com/felin/image/upload/v1638033089/DestinyOfTheChosen/enemies/Tearney.png",
-                        12, 2380, 1895, 56, 297, 316, findZoneByName("The Bridge")),
+                        12, 2380, 2395, 56, 297, 316, findZoneByName("The Bridge")),
                 new EnemyEntity("Legolas", "https://res.cloudinary.com/felin/image/upload/v1638033089/DestinyOfTheChosen/enemies/Legolas.png",
-                        13, 2600, 1725, 136, 323, 356, findZoneByName("The Bridge")),
+                        13, 2600, 1925, 136, 323, 356, findZoneByName("The Bridge")),
                 new EnemyEntity("Orc Chief", "https://res.cloudinary.com/felin/image/upload/v1638034088/DestinyOfTheChosen/enemies/OrcChief.png",
-                        14, 2820, 2120, 45, 365, 384, findZoneByName("The Bridge")),
+                        14, 2820, 2620, 45, 365, 384, findZoneByName("The Bridge")),
                 // Dark Pass enemies
                 new EnemyEntity("Gnoll Warlord", "https://res.cloudinary.com/felin/image/upload/v1638034787/DestinyOfTheChosen/enemies/GnollWarlord.png",
-                        15, 3140, 1885, 78, 397, 432, findZoneByName("Dark Pass")),
+                        15, 3140, 2485, 78, 397, 432, findZoneByName("Dark Pass")),
                 new EnemyEntity("Kaylessea", "https://res.cloudinary.com/felin/image/upload/v1638035448/DestinyOfTheChosen/enemies/Kaylessea.png",
-                        16, 3360, 1785, 148, 417, 492, findZoneByName("Dark Pass")),
+                        16, 3360, 2185, 148, 417, 492, findZoneByName("Dark Pass")),
                 new EnemyEntity("Chaoshag", "https://res.cloudinary.com/felin/image/upload/v1638039280/DestinyOfTheChosen/enemies/Chaoshag.png",
-                        17, 3580, 2430, 95, 525, 580, findZoneByName("Dark Pass")),
+                        17, 3580, 2630, 95, 525, 580, findZoneByName("Dark Pass")),
                 // Graveyard enemies
                 new EnemyEntity("Ghoul", "https://res.cloudinary.com/felin/image/upload/v1638041948/DestinyOfTheChosen/enemies/Ghoull.png",
-                        18, 3900, 2640, 86, 680, 730, findZoneByName("Graveyard")),
+                        18, 3900, 3140, 86, 680, 730, findZoneByName("Graveyard")),
                 new EnemyEntity("Trennaxath", "https://res.cloudinary.com/felin/image/upload/v1638042132/DestinyOfTheChosen/enemies/Trennaxath.png",
-                        19, 5700, 4120, 210, 1200, 1400, findZoneByName("Graveyard"))
+                        19, 5700, 5320, 210, 1200, 1400, findZoneByName("Graveyard"))
         );
 
         enemyRepository.saveAll(enemyEntities);
+
+        enemyEntities.get(2).setDropList(getDropListForLevel(enemyEntities.get(2)));
+    }
+
+    private List<DropListEntity> getDropListForLevel(EnemyEntity enemyEntity) {
+        return itemService.getItemsFromLevelRequirement(enemyEntity.getLevel())
+                .stream()
+                .map(itemEntity -> {
+                    DropListEntity itemDrop = new DropListEntity()
+                            .setEnemy(enemyEntity)
+                            .setItemId(itemEntity.getId());
+                    dropListRepository
+                            .save(itemDrop);
+                    return itemDrop;
+                })
+                .collect(Collectors.toList());
     }
 
     private ZoneEntity findZoneByName(String zoneName) {

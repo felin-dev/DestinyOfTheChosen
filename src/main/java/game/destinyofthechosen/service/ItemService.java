@@ -10,6 +10,10 @@ import java.util.UUID;
 
 public interface ItemService {
 
+    List<ItemEntity> getItemsFromLevelRequirement(Integer itemsLevel);
+
+    ItemEntity getItemById(UUID itemId);
+
     List<ItemViewModel> getAllItems();
 
     void create(ItemCreationServiceModel map) throws IOException;
@@ -17,6 +21,4 @@ public interface ItemService {
     boolean isItemNameFree(String itemName);
 
     void initialize();
-
-    ItemEntity getItemById(UUID itemId);
 }

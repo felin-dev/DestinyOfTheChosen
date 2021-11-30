@@ -36,6 +36,27 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemEntity> getItemsFromLevelRequirement(Integer itemsLevel) {
+        return itemRepository.getAllByLevelRequirement(itemsLevel);
+    }
+
+    @Override
+    public ItemEntity getItemById(UUID itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() ->
+                        new ObjectNotFoundException("Item with id: " + itemId + " is does not exist."));
+    }
+
+    @Override
+    public List<ItemViewModel> getAllItems() {
+        return itemRepository
+                .findAllOrderByTypeThenByLevelRequirement()
+                .stream()
+                .map(itemEntity -> modelMapper.map(itemEntity, ItemViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void create(ItemCreationServiceModel itemModel) throws IOException {
         cloudinaryService.setFolderName("Items/" +
                 (itemModel.getType().getName().equals("Staff") ? "Staves" : itemModel.getType().getName() + "s"));
@@ -59,22 +80,6 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
 
         statRepository.saveAll(stats);
-    }
-
-    @Override
-    public ItemEntity getItemById(UUID itemId) {
-        return itemRepository.findById(itemId)
-                .orElseThrow(() ->
-                        new ObjectNotFoundException("Item with id: " + itemId + " is does not exist."));
-    }
-
-    @Override
-    public List<ItemViewModel> getAllItems() {
-        return itemRepository
-                .findAllOrderByTypeThenByLevelRequirement()
-                .stream()
-                .map(itemEntity -> modelMapper.map(itemEntity, ItemViewModel.class))
-                .collect(Collectors.toList());
     }
 
     @Override

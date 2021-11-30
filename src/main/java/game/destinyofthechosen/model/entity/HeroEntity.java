@@ -245,6 +245,11 @@ public class HeroEntity extends BaseEntity {
         return this;
     }
 
+    public HeroEntity addItem(ItemEntity item) {
+        items.add(item);
+        return this;
+    }
+
     public List<SkillEntity> getSkills() {
         return skills;
     }
@@ -255,7 +260,7 @@ public class HeroEntity extends BaseEntity {
     }
 
     public HeroEntity addSkill(SkillEntity skill) {
-        this.skills.add(skill);
+        skills.add(skill);
         return this;
     }
 

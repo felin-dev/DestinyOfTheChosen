@@ -1,6 +1,8 @@
 package game.destinyofthechosen.model.session;
 
+import com.sun.xml.bind.v2.TODO;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
+import game.destinyofthechosen.model.view.ItemViewModel;
 import game.destinyofthechosen.model.view.SkillViewModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -33,7 +35,7 @@ public class CurrentHero {
     private UUID equippedWeapon;
     private Boolean isAlive = true;
     private List<SkillViewModel> skillList;
-    // TODO   private List<ItemEntity> items;
+    private List<ItemViewModel> items;
 
 
     public UUID getId() {
@@ -222,6 +224,20 @@ public class CurrentHero {
 
     public CurrentHero setSkillList(List<SkillViewModel> skillList) {
         this.skillList = skillList;
+        return this;
+    }
+
+    public List<ItemViewModel> getItems() {
+        return items;
+    }
+
+    public CurrentHero setItems(List<ItemViewModel> items) {
+        this.items = items;
+        return this;
+    }
+
+    public CurrentHero addItem(ItemViewModel item) {
+        items.add(item);
         return this;
     }
 

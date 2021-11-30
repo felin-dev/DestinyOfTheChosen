@@ -30,23 +30,5 @@ public interface UserService {
 
     void deleteHero(String name, HeroSelectServiceModel map);
 
-    HeroSelectedViewModel getCurrentHero(String username);
-
-    HeroCombatViewModel getCurrentHeroForCombat(String username);
-
-    CombatStatusViewModel performAttackOnEnemy(String username);
-
-    CombatStatusViewModel castSkillOnEnemy(String username, String skillName);
-
-    void setCurrentHero(String username);
-
-    void updateCurrentHero(String username);
-
-    void setCurrentEnemy(UUID id);
-
-    CombatStatusViewModel resetCurrentEnemy();
-
     void initialize();
-
-    void heroIsOverTheLevelRequirementForThatZone();
 }

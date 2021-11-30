@@ -44,6 +44,15 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         })
 
     function updateCombatStatus(combatStatus) {
+        if (combatStatus.itemDrop) {
+            console.log('New drop: ' +combatStatus.itemDrop)
+        }
+        if (combatStatus.leveledUp) {
+            console.log('Congratulations you are now level: ' +combatStatus.leveledUp)
+        }
+        if (combatStatus.moneyDrop) {
+            console.log('You received: ' + combatStatus.moneyDrop + ' gold')
+        }
         updateEnemyStatus(combatStatus);
         setTimeout(function () {
             updateHeroStatus(combatStatus)

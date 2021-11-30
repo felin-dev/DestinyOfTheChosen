@@ -1,8 +1,11 @@
 package game.destinyofthechosen.model.session;
 
+import com.sun.xml.bind.v2.TODO;
+import game.destinyofthechosen.model.view.ItemViewModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,7 +22,7 @@ public class CurrentEnemy {
     private Integer attack;
     private Integer goldDropUpperThreshold;
     private Integer goldDropLowerThreshold;
-    // TODO   private List<DropListEntity> dropList;
+    private List<ItemViewModel> dropList;
     private String zoneImageUrl;
     private String zoneName;
     private Integer zoneLevelRequirement;
@@ -116,6 +119,15 @@ public class CurrentEnemy {
 
     public CurrentEnemy setGoldDropLowerThreshold(Integer goldDropLowerThreshold) {
         this.goldDropLowerThreshold = goldDropLowerThreshold;
+        return this;
+    }
+
+    public List<ItemViewModel> getDropList() {
+        return dropList;
+    }
+
+    public CurrentEnemy setDropList(List<ItemViewModel> dropList) {
+        this.dropList = dropList;
         return this;
     }
 
