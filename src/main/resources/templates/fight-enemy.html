@@ -14,14 +14,14 @@
                 <div class="bg-primary bg-opacity-75 rounded-3 py-1 no-select">
                     <span class="text-secondary" th:text="${hero.name}"></span>
                 </div>
-                <div id="hero-health-bar" class="progress position-relative status-bar">
+                <div id="hero-health-bar" class="progress position-relative status-bar bg-dark bg-opacity-75">
                     <div id="hero-health-bar-fill" class="progress-bar"
                          role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     <small id="hero-health-bar-value"
                            class="status-bar-value justify-content-center h6 d-flex position-absolute w-100 no-select"
                            th:text="|${hero.currentHealth}/${hero.baseHealth}|"></small>
                 </div>
-                <div id="hero-mana-bar" class="progress position-relative status-bar">
+                <div id="hero-mana-bar" class="progress position-relative status-bar bg-dark bg-opacity-75">
                     <div id="hero-mana-bar-fill" class="progress-bar bg-primary"
                          role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     <small id="hero-mana-bar-value"
@@ -34,6 +34,8 @@
 
             <!-- Combat menu -->
             <div id="combat-menu" class="col-lg-2 align-self-lg-center">
+                <div id="info-message" class="row invisible">
+                </div>
                 <div id="skills" class="row align-content-center">
                     <div th:each="skill : ${hero.skillList}" class="col p-0">
                         <div class="skill-border bg-opacity-75 no-select">
@@ -56,7 +58,7 @@
                 <div class="bg-primary bg-opacity-75 rounded-3 py-1 no-select">
                     <span class="card-title text-secondary" th:text="${enemy.name}"></span>
                 </div>
-                <div id="enemy-health-bar" class="progress position-relative status-bar">
+                <div id="enemy-health-bar" class="progress position-relative status-bar bg-dark bg-opacity-75">
                     <div id="enemy-health-bar-fill" class="progress-bar"
                          role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     <small id="enemy-health-bar-value"

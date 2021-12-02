@@ -14,6 +14,8 @@ public interface ItemService {
 
     ItemEntity getItemById(UUID itemId);
 
+    ItemViewModel getItemViewById(UUID itemId);
+
     List<ItemViewModel> getAllItems();
 
     void create(ItemCreationServiceModel map) throws IOException;

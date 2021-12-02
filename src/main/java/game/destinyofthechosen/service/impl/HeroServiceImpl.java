@@ -8,6 +8,7 @@ import game.destinyofthechosen.model.entity.SkillEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
+import game.destinyofthechosen.model.service.StatUpServiceModel;
 import game.destinyofthechosen.model.session.CurrentEnemy;
 import game.destinyofthechosen.model.session.CurrentHero;
 import game.destinyofthechosen.model.view.*;
@@ -174,7 +175,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private boolean itemDropped() {
-        return getRandomNumberInRange(0, 100 + 1) < 30;
+        return getRandomNumberInRange(0, 100 + 1) < 15;
     }
 
     private Integer getRandomNumberInRange(Integer lowerBound, Integer upperBound) {
@@ -195,6 +196,12 @@ public class HeroServiceImpl implements HeroService {
 
     private void resetSkillCooDowns() {
         currentHero.getSkillList().forEach(skillViewModel -> skillViewModel.setCurrentCoolDown(0));
+    }
+
+    @Override
+    @Transactional
+    public CurrentHeroViewModel getCurrentHeroInfo(String username) {
+        return mapCurrentHeroToViewModel(CurrentHeroViewModel.class, username);
     }
 
     @Override
@@ -256,12 +263,34 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     @Transactional
+    public void addStats(StatUpServiceModel stats, String username) {
+        setCurrentHero(username);
+        HeroEntity heroEntity = heroRepository.getById(currentHero.getId());
+
+        heroEntity
+                .setBaseStrength(heroEntity.getBaseStrength() +
+                        Optional.ofNullable(stats.getStrength()).orElse(0))
+                .setBaseDexterity(heroEntity.getBaseDexterity() +
+                        Optional.ofNullable(stats.getDexterity()).orElse(0))
+                .setBaseEnergy(heroEntity.getBaseEnergy() +
+                        Optional.ofNullable(stats.getEnergy()).orElse(0))
+                .setBaseVitality(heroEntity.getBaseVitality() +
+                        Optional.ofNullable(stats.getVitality()).orElse(0));
+
+        setCurrentHero(username);
+    }
+
+    @Override
+    @Transactional
     public void setCurrentHero(String username) {
         UUID currentHeroId = getUserByUsername(username)
                 .getCurrentHeroId();
 
         checkIfTheCurrentEntityIsNull(currentHeroId == null, "There is no selected hero.");
         HeroEntity heroEntity = findHeroById(currentHeroId);
+        ItemViewModel itemViewModel = heroEntity.getEquippedWeapon() == null ?
+                new ItemViewModel() : itemService.getItemViewById(heroEntity.getEquippedWeapon());
+
         currentHero = modelMapper.map(heroEntity, CurrentHero.class);
         currentHero
                 .setCurrentHealth(currentHero.getBaseHealth())
@@ -271,7 +300,13 @@ public class HeroServiceImpl implements HeroService {
                         .stream()
                         .sorted(Comparator.comparing(SkillEntity::getLevel))
                         .map(skillEntity -> modelMapper.map(skillEntity, SkillViewModel.class).setCurrentCoolDown(0))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()))
+                .setEquippedWeapon(itemViewModel)
+                .setItems(heroEntity
+                        .getItems()
+                        .stream()
+                        .map(itemEntity -> itemService.getItemViewById(itemEntity.getId()))
+                .collect(Collectors.toList()));
     }
 
     private void checkIfTheCurrentEntityIsNull(Boolean condition, String message) {
@@ -327,7 +362,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseDefense(12)     // base defense increases with items and levels
                 .setBaseDexterity(5)    // attack = dexterity x1
                 .setBaseStrength(6)     // attack = strength x2
-                .setBaseEnergy(5)       // mana = energy x20, magic power = energy x1
+                .setBaseEnergy(5)       // mana = energy x5, magic power = energy x1
                 .setBaseVitality(9)     // health = vitality x20
                 .setImageUrl(WARRIOR_IMAGE)
                 .setSkills(List.of(skillService.findByNameAndLevel("Shield Bash", 1)));
@@ -338,7 +373,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseDefense(10)     // base defense increases with items and levels
                 .setBaseDexterity(10)   // attack = dexterity x2
                 .setBaseStrength(5)     // attack = strength x1
-                .setBaseEnergy(4)       // mana = energy x20, magic power = energy x1
+                .setBaseEnergy(4)       // mana = energy x5, magic power = energy x1
                 .setBaseVitality(6)     // health = vitality x20
                 .setImageUrl(HUNTER_IMAGE)
                 .setSkills(List.of(skillService.findByNameAndLevel("Double Arrow", 1)));
@@ -349,7 +384,7 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseDefense(8)      // base defense increases with items and levels
                 .setBaseDexterity(4)    // attack = dexterity x1
                 .setBaseStrength(4)     // attack = strength x1
-                .setBaseEnergy(12)      // mana = energy x20, magic power = energy x2
+                .setBaseEnergy(12)      // mana = energy x5, magic power = energy x2
                 .setBaseVitality(5)     // health = vitality x20
                 .setImageUrl(MAGE_IMAGE)
                 .setSkills(List.of(skillService.findByNameAndLevel("Fireball", 1)));
@@ -376,6 +411,11 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public boolean isHeroNameFree(String heroName) {
         return !heroRepository.existsByHeroName(heroName);
+    }
+
+    @Override
+    public boolean hasEnoughStatPoints(int stats) {
+        return currentHero.getStatPoints() >= stats;
     }
 
     @Override

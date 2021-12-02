@@ -27,11 +27,14 @@
             </div>
             <div class="col-xl-4 my-2 py-3 align-self-end border-bottom border-secondary">
                 <div>
-                    <p class="fs-3">Your selected hero is:</p>
-                    <p class="fs-4" th:text="${currentHero.name}"></p>
-                    <p class="fs-4" th:text="|lvl ${currentHero.level} ${currentHero.heroRole.getHeroRole()}|"></p>
-                    <p class="fs-4" th:text="|Experience ${currentHero.experience}|"></p>
+                    <p class="my-0 fs-3">Your selected hero is:</p>
+                    <p class="my-0 fs-4" th:text="${currentHero.name}"></p>
+                    <p class="my-0 fs-4" th:text="|lvl ${currentHero.level} ${currentHero.heroRole.getHeroRole()}|"></p>
+                    <p class="my-0 fs-4" th:text="|Experience ${currentHero.experience}|"></p>
                 </div>
+                <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/heroes/info}">
+                    Hero Equipment
+                </a>
                 <a class="btn border-secondary main-link my-2 fs-3" th:href="@{/heroes/select}">
                     Select New Hero
                 </a>

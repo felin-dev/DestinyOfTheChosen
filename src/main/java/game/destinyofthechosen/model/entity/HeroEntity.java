@@ -164,8 +164,8 @@ public class HeroEntity extends BaseEntity {
     }
 
     public HeroEntity setBaseVitality(Integer baseVitality) {
-        baseHealth = baseVitality * 20;
         this.baseVitality = baseVitality;
+        baseHealth = this.baseVitality * 20;
         return this;
     }
 
@@ -176,12 +176,16 @@ public class HeroEntity extends BaseEntity {
     public HeroEntity setBaseStrength(Integer baseStrength) {
         switch (heroRole) {
             case WARRIOR -> {
-                baseAttack += baseStrength * 2;
                 this.baseStrength = baseStrength;
+                baseAttack = (this.baseStrength * 2) + this.baseDexterity;
             }
-            case HUNTER, MAGE -> {
-                baseAttack += baseStrength;
+            case HUNTER -> {
                 this.baseStrength = baseStrength;
+                baseAttack = (this.baseDexterity * 2) + this.baseStrength;
+            }
+            case MAGE -> {
+                this.baseStrength = baseStrength;
+                baseAttack = this.baseStrength + this.baseDexterity;
             }
         }
 
@@ -194,13 +198,17 @@ public class HeroEntity extends BaseEntity {
 
     public HeroEntity setBaseDexterity(Integer baseDexterity) {
         switch (heroRole) {
-            case WARRIOR, MAGE -> {
-                baseAttack += baseDexterity;
+            case WARRIOR -> {
                 this.baseDexterity = baseDexterity;
+                baseAttack = (this.baseStrength * 2) + this.baseDexterity;
             }
             case HUNTER -> {
-                baseAttack += baseDexterity * 2;
                 this.baseDexterity = baseDexterity;
+                baseAttack = (this.baseDexterity * 2) + this.baseStrength;
+            }
+            case MAGE -> {
+                this.baseDexterity = baseDexterity;
+                baseAttack = this.baseStrength + this.baseDexterity;
             }
         }
 
@@ -214,14 +222,14 @@ public class HeroEntity extends BaseEntity {
     public HeroEntity setBaseEnergy(Integer baseEnergy) {
         switch (heroRole) {
             case WARRIOR, HUNTER -> {
-                baseMana = baseEnergy * 20;
-                baseMagicPower += baseEnergy;
                 this.baseEnergy = baseEnergy;
+                baseMana = this.baseEnergy * 5;
+                baseMagicPower = this.baseEnergy;
             }
             case MAGE -> {
-                baseMana = baseEnergy * 20;
-                baseMagicPower += baseEnergy * 2;
                 this.baseEnergy = baseEnergy;
+                baseMana = this.baseEnergy * 5;
+                baseMagicPower = this.baseEnergy * 2;
             }
         }
         return this;

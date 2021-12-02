@@ -31,13 +31,13 @@ public class SkillServiceImpl implements SkillService {
 
         List<SkillEntity> skillEntities = List.of(
                 new SkillEntity("Shield Bash", "https://res.cloudinary.com/felin/image/upload/v1638047887/DestinyOfTheChosen/skills/ShieldBash.jpg",
-                        HeroRoleEnum.WARRIOR, SkillTypeEnum.IMMOBILIZE, 10, 1, 55, 2,
+                        HeroRoleEnum.WARRIOR, SkillTypeEnum.IMMOBILIZE, 10, 1, 15, 2,
                         "Uses the shield to perform a basic attack, dealing damage and stunning the target."),
                 new SkillEntity("Double Arrow", "https://res.cloudinary.com/felin/image/upload/v1638047944/DestinyOfTheChosen/skills/DoubleArrow.jpg",
-                        HeroRoleEnum.HUNTER, SkillTypeEnum.DAMAGE, 20, 1, 45, 1,
+                        HeroRoleEnum.HUNTER, SkillTypeEnum.DAMAGE, 28, 1, 15, 1,
                         "Shoots two arrows, dealing damage."),
                 new SkillEntity("Fireball", "https://res.cloudinary.com/felin/image/upload/v1638047833/DestinyOfTheChosen/skills/Fireball.png",
-                        HeroRoleEnum.MAGE, SkillTypeEnum.DAMAGE, 14, 1, 88, 1,
+                        HeroRoleEnum.MAGE, SkillTypeEnum.DAMAGE, 44, 1, 38, 1,
                         "Shoots a fireball, dealing damage."),
                 new SkillEntity("Shield Bash", "https://res.cloudinary.com/felin/image/upload/v1638047887/DestinyOfTheChosen/skills/ShieldBash.jpg",
                         HeroRoleEnum.WARRIOR, SkillTypeEnum.IMMOBILIZE, 48, 10, 105, 2,

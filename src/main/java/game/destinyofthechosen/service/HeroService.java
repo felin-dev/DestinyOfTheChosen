@@ -2,7 +2,9 @@ package game.destinyofthechosen.service;
 
 import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
+import game.destinyofthechosen.model.service.StatUpServiceModel;
 import game.destinyofthechosen.model.view.CombatStatusViewModel;
+import game.destinyofthechosen.model.view.CurrentHeroViewModel;
 import game.destinyofthechosen.model.view.HeroCombatViewModel;
 import game.destinyofthechosen.model.view.HeroSelectedViewModel;
 
@@ -18,17 +20,21 @@ public interface HeroService {
 
     HeroCombatViewModel getCurrentHeroForCombat(String username);
 
-    void heroIsOverTheLevelRequirementForThatZone();
+    CurrentHeroViewModel getCurrentHeroInfo(String username);
+
+    void addStats(StatUpServiceModel statUpServiceModel, String username);
 
     void updateCurrentHero(String username);
+
+    void createNewHero(HeroCreationServiceModel heroModel, String userId);
+
+    void setCurrentHero(String username);
 
     void setCurrentEnemy(UUID id);
 
     CombatStatusViewModel resetCurrentEnemy();
 
-    void createNewHero(HeroCreationServiceModel heroModel, String userId);
-
-    void setCurrentHero(String username);
+    void heroIsOverTheLevelRequirementForThatZone();
 
     HeroEntity findHeroById(UUID id);
 
@@ -39,4 +45,6 @@ public interface HeroService {
     void initialize();
 
     boolean isHeroNameFree(String heroName);
+
+    boolean hasEnoughStatPoints(int stats);
 }

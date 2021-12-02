@@ -1,6 +1,5 @@
 package game.destinyofthechosen.model.session;
 
-import com.sun.xml.bind.v2.TODO;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.view.ItemViewModel;
 import game.destinyofthechosen.model.view.SkillViewModel;
@@ -19,7 +18,7 @@ public class CurrentHero {
     private HeroRoleEnum heroRole;
     private String imageUrl;
     private Integer level;
-    private Integer stats;
+    private Integer statPoints;
     private Integer experience;
     private Integer baseHealth;
     private Integer baseMana;
@@ -32,7 +31,7 @@ public class CurrentHero {
     private Integer baseStrength;
     private Integer baseDexterity;
     private Integer baseEnergy;
-    private UUID equippedWeapon;
+    private ItemViewModel equippedWeapon;
     private Boolean isAlive = true;
     private List<SkillViewModel> skillList;
     private List<ItemViewModel> items;
@@ -83,12 +82,12 @@ public class CurrentHero {
         return this;
     }
 
-    public Integer getStats() {
-        return stats;
+    public Integer getStatPoints() {
+        return statPoints;
     }
 
-    public CurrentHero setStats(Integer stats) {
-        this.stats = stats;
+    public CurrentHero setStatPoints(Integer statPoints) {
+        this.statPoints = statPoints;
         return this;
     }
 
@@ -200,11 +199,11 @@ public class CurrentHero {
         return this;
     }
 
-    public UUID getEquippedWeapon() {
+    public ItemViewModel getEquippedWeapon() {
         return equippedWeapon;
     }
 
-    public CurrentHero setEquippedWeapon(UUID equippedWeapon) {
+    public CurrentHero setEquippedWeapon(ItemViewModel equippedWeapon) {
         this.equippedWeapon = equippedWeapon;
         return this;
     }
@@ -248,7 +247,7 @@ public class CurrentHero {
                 ", heroRole=" + heroRole +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", level=" + level +
-                ", stats=" + stats +
+                ", stats=" + statPoints +
                 ", experience=" + experience +
                 ", baseHealth=" + baseHealth +
                 ", baseMana=" + baseMana +

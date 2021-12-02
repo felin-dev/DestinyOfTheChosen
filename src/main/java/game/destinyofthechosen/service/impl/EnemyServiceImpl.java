@@ -158,6 +158,9 @@ public class EnemyServiceImpl implements EnemyService {
         enemyRepository.saveAll(enemyEntities);
 
         enemyEntities.get(2).setDropList(getDropListForLevel(enemyEntities.get(2)));
+        enemyEntities.get(8).setDropList(getDropListForLevel(enemyEntities.get(8)));
+        enemyEntities.get(14).setDropList(getDropListForLevel(enemyEntities.get(14)));
+        enemyEntities.get(17).setDropList(getDropListForLevel(enemyEntities.get(17)));
     }
 
     private List<DropListEntity> getDropListForLevel(EnemyEntity enemyEntity) {

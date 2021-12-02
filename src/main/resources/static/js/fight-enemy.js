@@ -11,6 +11,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
     const enemyHealthBarValueElement = document.getElementById('enemy-health-bar-value');
     const skillsElement = document.getElementById('skills');
     const attackBtn = document.getElementById('attack-btn');
+    const infoMessageElement = document.getElementById('info-message');
     let firstBattle = true;
 
     document.getElementById('skills')
@@ -44,15 +45,8 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         })
 
     function updateCombatStatus(combatStatus) {
-        if (combatStatus.itemDrop) {
-            console.log('New drop: ' +combatStatus.itemDrop)
-        }
-        if (combatStatus.leveledUp) {
-            console.log('Congratulations you are now level: ' +combatStatus.leveledUp)
-        }
-        if (combatStatus.moneyDrop) {
-            console.log('You received: ' + combatStatus.moneyDrop + ' gold')
-        }
+        if (combatStatus.itemDrop || combatStatus.leveledUp || combatStatus.moneyDrop) showInfo(combatStatus);
+
         updateEnemyStatus(combatStatus);
         setTimeout(function () {
             updateHeroStatus(combatStatus)
@@ -111,6 +105,25 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
                     <p class="casted-skill hidden invisible">${skill.skillName}</p>
                     <p class="skill-dropdown text-secondary bg-primary bg-opacity-75 no-select align-self-center">Mana: ${skill.manaRequired} <br> ${skill.description}</p>
                 </div>`;
+    }
+
+    function showInfo(combatStatus) {
+        render(infoTemplate(combatStatus), infoMessageElement);
+        infoMessageElement.classList.remove('invisible');
+        setTimeout(function () {
+            infoMessageElement.classList.add('invisible');
+        }, 10000);
+    }
+
+    function infoTemplate(combatStatus) {
+        return html`
+            ${combatStatus.leveledUp ? html `
+                <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">Level up: ${combatStatus.leveledUp}</p>` : ''}
+            ${combatStatus.itemDrop ? html `
+                <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">New item: ${combatStatus.itemDrop}</p>` : ''}
+            ${combatStatus.moneyDrop ? html `
+                <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">Gold: ${combatStatus.moneyDrop}</p>` : ''}
+        `;
     }
 
     function updateEnemyStatus(combatStatus) {

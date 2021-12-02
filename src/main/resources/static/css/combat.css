@@ -117,3 +117,9 @@
     pointer-events: none;
     transform: translate(-50%, -50%);
 }
+
+#info-message {
+    min-height: 100px;
+    display: inline-block;
+    text-align: center;
+}

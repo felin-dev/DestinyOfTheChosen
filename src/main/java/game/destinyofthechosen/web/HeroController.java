@@ -2,8 +2,10 @@ package game.destinyofthechosen.web;
 
 import game.destinyofthechosen.model.binding.HeroCreationBindingModel;
 import game.destinyofthechosen.model.binding.HeroSelectBindingModel;
+import game.destinyofthechosen.model.binding.StatUpBindingModel;
 import game.destinyofthechosen.model.service.HeroCreationServiceModel;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
+import game.destinyofthechosen.model.service.StatUpServiceModel;
 import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -11,10 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -33,19 +32,54 @@ public class HeroController {
         this.modelMapper = modelMapper;
     }
 
+    @ModelAttribute("stats")
+    public StatUpBindingModel statUpBindingModel() {
+        return new StatUpBindingModel();
+    }
+
+    @ModelAttribute("notEnoughStats")
+    public Boolean notEnoughStats() {
+        return false;
+    }
+
+    @GetMapping("/heroes/info")
+    public String selectHero(Model model, Principal principal) {
+
+        model.addAttribute("hero", heroService.getCurrentHeroInfo(principal.getName()));
+
+        return "hero-info";
+    }
+
+    @PatchMapping("/heroes/stat-up")
+    public String addStats(@Valid StatUpBindingModel statUpBindingModel, BindingResult bindingResult,
+                           RedirectAttributes redirectAttributes, Principal principal) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes
+                    .addFlashAttribute("statUpBindingModel", statUpBindingModel)
+                    .addFlashAttribute("notEnoughStats", true);
+
+            return "redirect:info";
+        }
+
+        heroService.addStats(modelMapper.map(statUpBindingModel, StatUpServiceModel.class), principal.getName());
+
+        return "redirect:info";
+    }
+
     @ModelAttribute("heroSelectBindingModel")
     public HeroSelectBindingModel heroSelectBindingModel() {
         return new HeroSelectBindingModel();
     }
 
     @GetMapping("/heroes/select")
-    public String selectHero(Model model, Principal principal) {
+    public String heroInfo(Model model, Principal principal) {
 
         model.addAttribute("user", userService.getUserWithOwnedHeroes(principal.getName()));
 
         return "hero-select";
     }
-    
+
     @SuppressWarnings("SpringElInspection")
     @PreAuthorize("ownsThisHero(#heroSelectBindingModel)")
     @PostMapping("/heroes/select")
