@@ -19,43 +19,44 @@
                                 <span class="fs-5 fw-bold">Equipped items:</span>
                                 <img th:src="*{equippedWeapon.imageUrl}" class="item-image py-2 no-select"
                                      alt="item-img">
-                                <p class="my-0 no-select" th:text="*{equippedWeapon.type.name}"></p>
-                                <p class="my-0 no-select" th:text="*{equippedWeapon.itemName}"></p>
-                                <p class="my-0 no-select" th:text="|Level: *{equippedWeapon.levelRequirement}|"></p>
-                                <p class="my-0 no-select" th:each="stat : *{equippedWeapon.stats}"
+                                <p class="my-0 no-select fs-5 fw-bold" th:text="*{equippedWeapon.type.name}"></p>
+                                <p class="my-0 no-select fs-5 fw-bold" th:text="*{equippedWeapon.itemName}"></p>
+                                <p class="my-0 no-select fs-5 fw-bold" th:text="|Level: *{equippedWeapon.levelRequirement}|"></p>
+                                <p class="my-0 no-select fs-5 fw-bold" th:each="stat : *{equippedWeapon.stats}"
                                    th:text="|${stat.key}: ${stat.value}|"></p>
-                                <a th:href="@{unequip}"
-                                   class="main-link border border-secondary rounded-3 mt-3 px-1 no-select text-decoration-none">Unequip</a>
+                                <br>
+                                <a th:href="@{weapons/{id}/unequip(id = *{equippedWeapon.id})}"
+                                   class="main-link border border-secondary rounded-3 px-1 no-select text-decoration-none fs-5 fw-bold">Unequip</a>
                             </div>
-                            <p class="no-select fs-5 fw-bold" th:text="|Stat Points: *{statPoints}|"></p>
-                            <div class="container">
-                                <div class="row align-items-end">
-                                    <small class="stat no-select col-6 fs-5 fw-bold">Strength: </small>
-                                    <label for="strength" class="col-2"></label>
-                                    <input th:field="${stats.strength}" th:errorclass="is-invalid" type="number" min="0" class="d-inline-block stat-box col-4" id="strength">
-                                    <small class="stat no-select col-6 fs-5 fw-bold">Dexterity: </small>
-                                    <label for="dexterity" class="col-2"></label>
-                                    <input th:field="${stats.dexterity}" type="number" min="0" class="d-inline-block stat-box col-4" id="dexterity">
-                                    <small class="stat no-select col-6 fs-5 fw-bold">Energy: </small>
-                                    <label for="energy" class="col-2"></label>
-                                    <input th:field="${stats.energy}" type="number" min="0" class="d-inline-block stat-box col-4" id="energy">
-                                    <small class="stat no-select col-6 fs-5 fw-bold">Vitality: </small>
-                                    <label for="vitality" class="col-2"></label>
-                                    <input th:field="${stats.vitality}" type="number" min="0" class="d-inline-block stat-box col-4" id="vitality">
-                                </div>
-                            </div>
-                            <button type="submit"
-                                    class="main-link border border-secondary rounded-3 mt-3 px-1 no-select bg-transparent">
-                                Up stats
-                            </button>
-                            <p th:if="${notEnoughStats}" class="mt-3 errors alert alert-danger">Not enough skill points.</p>
                         </div>
                     </div>
                     <div class="col-xl-4 mt-5 mb-2 pb-3">
                         <img th:src="*{imageUrl}" class="rounded mx-auto d-block hero-image no-select" alt="hero-img">
                     </div>
-                    <div class="col-xl-4 my-2 py-3 mt-5 fs-4">
-                        <p class="no-select" th:utext="*{heroInfo()}"></p>
+                    <div class="col-xl-4 my-1 py-3 mt-5">
+                        <p class="no-select border-bottom border-secondary pb-2 fs-5 fw-bold" th:utext="*{heroInfo()}"></p>
+                        <p class="no-select fs-5 fw-bold" th:text="|Stat Points: *{statPoints}|"></p>
+                        <div th:if="*{statPoints > 0}" class="container">
+                            <div class="row align-items-end">
+                                <small class="stat no-select col-6 fs-5 fw-bold">Strength: </small>
+                                <label for="strength" class="col-2"></label>
+                                <input th:field="${stats.strength}" th:errorclass="is-invalid" type="number" min="0"
+                                       class="d-inline-block stat-box col-4" id="strength">
+                                <small class="stat no-select col-6 fs-5 fw-bold">Dexterity: </small>
+                                <label for="dexterity" class="col-2"></label>
+                                <input th:field="${stats.dexterity}" type="number" min="0"
+                                       class="d-inline-block stat-box col-4" id="dexterity">
+                                <small class="stat no-select col-6 fs-5 fw-bold">Energy: </small>
+                                <label for="energy" class="col-2"></label>
+                                <input th:field="${stats.energy}" type="number" min="0"
+                                       class="d-inline-block stat-box col-4" id="energy">
+                            </div>
+                            <button type="submit"
+                                    class="main-link border border-secondary rounded-3 mt-2 px-1 no-select bg-transparent fs-5 fw-bold">
+                                Up stats</button>
+                            <p th:if="${notEnoughStats}" class="mt-3 errors alert alert-danger">Not enough skill
+                                points.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -65,14 +66,21 @@
                         bg-primary bg-opacity-75 text-secondary rounded-3">
             <div class="row">
                 <div th:each="item : *{items}"
-                     class="col-6 col-md-4 col-lg-3 col-xl-2 mt-5 mb-2 pb-3 border border-secondary rounded-3">
+                     class="col-6 col-md-4 col-lg-3 col-xl-2 mt-5 mb-2 px-0 pb-3 border border-secondary rounded-3">
                     <img th:src="${item.imageUrl}" class="item-image py-2 no-select" alt="item-img">
                     <p class="my-0 no-select" th:text="${item.type.name}"></p>
                     <p class="my-0 no-select" th:text="${item.itemName}"></p>
                     <p class="my-0 no-select" th:text="|Level: ${item.levelRequirement}|"></p>
                     <p class="my-0 no-select" th:each="stat : ${item.stats}" th:text="|${stat.key}: ${stat.value}|"></p>
-                    <a th:href="@{{id}/equip(id = ${item.id})}"
-                       class="main-link border border-secondary rounded-3 mt-3 px-1 no-select text-decoration-none">Equip</a>
+                    <form th:if="${item.heroRole == hero.heroRole}"
+                          th:method="PATCH" th:action="@{weapons/{id}/equip(id = ${item.id})}" class="d-inline-block">
+                        <button id="equip-weapon-btn" class="main-link border border-secondary rounded-3 mt-3 px-1 no-select bg-transparent">
+                            Equip</button>
+                    </form>
+                    <form th:method="Delete" th:action="@{weapons/{id}/throw(id = ${item.id})}" class="d-inline-block">
+                        <button id="throw-weapon-btn"  class="main-link border border-secondary rounded-3 mt-3 px-1 no-select bg-transparent">
+                            Throw</button>
+                    </form>
                 </div>
             </div>
         </section>

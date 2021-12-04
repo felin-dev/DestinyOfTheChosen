@@ -24,6 +24,12 @@ public interface HeroService {
 
     void addStats(StatUpServiceModel statUpServiceModel, String username);
 
+    void equipWeapon(UUID id, String username);
+
+    void unequipWeapon(UUID id, String username);
+
+    void throwItem(UUID id, String username);
+
     void updateCurrentHero(String username);
 
     void createNewHero(HeroCreationServiceModel heroModel, String userId);
@@ -36,7 +42,7 @@ public interface HeroService {
 
     void heroIsOverTheLevelRequirementForThatZone();
 
-    HeroEntity findHeroById(UUID id);
+    HeroEntity getHeroById(UUID id);
 
     void deleteById(UUID id);
 

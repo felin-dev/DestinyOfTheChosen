@@ -109,12 +109,22 @@ public class CurrentHero {
         return this;
     }
 
+    public CurrentHero addHealth(Integer health) {
+        this.baseHealth += health;
+        return this;
+    }
+
     public Integer getBaseMana() {
         return baseMana;
     }
 
     public CurrentHero setBaseMana(Integer baseMana) {
         this.baseMana = baseMana;
+        return this;
+    }
+
+    public CurrentHero addMana(Integer mana) {
+        this.baseMana += mana;
         return this;
     }
 
@@ -145,12 +155,22 @@ public class CurrentHero {
         return this;
     }
 
+    public CurrentHero addAttack(Integer attack) {
+        this.baseAttack += attack;
+        return this;
+    }
+
     public Integer getBaseMagicPower() {
         return baseMagicPower;
     }
 
     public CurrentHero setBaseMagicPower(Integer baseMagicPower) {
         this.baseMagicPower = baseMagicPower;
+        return this;
+    }
+
+    public CurrentHero addMagicPower(Integer magicPower) {
+        this.baseMagicPower += magicPower;
         return this;
     }
 
@@ -163,12 +183,9 @@ public class CurrentHero {
         return this;
     }
 
-    public Integer getBaseVitality() {
-        return baseVitality;
-    }
 
-    public CurrentHero setBaseVitality(Integer baseVitality) {
-        this.baseVitality = baseVitality;
+    public CurrentHero addDefense(Integer defense) {
+        this.baseDefense += defense;
         return this;
     }
 
@@ -181,6 +198,11 @@ public class CurrentHero {
         return this;
     }
 
+    public CurrentHero addStrength(Integer strength) {
+        this.baseStrength += strength;
+        return this;
+    }
+
     public Integer getBaseDexterity() {
         return baseDexterity;
     }
@@ -190,12 +212,36 @@ public class CurrentHero {
         return this;
     }
 
+    public CurrentHero addDexterity(Integer dexterity) {
+        this.baseDexterity += dexterity;
+        return this;
+    }
+
     public Integer getBaseEnergy() {
         return baseEnergy;
     }
 
     public CurrentHero setBaseEnergy(Integer baseEnergy) {
         this.baseEnergy = baseEnergy;
+        return this;
+    }
+
+    public CurrentHero addEnergy(Integer energy) {
+        this.baseEnergy += energy;
+        return this;
+    }
+
+    public Integer getBaseVitality() {
+        return baseVitality;
+    }
+
+    public CurrentHero setBaseVitality(Integer baseVitality) {
+        this.baseVitality = baseVitality;
+        return this;
+    }
+
+    public CurrentHero addVitality(Integer vitality) {
+        this.baseVitality += vitality;
         return this;
     }
 

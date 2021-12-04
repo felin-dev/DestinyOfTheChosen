@@ -47,6 +47,9 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
     function updateCombatStatus(combatStatus) {
         if (combatStatus.itemDrop || combatStatus.leveledUp || combatStatus.moneyDrop) showInfo(combatStatus);
 
+        const hero = combatStatus.hero;
+        renderSkills([...hero.skillList], hero.currentMana);
+
         updateEnemyStatus(combatStatus);
         setTimeout(function () {
             updateHeroStatus(combatStatus)
@@ -57,9 +60,6 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         const hero = combatStatus.hero;
         const heroHpPercentage = Math.round(hero.currentHealth / hero.baseHealth * 100);
         const heroMpPercentage = Math.round(hero.currentMana / hero.baseMana * 100);
-        const skills = [...hero.skillList];
-
-        renderSkills(skills, hero.currentMana);
 
         if (heroHpPercentage <= 20) {
             heroHealthBarFillElement.style.backgroundColor = 'red';

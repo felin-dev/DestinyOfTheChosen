@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.UUID;
 
 @Controller
 public class HeroController {
@@ -45,6 +46,7 @@ public class HeroController {
     @GetMapping("/heroes/info")
     public String selectHero(Model model, Principal principal) {
 
+        heroService.setCurrentHero(principal.getName());
         model.addAttribute("hero", heroService.getCurrentHeroInfo(principal.getName()));
 
         return "hero-info";
@@ -65,6 +67,30 @@ public class HeroController {
         heroService.addStats(modelMapper.map(statUpBindingModel, StatUpServiceModel.class), principal.getName());
 
         return "redirect:info";
+    }
+
+    @PatchMapping("/heroes/weapons/{id}/equip")
+    public String equipWeapon(@PathVariable UUID id, Principal principal) {
+
+        heroService.equipWeapon(id, principal.getName());
+
+        return "redirect:/heroes/info";
+    }
+
+    @GetMapping("/heroes/weapons/{id}/unequip")
+    public String unequipWeapon(@PathVariable UUID id, Principal principal) {
+
+        heroService.unequipWeapon(id, principal.getName());
+
+        return "redirect:/heroes/info";
+    }
+
+    @DeleteMapping("/heroes/weapons/{id}/throw")
+    public String throwWeapon(@PathVariable UUID id, Principal principal) {
+
+        heroService.throwItem(id, principal.getName());
+
+        return "redirect:/heroes/info";
     }
 
     @ModelAttribute("heroSelectBindingModel")

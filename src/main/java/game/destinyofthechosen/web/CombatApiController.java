@@ -18,11 +18,9 @@ import java.security.Principal;
 @RestController
 public class CombatApiController {
 
-    private final UserService userService;
     private final HeroService heroService;
 
-    public CombatApiController(UserService userService, HeroService heroService) {
-        this.userService = userService;
+    public CombatApiController(HeroService heroService) {
         this.heroService = heroService;
     }
 

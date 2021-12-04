@@ -3,6 +3,7 @@ package game.destinyofthechosen.service.impl;
 import game.destinyofthechosen.exception.ObjectNotFoundException;
 import game.destinyofthechosen.model.entity.ItemEntity;
 import game.destinyofthechosen.model.entity.StatEntity;
+import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
 import game.destinyofthechosen.model.enumeration.StatEnum;
 import game.destinyofthechosen.model.service.CloudinaryImage;
@@ -55,6 +56,12 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new ObjectNotFoundException(String.format("There is no item with id: %s.", itemId)));
 
         ItemViewModel itemView = modelMapper.map(itemEntity, ItemViewModel.class);
+        ItemTypeEnum type = itemEntity.getType();
+        switch (type) {
+            case SWORD -> itemView.setHeroRole(HeroRoleEnum.WARRIOR);
+            case BOW -> itemView.setHeroRole(HeroRoleEnum.HUNTER);
+            case STAFF -> itemView.setHeroRole(HeroRoleEnum.MAGE);
+        }
 
         Map<String, Integer> stats = itemEntity.getStats()
                 .stream()
@@ -135,252 +142,176 @@ public class ItemServiceImpl implements ItemService {
                 // Broadsword's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(6)
+                        .setValue(11)
                         .setItem(items.get(0)),
                 new StatEntity()
                         .setStat(StatEnum.DEFENSE)
-                        .setValue(4)
+                        .setValue(9)
                         .setItem(items.get(0)),
                 new StatEntity()
                         .setStat(StatEnum.STRENGTH)
-                        .setValue(1)
+                        .setValue(6)
                         .setItem(items.get(0)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(2)
+                        .setValue(7)
                         .setItem(items.get(0)),
                 // Deathraze's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(9)
+                        .setValue(49)
                         .setItem(items.get(1)),
                 new StatEntity()
                         .setStat(StatEnum.DEFENSE)
-                        .setValue(7)
+                        .setValue(27)
                         .setItem(items.get(1)),
                 new StatEntity()
                         .setStat(StatEnum.STRENGTH)
-                        .setValue(3)
-                        .setItem(items.get(1)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(3)
+                        .setValue(81)
                         .setItem(items.get(1)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(5)
+                        .setValue(20)
                         .setItem(items.get(1)),
                 // Swift Blade's
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(24)
+                        .setValue(84)
                         .setItem(items.get(2)),
                 new StatEntity()
                         .setStat(StatEnum.DEFENSE)
-                        .setValue(14)
+                        .setValue(54)
                         .setItem(items.get(2)),
                 new StatEntity()
                         .setStat(StatEnum.STRENGTH)
-                        .setValue(8)
-                        .setItem(items.get(2)),
-                new StatEntity()
-                        .setStat(StatEnum.DEXTERITY)
-                        .setValue(4)
-                        .setItem(items.get(2)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(8)
+                        .setValue(120)
                         .setItem(items.get(2)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(16)
+                        .setValue(66)
                         .setItem(items.get(2)),
                 // Doom Blade's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(35)
+                        .setValue(125)
                         .setItem(items.get(3)),
                 new StatEntity()
                         .setStat(StatEnum.DEFENSE)
-                        .setValue(32)
+                        .setValue(112)
                         .setItem(items.get(3)),
                 new StatEntity()
                         .setStat(StatEnum.STRENGTH)
-                        .setValue(15)
-                        .setItem(items.get(3)),
-                new StatEntity()
-                        .setStat(StatEnum.DEXTERITY)
-                        .setValue(7)
-                        .setItem(items.get(3)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(15)
+                        .setValue(247)
                         .setItem(items.get(3)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(25)
+                        .setValue(85)
                         .setItem(items.get(3)),
                 // Bows' stats
                 // Composite Bow's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(14)
+                        .setValue(34)
                         .setItem(items.get(4)),
                 new StatEntity()
                         .setStat(StatEnum.DEXTERITY)
-                        .setValue(2)
+                        .setValue(7)
                         .setItem(items.get(4)),
                 new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(1)
+                        .setStat(StatEnum.VITALITY)
+                        .setValue(6)
                         .setItem(items.get(4)),
                 // Maple Bow's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(23)
+                        .setValue(123)
                         .setItem(items.get(5)),
                 new StatEntity()
                         .setStat(StatEnum.DEXTERITY)
-                        .setValue(6)
-                        .setItem(items.get(5)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(4)
+                        .setValue(85)
                         .setItem(items.get(5)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(1)
+                        .setValue(16)
                         .setItem(items.get(5)),
                 // Light Bow's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(52)
+                        .setValue(172)
                         .setItem(items.get(6)),
                 new StatEntity()
                         .setStat(StatEnum.DEXTERITY)
-                        .setValue(16)
-                        .setItem(items.get(6)),
-                new StatEntity()
-                        .setStat(StatEnum.STRENGTH)
-                        .setValue(10)
-                        .setItem(items.get(6)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(5)
+                        .setValue(126)
                         .setItem(items.get(6)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(5)
+                        .setValue(50)
                         .setItem(items.get(6)),
                 // Crossfire's stats
                 new StatEntity()
                         .setStat(StatEnum.ATTACK)
-                        .setValue(99)
+                        .setValue(349)
                         .setItem(items.get(7)),
                 new StatEntity()
                         .setStat(StatEnum.DEXTERITY)
-                        .setValue(33)
-                        .setItem(items.get(7)),
-                new StatEntity()
-                        .setStat(StatEnum.STRENGTH)
-                        .setValue(15)
-                        .setItem(items.get(7)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(7)
+                        .setValue(255)
                         .setItem(items.get(7)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(7)
+                        .setValue(77)
                         .setItem(items.get(7)),
                 // Staves' stats
                 // Ash Wood Scepter's stats
                 new StatEntity()
-                        .setStat(StatEnum.ATTACK)
-                        .setValue(4)
-                        .setItem(items.get(8)),
-                new StatEntity()
                         .setStat(StatEnum.MAGIC_POWER)
-                        .setValue(10)
+                        .setValue(34)
                         .setItem(items.get(8)),
-                new StatEntity()
-                        .setStat(StatEnum.ENERGY)
-                        .setValue(3)
-                        .setItem(items.get(8)),
-                // War Staff's stats
-                new StatEntity()
-                        .setStat(StatEnum.ATTACK)
-                        .setValue(6)
-                        .setItem(items.get(9)),
-                new StatEntity()
-                        .setStat(StatEnum.MAGIC_POWER)
-                        .setValue(17)
-                        .setItem(items.get(9)),
                 new StatEntity()
                         .setStat(StatEnum.ENERGY)
                         .setValue(8)
+                        .setItem(items.get(8)),
+                new StatEntity()
+                        .setStat(StatEnum.VITALITY)
+                        .setValue(5)
+                        .setItem(items.get(8)),
+                // War Staff's stats
+                new StatEntity()
+                        .setStat(StatEnum.MAGIC_POWER)
+                        .setValue(123)
                         .setItem(items.get(9)),
                 new StatEntity()
-                        .setStat(StatEnum.STRENGTH)
-                        .setValue(1)
-                        .setItem(items.get(9)),
-                new StatEntity()
-                        .setStat(StatEnum.DEXTERITY)
-                        .setValue(1)
+                        .setStat(StatEnum.ENERGY)
+                        .setValue(86)
                         .setItem(items.get(9)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(1)
+                        .setValue(15)
                         .setItem(items.get(9)),
                 // Devotion' stats
                 new StatEntity()
-                        .setStat(StatEnum.ATTACK)
-                        .setValue(20)
-                        .setItem(items.get(10)),
-                new StatEntity()
                         .setStat(StatEnum.MAGIC_POWER)
-                        .setValue(32)
+                        .setValue(172)
                         .setItem(items.get(10)),
                 new StatEntity()
                         .setStat(StatEnum.ENERGY)
-                        .setValue(21)
-                        .setItem(items.get(10)),
-                new StatEntity()
-                        .setStat(StatEnum.STRENGTH)
-                        .setValue(5)
-                        .setItem(items.get(10)),
-                new StatEntity()
-                        .setStat(StatEnum.DEXTERITY)
-                        .setValue(5)
+                        .setValue(127)
                         .setItem(items.get(10)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(5)
+                        .setValue(49)
                         .setItem(items.get(10)),
                 // Staff of Fate
                 new StatEntity()
-                        .setStat(StatEnum.ATTACK)
-                        .setValue(33)
-                        .setItem(items.get(11)),
-                new StatEntity()
                         .setStat(StatEnum.MAGIC_POWER)
-                        .setValue(66)
+                        .setValue(349)
                         .setItem(items.get(11)),
                 new StatEntity()
                         .setStat(StatEnum.ENERGY)
-                        .setValue(41)
-                        .setItem(items.get(11)),
-                new StatEntity()
-                        .setStat(StatEnum.STRENGTH)
-                        .setValue(7)
-                        .setItem(items.get(11)),
-                new StatEntity()
-                        .setStat(StatEnum.DEXTERITY)
-                        .setValue(7)
+                        .setValue(255)
                         .setItem(items.get(11)),
                 new StatEntity()
                         .setStat(StatEnum.VITALITY)
-                        .setValue(7)
+                        .setValue(77)
                         .setItem(items.get(11))
         );
 

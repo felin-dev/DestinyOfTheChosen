@@ -1,5 +1,6 @@
 package game.destinyofthechosen.model.view;
 
+import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.enumeration.ItemTypeEnum;
 
 import java.util.LinkedHashMap;
@@ -11,6 +12,7 @@ public class ItemViewModel {
     private UUID id;
     private String itemName;
     private ItemTypeEnum type;
+    private HeroRoleEnum heroRole;
     private Map<String, Integer> stats = new LinkedHashMap<>();
     private String imageUrl;
     private Integer levelRequirement;
@@ -39,6 +41,15 @@ public class ItemViewModel {
 
     public ItemViewModel setType(ItemTypeEnum type) {
         this.type = type;
+        return this;
+    }
+
+    public HeroRoleEnum getHeroRole() {
+        return heroRole;
+    }
+
+    public ItemViewModel setHeroRole(HeroRoleEnum heroRole) {
+        this.heroRole = heroRole;
         return this;
     }
 

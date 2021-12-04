@@ -19,6 +19,8 @@ import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.ItemService;
 import game.destinyofthechosen.service.SkillService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +35,8 @@ public class HeroServiceImpl implements HeroService {
     private static final String HUNTER_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/hunter-f.png";
     private static final String MAGE_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/mage-f.png";
     private static final Map<Integer, Integer> LEVELING = new LinkedHashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(HeroServiceImpl.class);
+    private static final Boolean TEST_MODE = true;
 
     private final HeroRepository heroRepository;
     private final UserRepository userRepository;
@@ -72,17 +76,23 @@ public class HeroServiceImpl implements HeroService {
         skill.setCurrentCoolDown(skill.getCoolDown() + 1);
         currentHero.setCurrentMana(currentHero.getCurrentMana() - skill.getManaRequired());
 
+        CombatStatusViewModel combatStatusViewModel = new CombatStatusViewModel();
+
+        int damageSkillDamage = currentHero.getBaseAttack() + currentHero.getBaseMagicPower() + (skill.getSkillValue() * currentHero.getLevel());
+        int healAmount = Math.min(currentHero.getBaseHealth(), currentHero.getCurrentHealth() + (skill.getSkillValue() * currentHero.getLevel() / 3));
+        int immobilizeSkillDamage = currentHero.getBaseAttack() + (skill.getSkillValue() * currentHero.getLevel());
+
         switch (skill.getType()) {
-            case DAMAGE -> attackEnemy(username, currentHero.getBaseAttack() + currentHero.getBaseMagicPower() + skill.getSkillValue(), currentHero.getBaseDefense(), false, false);
-            case DEFENSE_BUFF -> attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense() + skill.getSkillValue(), false, false);
+            case DAMAGE -> combatStatusViewModel = attackEnemy(username, damageSkillDamage, currentHero.getBaseDefense(), false, false);
+            case DEFENSE_BUFF -> combatStatusViewModel = attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense() + skill.getSkillValue(), false, false);
             case HEAL -> {
-                currentHero.setCurrentHealth(Math.min(currentHero.getBaseHealth(), currentHero.getCurrentHealth() + skill.getSkillValue()));
-                attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, true);
+                currentHero.setCurrentHealth(healAmount);
+                combatStatusViewModel = attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, true);
             }
-            case IMMOBILIZE -> attackEnemy(username, currentHero.getBaseAttack() + skill.getSkillValue(), currentHero.getBaseDefense(), true, false);
+            case IMMOBILIZE -> combatStatusViewModel = attackEnemy(username, immobilizeSkillDamage, currentHero.getBaseDefense(), true, false);
         }
 
-        return createCombatStatusView();
+        return combatStatusViewModel;
     }
 
     @Override
@@ -126,19 +136,23 @@ public class HeroServiceImpl implements HeroService {
         currentEnemy.setIsAlive(false);
         earnGold(username);
 
-        if (currentEnemy.getDropList().size() > 0 && itemDropped()) {
+        if (currentEnemy.getDropList().size() > 0 && itemDropped() || currentEnemy.getDropList().size() > 0 && TEST_MODE) {
             addItemToHero();
         }
 
         gainExperience(currentHero.getId(),
-                currentHero.getLevel() > currentEnemy.getLevel() ? currentEnemy.getExperience() / 2 : currentEnemy.getExperience());
+                currentHero.getLevel() > currentEnemy.getLevel() ? currentEnemy.getExperience() / 4 : currentEnemy.getExperience());
 
-        if (currentHero.getLevel() < findHeroById(currentHero.getId()).getLevel()) updateCurrentHero(username);
+        if (currentHero.getLevel() < getHeroById(currentHero.getId()).getLevel()) updateCurrentHero(username);
     }
 
     public void gainExperience(UUID id, Integer experience) {
-        HeroEntity heroEntity = findHeroById(id);
-        heroEntity.setExperience(heroEntity.getExperience() + experience);
+        HeroEntity heroEntity = getHeroById(id);
+        int experienceGain = heroEntity.getExperience() + experience;
+
+        if (TEST_MODE) experienceGain = currentHero.getLevel() > currentEnemy.getLevel() ? 0 : experienceGain * 5;
+
+        heroEntity.setExperience(experienceGain);
         checkIfHeroHasToLevelUp(heroEntity);
 
         heroRepository.save(heroEntity);
@@ -150,8 +164,31 @@ public class HeroServiceImpl implements HeroService {
 
         Integer experienceNeededForLevelingUp = LEVELING.get(currentLevel + 1);
         if (heroEntity.getExperience() >= experienceNeededForLevelingUp) {
-            heroEntity.levelUp();
-            leveledUp = heroEntity.getLevel();
+            levelUp(heroEntity);
+        }
+    }
+
+    private void levelUp(HeroEntity heroEntity) {
+        heroEntity.levelUp();
+        leveledUp = heroEntity.getLevel();
+        if (leveledUp == 5 || leveledUp == 10 || leveledUp == 14 || leveledUp == 17) {
+            addNewSkill(heroEntity);
+        }
+
+        heroRepository.save(heroEntity);
+    }
+
+    private void addNewSkill(HeroEntity heroEntity) {
+        switch (heroEntity.getLevel()) {
+            case 5 -> heroEntity.addSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 5));
+            case 10 -> heroEntity
+                    .removeSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 1))
+                    .addSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 10));
+            case 14 -> heroEntity
+                    .addSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 14));
+            case 17 -> heroEntity
+                    .removeSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 5))
+                    .addSkill(skillService.findByRoleAndLevel(heroEntity.getHeroRole(), 17));
         }
     }
 
@@ -165,8 +202,15 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private void addItemToHero() {
-        Integer itemIndex = getRandomNumberInRange(0, currentEnemy.getDropList().size());
-        ItemEntity itemEntity = itemService.getItemById(currentEnemy.getDropList().get(itemIndex).getId());
+        int itemIndex = getRandomNumberInRange(0, currentEnemy.getDropList().size());
+        UUID enemyDropId = currentEnemy.getDropList().get(itemIndex).getId();
+
+        if (currentHero.getItems().stream().anyMatch(itemViewModel -> itemViewModel.getId().equals(enemyDropId)) ||
+                currentHero.getEquippedWeapon().getId() != null && currentHero.getEquippedWeapon().getId().equals(enemyDropId))
+            return;
+
+        logger.info("Hero {} received item with id: {}.", currentHero.getName(), enemyDropId);
+        ItemEntity itemEntity = itemService.getItemById(enemyDropId);
 
         HeroEntity heroEntity = heroRepository.getById(currentHero.getId());
         heroEntity.addItem(itemEntity);
@@ -175,7 +219,8 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private boolean itemDropped() {
-        return getRandomNumberInRange(0, 100 + 1) < 15;
+        int dropChance = 30 - currentEnemy.getLevel();
+        return getRandomNumberInRange(0, 100 + 1) < dropChance;
     }
 
     private Integer getRandomNumberInRange(Integer lowerBound, Integer upperBound) {
@@ -266,7 +311,7 @@ public class HeroServiceImpl implements HeroService {
     public void addStats(StatUpServiceModel stats, String username) {
         setCurrentHero(username);
         HeroEntity heroEntity = heroRepository.getById(currentHero.getId());
-
+        heroEntity.setStatPoints(heroEntity.getStatPoints() - totalStats(stats));
         heroEntity
                 .setBaseStrength(heroEntity.getBaseStrength() +
                         Optional.ofNullable(stats.getStrength()).orElse(0))
@@ -277,6 +322,52 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseVitality(heroEntity.getBaseVitality() +
                         Optional.ofNullable(stats.getVitality()).orElse(0));
 
+        heroRepository.save(heroEntity);
+        setCurrentHero(username);
+    }
+
+    private Integer totalStats(StatUpServiceModel stats) {
+        return Optional.ofNullable(stats.getStrength()).orElse(0) + Optional.ofNullable(stats.getDexterity()).orElse(0)
+                + Optional.ofNullable(stats.getEnergy()).orElse(0) + Optional.ofNullable(stats.getVitality()).orElse(0);
+    }
+
+    @Override
+    @Transactional
+    public void equipWeapon(UUID weaponId, String username) {
+        setCurrentHero(username);
+        ItemViewModel itemView = currentHero
+                .getItems()
+                .stream()
+                .filter(itemViewModel -> itemViewModel.getId().equals(weaponId))
+                .findFirst()
+                .orElseThrow(() -> new ObjectNotFoundException("Hero does not own item with id: " + weaponId));
+
+        if (itemView.getLevelRequirement() > currentHero.getLevel()) return;
+
+        HeroEntity heroEntity = getHeroById(currentHero.getId());
+        heroEntity.setEquippedWeapon(weaponId);
+        heroRepository.save(heroEntity);
+        setCurrentHero(username);
+    }
+
+    @Override
+    @Transactional
+    public void unequipWeapon(UUID id, String username) {
+        setCurrentHero(username);
+        currentHero.setEquippedWeapon(null);
+        HeroEntity heroEntity = getHeroById(currentHero.getId());
+        heroEntity.setEquippedWeapon(null);
+        heroRepository.save(heroEntity);
+        setCurrentHero(username);
+    }
+
+    @Override
+    @Transactional
+    public void throwItem(UUID id, String username) {
+        setCurrentHero(username);
+        HeroEntity heroEntity = getHeroById(currentHero.getId());
+        heroEntity.throwItem(itemService.getItemById(id));
+        heroRepository.save(heroEntity);
         setCurrentHero(username);
     }
 
@@ -287,14 +378,12 @@ public class HeroServiceImpl implements HeroService {
                 .getCurrentHeroId();
 
         checkIfTheCurrentEntityIsNull(currentHeroId == null, "There is no selected hero.");
-        HeroEntity heroEntity = findHeroById(currentHeroId);
+        HeroEntity heroEntity = getHeroById(currentHeroId);
         ItemViewModel itemViewModel = heroEntity.getEquippedWeapon() == null ?
                 new ItemViewModel() : itemService.getItemViewById(heroEntity.getEquippedWeapon());
 
         currentHero = modelMapper.map(heroEntity, CurrentHero.class);
         currentHero
-                .setCurrentHealth(currentHero.getBaseHealth())
-                .setCurrentMana(currentHero.getBaseMana())
                 .setSkillList(heroEntity
                         .getSkills()
                         .stream()
@@ -305,8 +394,96 @@ public class HeroServiceImpl implements HeroService {
                 .setItems(heroEntity
                         .getItems()
                         .stream()
+                        .filter(itemEntity -> !itemEntity.getId().equals(currentHero.getEquippedWeapon().getId()))
                         .map(itemEntity -> itemService.getItemViewById(itemEntity.getId()))
-                .collect(Collectors.toList()));
+                        .collect(Collectors.toList()));
+
+        addEquippedItemStats(currentHero.getEquippedWeapon());
+        currentHero
+                .setCurrentHealth(currentHero.getBaseHealth())
+                .setCurrentMana(currentHero.getBaseMana());
+    }
+
+    private void addEquippedItemStats(ItemViewModel equippedWeapon) {
+
+        equippedWeapon
+                .getStats()
+                .forEach((key, value) -> {
+                    switch (currentHero.getHeroRole()) {
+                        case WARRIOR -> {
+                            switch (key.toUpperCase()) {
+                                case "ATTACK" -> currentHero.addAttack(value);
+                                case "MAGIC POWER" -> currentHero.addMagicPower(value);
+                                case "DEFENSE" -> currentHero.addDefense(value);
+                                case "STRENGTH" -> {
+                                    currentHero.addStrength(value);
+                                    currentHero.addAttack(value * 2);
+                                }
+                                case "DEXTERITY" -> {
+                                    currentHero.addDexterity(value);
+                                    currentHero.addAttack(value);
+                                }
+                                case "ENERGY" -> {
+                                    currentHero.addEnergy(value);
+                                    currentHero.addMagicPower(value);
+                                    currentHero.addMana(value * 5);
+                                }
+                                case "VITALITY" -> {
+                                    currentHero.addVitality(value);
+                                    currentHero.addHealth(value * 20);
+                                }
+                            }
+                        }
+                        case HUNTER -> {
+                            switch (key.toUpperCase()) {
+                                case "ATTACK" -> currentHero.addAttack(value);
+                                case "MAGIC POWER" -> currentHero.addMagicPower(value);
+                                case "DEFENSE" -> currentHero.addDefense(value);
+                                case "STRENGTH" -> {
+                                    currentHero.addStrength(value);
+                                    currentHero.addAttack(value);
+                                }
+                                case "DEXTERITY" -> {
+                                    currentHero.addDexterity(value);
+                                    currentHero.addAttack(value * 2);
+                                }
+                                case "ENERGY" -> {
+                                    currentHero.addEnergy(value);
+                                    currentHero.addMagicPower(value);
+                                    currentHero.addMana(value * 5);
+                                }
+                                case "VITALITY" -> {
+                                    currentHero.addVitality(value);
+                                    currentHero.addHealth(value * 20);
+                                }
+                            }
+                        }
+                        case MAGE -> {
+                            switch (key.toUpperCase()) {
+                                case "ATTACK" -> currentHero.addAttack(value);
+                                case "MAGIC POWER" -> currentHero.addMagicPower(value);
+                                case "DEFENSE" -> currentHero.addDefense(value);
+                                case "STRENGTH" -> {
+                                    currentHero.addStrength(value);
+                                    currentHero.addAttack(value);
+                                }
+                                case "DEXTERITY" -> {
+                                    currentHero.addDexterity(value);
+                                    currentHero.addAttack(value);
+                                }
+                                case "ENERGY" -> {
+                                    currentHero.addEnergy(value);
+                                    currentHero.addMagicPower(value * 2);
+                                    currentHero.addMana(value * 5);
+                                }
+                                case "VITALITY" -> {
+                                    currentHero.addVitality(value);
+                                    currentHero.addHealth(value * 20);
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     private void checkIfTheCurrentEntityIsNull(Boolean condition, String message) {
@@ -365,18 +542,18 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseEnergy(5)       // mana = energy x5, magic power = energy x1
                 .setBaseVitality(9)     // health = vitality x20
                 .setImageUrl(WARRIOR_IMAGE)
-                .setSkills(List.of(skillService.findByNameAndLevel("Shield Bash", 1)));
+                .addSkill(skillService.findByNameAndLevel("Shield Bash", 1));
     }
 
     private void createHunter(HeroEntity hunter) {
         hunter
                 .setBaseDefense(10)     // base defense increases with items and levels
-                .setBaseDexterity(10)   // attack = dexterity x2
+                .setBaseDexterity(12)   // attack = dexterity x2
                 .setBaseStrength(5)     // attack = strength x1
                 .setBaseEnergy(4)       // mana = energy x5, magic power = energy x1
                 .setBaseVitality(6)     // health = vitality x20
                 .setImageUrl(HUNTER_IMAGE)
-                .setSkills(List.of(skillService.findByNameAndLevel("Double Arrow", 1)));
+                .addSkill(skillService.findByNameAndLevel("Double Arrow", 1));
     }
 
     private void createMage(HeroEntity mage) {
@@ -384,14 +561,14 @@ public class HeroServiceImpl implements HeroService {
                 .setBaseDefense(8)      // base defense increases with items and levels
                 .setBaseDexterity(4)    // attack = dexterity x1
                 .setBaseStrength(4)     // attack = strength x1
-                .setBaseEnergy(12)      // mana = energy x5, magic power = energy x2
-                .setBaseVitality(5)     // health = vitality x20
+                .setBaseEnergy(14)      // mana = energy x5, magic power = energy x2
+                .setBaseVitality(7)     // health = vitality x20
                 .setImageUrl(MAGE_IMAGE)
-                .setSkills(List.of(skillService.findByNameAndLevel("Fireball", 1)));
+                .addSkill(skillService.findByNameAndLevel("Fireball", 1));
     }
 
     @Override
-    public HeroEntity findHeroById(UUID id) {
+    public HeroEntity getHeroById(UUID id) {
         return heroRepository.findHeroById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("There is no hero with such id."));
     }
@@ -403,7 +580,7 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public boolean isOverTheLevelRequirement(String username, Integer levelRequirement) {
-        HeroEntity heroEntity = findHeroById(getUserByUsername(username).getCurrentHeroId());
+        HeroEntity heroEntity = getHeroById(getUserByUsername(username).getCurrentHeroId());
 
         return heroEntity.getLevel() >= levelRequirement;
     }
@@ -421,6 +598,7 @@ public class HeroServiceImpl implements HeroService {
     @Override
     public void initialize() {
         if (heroRepository.count() != 0) return;
+
         HeroEntity hunter = new HeroEntity("Felixi", HeroRoleEnum.HUNTER).setUser(getUserByUsername("felin"));
         createHunter(hunter);
         HeroEntity warrior = new HeroEntity("Jessica", HeroRoleEnum.WARRIOR).setUser(getUserByUsername("felin"));
@@ -428,9 +606,11 @@ public class HeroServiceImpl implements HeroService {
         HeroEntity mage = new HeroEntity("SpiritOfTheElder", HeroRoleEnum.MAGE).setUser(getUserByUsername("felin"));
         createMage(mage);
 
-        List<HeroEntity> heroEntities = List.of(hunter, warrior, mage);
-
-        heroRepository.saveAll(heroEntities);
+        for (int i = 1; i < 15; i++) {
+            levelUp(warrior);
+            levelUp(hunter);
+            levelUp(mage);
+        }
     }
 
     static {

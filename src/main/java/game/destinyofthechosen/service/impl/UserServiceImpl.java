@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         if (user.getCurrentHeroId() != null && user.getCurrentHeroId().equals(heroModel.getId()))
             user.setCurrentHeroId(null);
 
-        user.getHeroes().remove(heroService.findHeroById(heroModel.getId()));
+        user.getHeroes().remove(heroService.getHeroById(heroModel.getId()));
 
         userRepository.save(user);
         heroService.deleteById(heroModel.getId());
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = getUserByUsername(username);
         HeroEntity heroEntity = user.getCurrentHeroId() == null ?
                 new HeroEntity() : heroService.
-                findHeroById(user.getCurrentHeroId());
+                getHeroById(user.getCurrentHeroId());
 
         return new UserHeroSelectViewModel()
                 .setCurrentHero(modelMapper.map(heroEntity, HeroInfoViewModel.class))
