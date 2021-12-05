@@ -152,14 +152,14 @@ public class UserServiceImpl implements UserService {
 
         List<UserEntity> userEntities = List.of(new UserEntity(
                 "felin",
-                passwordEncoder.encode("testtest"),
-                "felin@gmail.com",
+                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
+                System.getenv("FELIN_EMAIL"),
                 Set.of(userRoleService.findByUserRole(UserRoleEnum.ADMIN),
                         userRoleService.findByUserRole(UserRoleEnum.USER))
         ), new UserEntity(
                 "felixi",
-                passwordEncoder.encode("testtest"),
-                "felixi@gmail.com",
+                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
+                System.getenv("FELIXI_EMAIL"),
                 Set.of(userRoleService.findByUserRole(UserRoleEnum.USER))
         ));
 
