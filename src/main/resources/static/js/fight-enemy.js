@@ -19,7 +19,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
             if (event.target.tagName === 'IMG' && attackBtn.textContent !== 'Attack Again' &&  attackBtn.textContent !== 'Try Again') {
                 const castedSkill = event.target.parentNode.parentNode.querySelector('.casted-skill').textContent;
                 const token = await performGetRequest('/csrf');
-                const combatStatus = await performPostRequest('fragments/enemies/skill/attack', {
+                const combatStatus = await performPostRequest('/enemies/skill/attack', {
                     [token.headerName]: [token.csrf]
                 }, { skillName: castedSkill });
 
@@ -31,13 +31,13 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         .addEventListener('click', async () => {
             if (attackBtn.textContent === 'Attack Again' || attackBtn.textContent === 'Try Again') {
                 attackBtn.textContent = 'Attack';
-                const newCombatStatus = await performGetRequest('fragments/enemies/attack/new-enemy');
+                const newCombatStatus = await performGetRequest('/enemies/attack/new-enemy');
                 updateCombatStatus(newCombatStatus);
                 return;
             }
 
-            const token = await performGetRequest('fragments/csrf');
-            const combatStatus = await performPostRequest('fragments/enemies/attack', {
+            const token = await performGetRequest('/csrf');
+            const combatStatus = await performPostRequest('/enemies/attack', {
                 [token.headerName]: [token.csrf]
             });
 
