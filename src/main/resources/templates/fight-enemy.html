@@ -2,10 +2,10 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="/fragments/head::head"><title></title></head>
+<head th:replace="fragments/head::head"><title></title></head>
 
 <body>
-<header th:replace="/fragments/navigation::navigation"></header>
+<header th:replace="fragments/navigation::navigation"></header>
 <main th:style="'background: url(' + ${enemy.zoneImageUrl} + ') no-repeat center fixed;'">
     <br>
     <div class="container-sm my-1">
@@ -71,7 +71,7 @@
     </div>
     <br>
 </main>
-<footer th:replace="/fragments/footer::footer"></footer>
+<footer th:replace="fragments/footer::footer"></footer>
 <script type="module" src="/js/fight-enemy.js"></script>
 </body>
 

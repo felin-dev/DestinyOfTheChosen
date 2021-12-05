@@ -2,10 +2,10 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="/fragments/head::head"><title></title></head>
+<head th:replace="fragments/head::head"><title></title></head>
 
 <body>
-<header th:replace="/fragments/navigation::navigation"></header>
+<header th:replace="fragments/navigation::navigation"></header>
 <main class="character-creation-background">
     <br>
     <form th:object="${heroCreationBindingModel}"
@@ -73,7 +73,7 @@
     </form>
     <br>
 </main>
-<footer th:replace="/fragments/footer::footer"></footer>
+<footer th:replace="fragments/footer::footer"></footer>
 <script src="/js/hero-creation.js"></script>
 </body>
 
