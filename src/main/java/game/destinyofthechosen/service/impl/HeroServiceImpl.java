@@ -36,7 +36,7 @@ public class HeroServiceImpl implements HeroService {
     private static final String MAGE_IMAGE = "https://res.cloudinary.com/felin/image/upload/v1636280530/DestinyOfTheChosen/heroes/mage-f.png";
     private static final Map<Integer, Integer> LEVELING = new LinkedHashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(HeroServiceImpl.class);
-    private static final Boolean TEST_MODE = true;
+    private static final Boolean TEST_MODE = false;
 
     private final HeroRepository heroRepository;
     private final UserRepository userRepository;
@@ -606,11 +606,7 @@ public class HeroServiceImpl implements HeroService {
         HeroEntity mage = new HeroEntity("SpiritOfTheElder", HeroRoleEnum.MAGE).setUser(getUserByUsername("felin"));
         createMage(mage);
 
-        for (int i = 1; i < 15; i++) {
-            levelUp(warrior);
-            levelUp(hunter);
-            levelUp(mage);
-        }
+        heroRepository.saveAll(List.of(hunter, warrior, mage));
     }
 
     static {
@@ -619,6 +615,10 @@ public class HeroServiceImpl implements HeroService {
         for (int i = 2; i <= 20; i++) {
             LEVELING.put(i, experience);
             experience += experience;
+        }
+
+        for (Map.Entry<Integer, Integer> level : LEVELING.entrySet()) {
+            logger.info("{} - {}", level.getKey(), level.getValue());
         }
     }
 }
