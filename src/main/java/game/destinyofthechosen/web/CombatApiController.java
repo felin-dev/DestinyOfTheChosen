@@ -4,7 +4,6 @@ import game.destinyofthechosen.model.dto.SkillDto;
 import game.destinyofthechosen.model.view.CombatStatusViewModel;
 import game.destinyofthechosen.model.view.CsrfTokenViewModel;
 import game.destinyofthechosen.service.HeroService;
-import game.destinyofthechosen.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;

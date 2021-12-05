@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "bootstrap": "^5.1.3",
+    "cli": "^1.0.1",
+    "heroku": "^7.59.2",
     "lit-html": "^2.0.2"
   }
 }
