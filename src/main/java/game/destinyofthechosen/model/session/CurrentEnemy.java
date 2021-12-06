@@ -1,6 +1,6 @@
 package game.destinyofthechosen.model.session;
 
-import com.sun.xml.bind.v2.TODO;
+import game.destinyofthechosen.model.view.EnemyViewModel;
 import game.destinyofthechosen.model.view.ItemViewModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -165,6 +165,24 @@ public class CurrentEnemy {
     public CurrentEnemy setZoneLevelRequirement(Integer zoneLevelRequirement) {
         this.zoneLevelRequirement = zoneLevelRequirement;
         return this;
+    }
+
+    public CurrentEnemy mapFromViewModel(EnemyViewModel enemyView) {
+        return this
+                .setId(enemyView.getId())
+                .setName(enemyView.getName())
+                .setImageUrl(enemyView.getImageUrl())
+                .setLevel(enemyView.getLevel())
+                .setExperience(enemyView.getExperience())
+                .setHealth(enemyView.getHealth())
+                .setAttack(enemyView.getAttack())
+                .setGoldDropLowerThreshold(enemyView.getGoldDropLowerThreshold())
+                .setGoldDropUpperThreshold(enemyView.getGoldDropUpperThreshold())
+                .setZoneImageUrl(enemyView.getZoneImageUrl())
+                .setZoneName(enemyView.getZoneName())
+                .setZoneLevelRequirement(enemyView.getZoneLevelRequirement())
+                .setDropList(enemyView.getDropList())
+                .setCurrentHealth(enemyView.getHealth());
     }
 
     @Override

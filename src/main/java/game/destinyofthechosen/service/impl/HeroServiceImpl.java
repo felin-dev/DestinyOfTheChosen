@@ -44,20 +44,22 @@ public class HeroServiceImpl implements HeroService {
     private final ItemService itemService;
     private final SkillService skillService;
     private final ModelMapper modelMapper;
+    private final CurrentHero currentHero;
+    private final CurrentEnemy currentEnemy;
 
-    private CurrentHero currentHero;
-    private CurrentEnemy currentEnemy;
     private String itemDrop = null;
     private Integer moneyDrop = null;
     private Integer leveledUp = null;
 
-    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, EnemyService enemyService, ItemService itemService, SkillService skillService, ModelMapper modelMapper) {
+    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, EnemyService enemyService, ItemService itemService, SkillService skillService, ModelMapper modelMapper, CurrentHero currentHero, CurrentEnemy currentEnemy) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
         this.enemyService = enemyService;
         this.itemService = itemService;
         this.skillService = skillService;
         this.modelMapper = modelMapper;
+        this.currentHero = currentHero;
+        this.currentEnemy = currentEnemy;
     }
 
     @Override
@@ -257,9 +259,7 @@ public class HeroServiceImpl implements HeroService {
 
     @Override
     public void setCurrentEnemy(UUID id) {
-        currentEnemy = modelMapper.map(enemyService.findById(id), CurrentEnemy.class);
-        currentEnemy
-                .setCurrentHealth(currentEnemy.getHealth());
+        currentEnemy.mapFromViewModel(enemyService.findById(id));
     }
 
     @Override
@@ -382,7 +382,6 @@ public class HeroServiceImpl implements HeroService {
         ItemViewModel itemViewModel = heroEntity.getEquippedWeapon() == null ?
                 new ItemViewModel() : itemService.getItemViewById(heroEntity.getEquippedWeapon());
 
-        currentHero = modelMapper.map(heroEntity, CurrentHero.class);
         currentHero
                 .setSkillList(heroEntity
                         .getSkills()
@@ -398,10 +397,9 @@ public class HeroServiceImpl implements HeroService {
                         .map(itemEntity -> itemService.getItemViewById(itemEntity.getId()))
                         .collect(Collectors.toList()));
 
+        currentHero.mapFromEntity(heroEntity);
+
         addEquippedItemStats(currentHero.getEquippedWeapon());
-        currentHero
-                .setCurrentHealth(currentHero.getBaseHealth())
-                .setCurrentMana(currentHero.getBaseMana());
     }
 
     private void addEquippedItemStats(ItemViewModel equippedWeapon) {
@@ -503,7 +501,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private <T> T mapCurrentHeroToViewModel(Class<T> viewClass, String username) {
-        if (currentHero == null) setCurrentHero(username);
+        setCurrentHero(username);
         return modelMapper.map(
                 currentHero,
                 viewClass);

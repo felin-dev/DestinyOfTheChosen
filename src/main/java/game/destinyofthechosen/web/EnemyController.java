@@ -15,13 +15,11 @@ import java.util.UUID;
 @Controller
 public class EnemyController {
 
-    private final UserService userService;
     private final HeroService heroService;
     private final ZoneService zoneService;
     private final EnemyService enemyService;
 
-    public EnemyController(UserService userService, HeroService heroService, ZoneService zoneService, EnemyService enemyService) {
-        this.userService = userService;
+    public EnemyController(HeroService heroService, ZoneService zoneService, EnemyService enemyService) {
         this.heroService = heroService;
         this.zoneService = zoneService;
         this.enemyService = enemyService;

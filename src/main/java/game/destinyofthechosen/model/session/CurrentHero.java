@@ -1,5 +1,6 @@
 package game.destinyofthechosen.model.session;
 
+import game.destinyofthechosen.model.entity.HeroEntity;
 import game.destinyofthechosen.model.enumeration.HeroRoleEnum;
 import game.destinyofthechosen.model.view.ItemViewModel;
 import game.destinyofthechosen.model.view.SkillViewModel;
@@ -35,7 +36,6 @@ public class CurrentHero {
     private Boolean isAlive = true;
     private List<SkillViewModel> skillList;
     private List<ItemViewModel> items;
-
 
     public UUID getId() {
         return id;
@@ -284,6 +284,28 @@ public class CurrentHero {
     public CurrentHero addItem(ItemViewModel item) {
         items.add(item);
         return this;
+    }
+
+    public CurrentHero mapFromEntity(HeroEntity heroEntity) {
+        return this
+                .setId(heroEntity.getId())
+                .setName(heroEntity.getHeroName())
+                .setHeroRole(heroEntity.getHeroRole())
+                .setImageUrl(heroEntity.getImageUrl())
+                .setLevel(heroEntity.getLevel())
+                .setStatPoints(heroEntity.getStatPoints())
+                .setExperience(heroEntity.getExperience())
+                .setBaseHealth(heroEntity.getBaseHealth())
+                .setBaseMana(heroEntity.getBaseMana())
+                .setBaseAttack(heroEntity.getBaseAttack())
+                .setBaseMagicPower(heroEntity.getBaseMagicPower())
+                .setBaseDefense(heroEntity.getBaseDefense())
+                .setBaseStrength(heroEntity.getBaseStrength())
+                .setBaseDexterity(heroEntity.getBaseDexterity())
+                .setBaseEnergy(heroEntity.getBaseEnergy())
+                .setBaseVitality(heroEntity.getBaseVitality())
+                .setCurrentHealth(heroEntity.getBaseHealth())
+                .setCurrentMana(heroEntity.getBaseMana());
     }
 
     @Override

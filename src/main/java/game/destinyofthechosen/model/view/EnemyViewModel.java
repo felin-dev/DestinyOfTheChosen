@@ -12,12 +12,12 @@ public class EnemyViewModel {
     private Integer experience;
     private Integer health;
     private Integer currentHealth;
-    private Integer Attack;
+    private Integer attack;
+    private Integer goldDropUpperThreshold;
+    private Integer goldDropLowerThreshold;
     private String zoneImageUrl;
     private String zoneName;
     private Integer zoneLevelRequirement;
-    private Integer goldDropUpperThreshold;
-    private Integer goldDropLowerThreshold;
     private List<ItemViewModel> dropList;
 
     public UUID getId() {
@@ -84,11 +84,11 @@ public class EnemyViewModel {
     }
 
     public Integer getAttack() {
-        return Attack;
+        return attack;
     }
 
     public EnemyViewModel setAttack(Integer attack) {
-        Attack = attack;
+        this.attack = attack;
         return this;
     }
 
