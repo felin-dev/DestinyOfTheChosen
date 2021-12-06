@@ -26,7 +26,7 @@ public class CurrentEnemy {
     private String zoneImageUrl;
     private String zoneName;
     private Integer zoneLevelRequirement;
-    private Boolean isAlive = false;
+    private Boolean isAlive;
 
     public UUID getId() {
         return id;

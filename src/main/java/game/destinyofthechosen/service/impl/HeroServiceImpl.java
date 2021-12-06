@@ -66,8 +66,6 @@ public class HeroServiceImpl implements HeroService {
     @Transactional
     public CombatStatusViewModel castSkillOnEnemy(String username, String skillName) {
         if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
-        logger.info(currentHero.toString());
-        logger.info(currentEnemy.toString());
 
         SkillViewModel skill = currentHero
                 .getSkillList().stream()
@@ -103,7 +101,7 @@ public class HeroServiceImpl implements HeroService {
     @Transactional
     public CombatStatusViewModel performAttackOnEnemy(String username) {
 
-        if (currentHero.getIsAlive()) setCurrentHero(username);
+        if (currentHero.getId() == null) setCurrentHero(username);
         checkIfTheCurrentEntityIsNull(currentEnemy == null, "There is no selected enemy.");
 
         return attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, false);

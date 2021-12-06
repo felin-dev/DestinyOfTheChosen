@@ -33,7 +33,7 @@ public class CurrentHero {
     private Integer baseDexterity;
     private Integer baseEnergy;
     private ItemViewModel equippedWeapon;
-    private Boolean isAlive = false;
+    private Boolean isAlive;
     private List<SkillViewModel> skillList;
     private List<ItemViewModel> items;
 
