@@ -66,6 +66,8 @@ public class HeroServiceImpl implements HeroService {
     @Transactional
     public CombatStatusViewModel castSkillOnEnemy(String username, String skillName) {
         if (!currentEnemy.getIsAlive() || !currentHero.getIsAlive()) return createCombatStatusView();
+        logger.info(currentHero.toString());
+        logger.info(currentEnemy.toString());
 
         SkillViewModel skill = currentHero
                 .getSkillList().stream()
@@ -101,7 +103,7 @@ public class HeroServiceImpl implements HeroService {
     @Transactional
     public CombatStatusViewModel performAttackOnEnemy(String username) {
 
-        if (currentHero == null) setCurrentHero(username);
+        if (currentHero.getIsAlive()) setCurrentHero(username);
         checkIfTheCurrentEntityIsNull(currentEnemy == null, "There is no selected enemy.");
 
         return attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, false);
@@ -269,7 +271,8 @@ public class HeroServiceImpl implements HeroService {
                 .setCurrentHealth(currentEnemy.getHealth());
         currentHero
                 .setIsAlive(true)
-                .setCurrentHealth(currentHero.getBaseHealth());
+                .setCurrentHealth(currentHero.getBaseHealth())
+                .setCurrentMana(currentHero.getBaseMana());
 
         return createCombatStatusView();
     }
@@ -400,6 +403,9 @@ public class HeroServiceImpl implements HeroService {
         currentHero.mapFromEntity(heroEntity);
 
         addEquippedItemStats(currentHero.getEquippedWeapon());
+        currentHero
+                .setCurrentHealth(currentHero.getBaseHealth())
+                .setCurrentMana(currentHero.getBaseMana());
     }
 
     private void addEquippedItemStats(ItemViewModel equippedWeapon) {
@@ -501,7 +507,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private <T> T mapCurrentHeroToViewModel(Class<T> viewClass, String username) {
-        setCurrentHero(username);
+        if (currentHero.getId() == null) setCurrentHero(username);
         return modelMapper.map(
                 currentHero,
                 viewClass);

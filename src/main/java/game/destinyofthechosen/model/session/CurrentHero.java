@@ -33,7 +33,7 @@ public class CurrentHero {
     private Integer baseDexterity;
     private Integer baseEnergy;
     private ItemViewModel equippedWeapon;
-    private Boolean isAlive = true;
+    private Boolean isAlive = false;
     private List<SkillViewModel> skillList;
     private List<ItemViewModel> items;
 
@@ -304,8 +304,7 @@ public class CurrentHero {
                 .setBaseDexterity(heroEntity.getBaseDexterity())
                 .setBaseEnergy(heroEntity.getBaseEnergy())
                 .setBaseVitality(heroEntity.getBaseVitality())
-                .setCurrentHealth(heroEntity.getBaseHealth())
-                .setCurrentMana(heroEntity.getBaseMana());
+                .setIsAlive(true);
     }
 
     @Override

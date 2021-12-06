@@ -26,7 +26,7 @@ public class CurrentEnemy {
     private String zoneImageUrl;
     private String zoneName;
     private Integer zoneLevelRequirement;
-    private Boolean isAlive = true;
+    private Boolean isAlive = false;
 
     public UUID getId() {
         return id;
@@ -182,7 +182,8 @@ public class CurrentEnemy {
                 .setZoneName(enemyView.getZoneName())
                 .setZoneLevelRequirement(enemyView.getZoneLevelRequirement())
                 .setDropList(enemyView.getDropList())
-                .setCurrentHealth(enemyView.getHealth());
+                .setCurrentHealth(enemyView.getHealth())
+                .setIsAlive(true);
     }
 
     @Override
