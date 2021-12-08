@@ -1,0 +1,9 @@
+#Custom properties
+admin:
+  username: felin
+  password: testtest
+  email: felin@gmail.com
+user:
+  username: felixi
+  password: testtest
+  email: felixi@gmail.com

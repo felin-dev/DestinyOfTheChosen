@@ -51,7 +51,9 @@ public class HeroServiceImpl implements HeroService {
     private Integer moneyDrop = null;
     private Integer leveledUp = null;
 
-    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, EnemyService enemyService, ItemService itemService, SkillService skillService, ModelMapper modelMapper, CurrentHero currentHero, CurrentEnemy currentEnemy) {
+    public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, EnemyService enemyService,
+                           ItemService itemService, SkillService skillService, ModelMapper modelMapper,
+                           CurrentHero currentHero, CurrentEnemy currentEnemy) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
         this.enemyService = enemyService;

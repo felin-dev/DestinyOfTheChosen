@@ -12,4 +12,6 @@ public interface HeroRepository extends JpaRepository<HeroEntity, UUID> {
     boolean existsByHeroName(String heroName);
 
     Optional<HeroEntity> findHeroById(UUID id);
+
+    HeroEntity findHeroByHeroName(String name);
 }

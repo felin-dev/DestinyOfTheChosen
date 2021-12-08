@@ -15,7 +15,9 @@ public class CommandRunner implements CommandLineRunner {
     private final SkillService skillService;
     private final HeroService heroService;
 
-    public CommandRunner(UserRoleService userRoleService, UserService userService, ZoneService zoneService, ItemService itemService, EnemyService enemyService, SkillService skillService, HeroService heroService) {
+    public CommandRunner(UserRoleService userRoleService, UserService userService, ZoneService zoneService,
+                         ItemService itemService, EnemyService enemyService, SkillService skillService,
+                         HeroService heroService) {
         this.userRoleService = userRoleService;
         this.userService = userService;
         this.zoneService = zoneService;

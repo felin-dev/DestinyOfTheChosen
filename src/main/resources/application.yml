@@ -36,3 +36,13 @@ cloudinary:
 #  level:
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+#Custom properties
+admin:
+  username: ${ADMIN_USERNAME}
+  password: ${ADMIN_PASS}
+  email: ${ADMIN_EMAIL}
+user:
+  username: ${USER_USERNAME}
+  password: ${USER_PASS}
+  email: ${USER_EMAIL}

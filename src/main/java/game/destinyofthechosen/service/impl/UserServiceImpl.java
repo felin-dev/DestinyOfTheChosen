@@ -13,6 +13,7 @@ import game.destinyofthechosen.service.HeroService;
 import game.destinyofthechosen.service.UserRoleService;
 import game.destinyofthechosen.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,14 +36,34 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final SecurityUserServiceImpl securityUserService;
     private final ModelMapper modelMapper;
+    private final String adminUsername;
+    private final String adminPassword;
+    private final String adminEmail;
+    private final String userUsername;
+    private final String userPassword;
+    private final String userEmail;
 
-    public UserServiceImpl(UserRepository userRepository, HeroService heroService, UserRoleService userRoleService, PasswordEncoder passwordEncoder, SecurityUserServiceImpl securityUserService, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, HeroService heroService, UserRoleService userRoleService,
+                           PasswordEncoder passwordEncoder, SecurityUserServiceImpl securityUserService,
+                           ModelMapper modelMapper,
+                           @Value("${admin.username}") String adminUsername,
+                           @Value("${admin.password}") String adminPassword,
+                           @Value("${admin.email}") String adminEmail,
+                           @Value("${user.username}") String userUsername,
+                           @Value("${user.password}") String userPassword,
+                           @Value("${user.email}") String userEmail) {
         this.userRepository = userRepository;
         this.heroService = heroService;
         this.userRoleService = userRoleService;
         this.passwordEncoder = passwordEncoder;
         this.securityUserService = securityUserService;
         this.modelMapper = modelMapper;
+        this.adminUsername = adminUsername;
+        this.adminPassword = adminPassword;
+        this.adminEmail = adminEmail;
+        this.userUsername = userUsername;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
     }
 
     @Override
@@ -151,15 +172,15 @@ public class UserServiceImpl implements UserService {
         if (userRepository.count() != 0) return;
 
         List<UserEntity> userEntities = List.of(new UserEntity(
-                "felin",
-                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
-                System.getenv("FELIN_EMAIL"),
+                adminUsername,
+                passwordEncoder.encode(adminPassword),
+                adminEmail,
                 Set.of(userRoleService.findByUserRole(UserRoleEnum.ADMIN),
                         userRoleService.findByUserRole(UserRoleEnum.USER))
         ), new UserEntity(
-                "felixi",
-                passwordEncoder.encode(System.getenv("ADMIN_PASS")),
-                System.getenv("FELIXI_EMAIL"),
+                userUsername,
+                passwordEncoder.encode(userPassword),
+                userEmail,
                 Set.of(userRoleService.findByUserRole(UserRoleEnum.USER))
         ));
 
