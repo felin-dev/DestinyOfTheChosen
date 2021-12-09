@@ -358,9 +358,32 @@ public class HeroServiceImplTest {
         Assertions.assertEquals(2, currentHero.getLevel());
     }
 
+    @Test
+    void testResetCurrentCombatParticipants() {
+        CurrentHero currentHero = new CurrentHero();
+        CurrentEnemy currentEnemy = new CurrentEnemy();
+        selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+
+        Assertions.assertEquals(currentHero.getCurrentHealth(), currentHero.getBaseHealth());
+        Assertions.assertEquals(currentEnemy.getCurrentHealth(), currentEnemy.getBaseHealth());
+
+        currentHero.setCurrentHealth(currentHero.getBaseHealth() - 50);
+        currentEnemy.setCurrentHealth(currentEnemy.getBaseHealth() - 50);
+
+        Assertions.assertEquals(currentHero.getBaseHealth() - 50, currentHero.getCurrentHealth());
+        Assertions.assertEquals(currentEnemy.getBaseHealth() - 50, currentEnemy.getCurrentHealth());
+
+        heroService.resetCurrentCombatParticipants();
+
+        Assertions.assertEquals(currentHero.getCurrentHealth(), currentHero.getBaseHealth());
+        Assertions.assertEquals(currentEnemy.getCurrentHealth(), currentEnemy.getBaseHealth());
+    }
+
     private HeroEntity selectHeroJessicaOnUserFelin(CurrentHero currentHero, CurrentEnemy currentEnemy, String username, String heroName) {
         heroService.setCurrentHeroForTesting(currentHero);
         heroService.setCurrentEnemyForTesting(currentEnemy);
+
+        heroService.setCurrentEnemy(enemyRepository.findByEnemyName("Baby Boar").getId());
 
         HeroEntity hero = heroRepository.findHeroByHeroName(heroName);
         userService.selectNewHero(username,
