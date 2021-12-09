@@ -2,7 +2,6 @@ package game.destinyofthechosen.web;
 
 import game.destinyofthechosen.service.EnemyService;
 import game.destinyofthechosen.service.HeroService;
-import game.destinyofthechosen.service.UserService;
 import game.destinyofthechosen.service.ZoneService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +37,7 @@ public class EnemyController {
 
         heroService.setCurrentHero(principal.getName());
         heroService.setCurrentEnemy(id);
-        heroService.heroIsOverTheLevelRequirementForThatZone();
+        heroService.currentHeroIsOverTheLevelRequirementForThatZone();
 
         model.addAttribute("enemy", enemyService.findById(id));
         model.addAttribute("hero", heroService.getCurrentHeroForCombat(principal.getName()));

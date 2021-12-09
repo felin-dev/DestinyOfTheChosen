@@ -21,6 +21,7 @@ import game.destinyofthechosen.service.SkillService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -44,23 +45,31 @@ public class HeroServiceImpl implements HeroService {
     private final ItemService itemService;
     private final SkillService skillService;
     private final ModelMapper modelMapper;
-    private final CurrentHero currentHero;
-    private final CurrentEnemy currentEnemy;
+
+    @Autowired
+    private CurrentHero currentHero;
+    @Autowired
+    private CurrentEnemy currentEnemy;
 
     private String itemDrop = null;
     private Integer moneyDrop = null;
     private Integer leveledUp = null;
 
     public HeroServiceImpl(HeroRepository heroRepository, UserRepository userRepository, EnemyService enemyService,
-                           ItemService itemService, SkillService skillService, ModelMapper modelMapper,
-                           CurrentHero currentHero, CurrentEnemy currentEnemy) {
+                           ItemService itemService, SkillService skillService, ModelMapper modelMapper) {
         this.heroRepository = heroRepository;
         this.userRepository = userRepository;
         this.enemyService = enemyService;
         this.itemService = itemService;
         this.skillService = skillService;
         this.modelMapper = modelMapper;
+    }
+
+    public void setCurrentHeroForTesting(CurrentHero currentHero) {
         this.currentHero = currentHero;
+    }
+
+    public void setCurrentEnemyForTesting(CurrentEnemy currentEnemy) {
         this.currentEnemy = currentEnemy;
     }
 
@@ -265,7 +274,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public CombatStatusViewModel resetCurrentEnemy() {
+    public CombatStatusViewModel resetCurrentCombatParticipants() {
         currentEnemy
                 .setIsAlive(true)
                 .setCurrentHealth(currentEnemy.getHealth());
@@ -314,6 +323,10 @@ public class HeroServiceImpl implements HeroService {
     public void addStats(StatUpServiceModel stats, String username) {
         setCurrentHero(username);
         HeroEntity heroEntity = heroRepository.getById(currentHero.getId());
+
+        if (heroEntity.getStatPoints() < totalStats(stats))
+            throw new UserHasNoPermissionToAccessException("Hero does not have enough stats.");
+
         heroEntity.setStatPoints(heroEntity.getStatPoints() - totalStats(stats));
         heroEntity
                 .setBaseStrength(heroEntity.getBaseStrength() +
@@ -514,7 +527,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
-    public void heroIsOverTheLevelRequirementForThatZone() {
+    public void currentHeroIsOverTheLevelRequirementForThatZone() {
         if (currentHero.getLevel() < currentEnemy.getZoneLevelRequirement())
             throw new UserHasNoPermissionToAccessException("Current hero level is too low for that instance.");
     }
@@ -526,7 +539,6 @@ public class HeroServiceImpl implements HeroService {
     }
 
     private HeroEntity createNewHeroEntity(HeroCreationServiceModel heroModel) {
-
         HeroEntity heroEntity = new HeroEntity(heroModel.getHeroName(), heroModel.getHeroRole());
 
         switch (heroEntity.getHeroRole()) {

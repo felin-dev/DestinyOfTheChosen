@@ -51,7 +51,7 @@ public class CombatApiController {
     public ResponseEntity<CombatStatusViewModel> attackNewEnemy(Principal principal) {
 
         heroService.setCurrentHero(principal.getName());
-        CombatStatusViewModel combatStatus = heroService.resetCurrentEnemy();
+        CombatStatusViewModel combatStatus = heroService.resetCurrentCombatParticipants();
 
         return ResponseEntity
                 .ok(combatStatus);

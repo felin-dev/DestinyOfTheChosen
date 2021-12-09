@@ -17,4 +17,6 @@ public interface ItemRepository extends JpaRepository<ItemEntity, UUID> {
     boolean existsByItemName(String itemName);
 
     List<ItemEntity> getAllByLevelRequirement(Integer itemsLevel);
+
+    ItemEntity findByItemName(String itemName);
 }

@@ -38,9 +38,9 @@ public interface HeroService {
 
     void setCurrentEnemy(UUID id);
 
-    CombatStatusViewModel resetCurrentEnemy();
+    CombatStatusViewModel resetCurrentCombatParticipants();
 
-    void heroIsOverTheLevelRequirementForThatZone();
+    void currentHeroIsOverTheLevelRequirementForThatZone();
 
     HeroEntity getHeroById(UUID id);
 

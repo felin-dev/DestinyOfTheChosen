@@ -9,4 +9,7 @@ import java.util.UUID;
 @Repository
 public interface EnemyRepository extends JpaRepository<EnemyEntity, UUID> {
     boolean existsByEnemyName(String name);
+
+
+    EnemyEntity findByEnemyName(String enemyName);
 }
