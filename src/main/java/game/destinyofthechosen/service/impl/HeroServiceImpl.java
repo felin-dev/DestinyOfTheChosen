@@ -306,6 +306,7 @@ public class HeroServiceImpl implements HeroService {
     }
 
     @Override
+    @Transactional
     public void createNewHero(HeroCreationServiceModel heroModel, String username) {
 
         UserEntity userEntity = getUserByUsername(username);
