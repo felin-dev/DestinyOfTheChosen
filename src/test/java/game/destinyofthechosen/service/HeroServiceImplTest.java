@@ -209,7 +209,7 @@ public class HeroServiceImplTest {
     void testEquipWeaponWarrior() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         Assertions.assertEquals(17, hero.getBaseAttack());
         ItemEntity item = itemRepository.findByItemName("Broad Sword");
@@ -228,7 +228,7 @@ public class HeroServiceImplTest {
     void testEquipWeaponHunter() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Felixi");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Felixi");
 
         Assertions.assertEquals(29, hero.getBaseAttack());
         ItemEntity item = itemRepository.findByItemName("Composite Bow");
@@ -247,7 +247,7 @@ public class HeroServiceImplTest {
     void testEquipWeaponMage() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "SpiritOfTheElder");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "SpiritOfTheElder");
 
         Assertions.assertEquals(8, hero.getBaseAttack());
         ItemEntity item = itemRepository.findByItemName("Ash Wood Scepter");
@@ -268,7 +268,7 @@ public class HeroServiceImplTest {
     void testUnequipWeapon() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         Assertions.assertEquals(17, hero.getBaseAttack());
         ItemEntity item = itemRepository.findByItemName("Broad Sword");
@@ -287,7 +287,7 @@ public class HeroServiceImplTest {
     void testThrowItem() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         Assertions.assertEquals(17, hero.getBaseAttack());
         ItemEntity item = itemRepository.findByItemName("Broad Sword");
@@ -305,7 +305,7 @@ public class HeroServiceImplTest {
     void testAddStatsThrowsExceptionForNotEnoughStatPoints() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
 
         Assertions.assertThrows(UserHasNoPermissionToAccessException.class,
@@ -317,7 +317,7 @@ public class HeroServiceImplTest {
     void testAddStatsCorrectly() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         hero.levelUp();
         heroRepository.save(hero);
@@ -343,7 +343,7 @@ public class HeroServiceImplTest {
     void testUpdateCurrentHero() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        HeroEntity hero = selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        HeroEntity hero = setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         Assertions.assertEquals(1, hero.getLevel());
         Assertions.assertEquals(1, currentHero.getLevel());
@@ -362,7 +362,7 @@ public class HeroServiceImplTest {
     void testResetCurrentCombatParticipants() {
         CurrentHero currentHero = new CurrentHero();
         CurrentEnemy currentEnemy = new CurrentEnemy();
-        selectHeroJessicaOnUserFelin(currentHero, currentEnemy, "felin", "Jessica");
+        setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
 
         Assertions.assertEquals(currentHero.getCurrentHealth(), currentHero.getBaseHealth());
         Assertions.assertEquals(currentEnemy.getCurrentHealth(), currentEnemy.getBaseHealth());
@@ -379,10 +379,85 @@ public class HeroServiceImplTest {
         Assertions.assertEquals(currentEnemy.getCurrentHealth(), currentEnemy.getBaseHealth());
     }
 
-    private HeroEntity selectHeroJessicaOnUserFelin(CurrentHero currentHero, CurrentEnemy currentEnemy, String username, String heroName) {
+    @Test
+    void testPerformAttackOnEnemyWithNullEnemyThrowsException() {
+        heroService.setCurrentHeroForTesting(new CurrentHero());
+        heroService.setCurrentEnemyForTesting(new CurrentEnemy());
+
+        HeroEntity hero = heroRepository.findHeroByHeroName("Felixi");
+        userService.selectNewHero("felin",
+                new HeroSelectServiceModel()
+                        .setId(hero.getId()));
+        Assertions.assertThrows(ObjectNotFoundException.class,
+                () -> heroService.performAttackOnEnemy("felin"),
+                "There is no selected enemy.");
+    }
+
+    @Test
+    void testPerformAttackOnEnemy() {
+        CurrentHero currentHero = new CurrentHero();
+        CurrentEnemy currentEnemy = new CurrentEnemy();
+        setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
+
+        Assertions.assertEquals(currentHero.getCurrentHealth(), currentHero.getBaseHealth());
+        Assertions.assertEquals(currentEnemy.getCurrentHealth(), currentEnemy.getBaseHealth());
+
+        heroService.performAttackOnEnemy("felin");
+
+        Assertions.assertEquals(currentHero.getBaseHealth() - (currentEnemy.getAttack() - currentHero.getBaseDefense()),
+                currentHero.getCurrentHealth());
+        Assertions.assertEquals(currentEnemy.getBaseHealth() - currentHero.getBaseAttack(), currentEnemy.getCurrentHealth());
+    }
+
+    @Test
+    void testPerformAttackOnEnemyEnemyDies() {
+        CurrentHero currentHero = new CurrentHero();
+        CurrentEnemy currentEnemy = new CurrentEnemy();
+        setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
+
+        UserEntity user = userService.getUserByUsername("felin");
+
+        Assertions.assertEquals(0, user.getGold());
+
+        currentEnemy.setCurrentHealth(1);
+        heroService.performAttackOnEnemy("felin");
+
+        Assertions.assertNotEquals(0, user.getGold());
+        Assertions.assertFalse(currentEnemy.getIsAlive());
+    }
+
+    @Test
+    void testPerformAttackOnEnemyLevelUp() {
+        CurrentHero currentHero = new CurrentHero();
+        CurrentEnemy currentEnemy = new CurrentEnemy();
+        setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(currentHero, currentEnemy, "felin", "Jessica");
+        heroService.setCurrentEnemy(enemyRepository.findByEnemyName("Trennaxath").getId());
+
+        Assertions.assertEquals(1, currentHero.getLevel());
+        Assertions.assertEquals(0, currentHero.getExperience());
+        Assertions.assertEquals(1, currentHero.getSkillList().size());
+
+        currentEnemy.setCurrentHealth(1);
+        heroService.performAttackOnEnemy("felin");
+        currentEnemy.setCurrentHealth(1);
+        currentEnemy.setIsAlive(true);
+        heroService.performAttackOnEnemy("felin");
+        currentEnemy.setCurrentHealth(1);
+        currentEnemy.setIsAlive(true);
+        heroService.performAttackOnEnemy("felin");
+        currentEnemy.setCurrentHealth(1);
+        currentEnemy.setIsAlive(true);
+        heroService.performAttackOnEnemy("felin");
+
+        heroService.setCurrentHero("felin");
+        Assertions.assertNotEquals(0, currentHero.getExperience());
+        Assertions.assertEquals(5, currentHero.getLevel());
+        Assertions.assertEquals(2, currentHero.getSkillList().size());
+    }
+
+    private HeroEntity setCurrentHeroAndCurrentEnemyWithUsernameAndHeroName(CurrentHero currentHero, CurrentEnemy currentEnemy, String username, String heroName) {
         heroService.setCurrentHeroForTesting(currentHero);
         heroService.setCurrentEnemyForTesting(currentEnemy);
-
         heroService.setCurrentEnemy(enemyRepository.findByEnemyName("Baby Boar").getId());
 
         HeroEntity hero = heroRepository.findHeroByHeroName(heroName);

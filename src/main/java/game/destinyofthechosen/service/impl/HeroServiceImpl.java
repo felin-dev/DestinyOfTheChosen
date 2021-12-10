@@ -113,7 +113,7 @@ public class HeroServiceImpl implements HeroService {
     public CombatStatusViewModel performAttackOnEnemy(String username) {
 
         if (currentHero.getId() == null) setCurrentHero(username);
-        checkIfTheCurrentEntityIsNull(currentEnemy == null, "There is no selected enemy.");
+        checkIfTheCurrentEntityIsNull(currentEnemy.getId() == null, "There is no selected enemy.");
 
         return attackEnemy(username, currentHero.getBaseAttack(), currentHero.getBaseDefense(), false, false);
     }
@@ -316,6 +316,7 @@ public class HeroServiceImpl implements HeroService {
 
         userEntity.setCurrentHeroId(newHeroEntity.getId());
         userRepository.save(userEntity);
+        setCurrentHero(username);
     }
 
     @Override
