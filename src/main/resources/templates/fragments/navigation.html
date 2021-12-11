@@ -23,7 +23,7 @@
                     <span class="main-link dropdown-toggle no-select" id="dropdownMenuButton" data-toggle="dropdown"
                           aria-haspopup="true" aria-expanded="false" sec:authentication="name"></span>
                     <div class="dropdown-menu text-secondary bg-primary rounded-3" aria-labelledby="dropdownMenuButton">
-                        <a class="nav-link main-link no-select" th:href="@{/users/profile}">Profile</a>
+<!--                        <a class="nav-link main-link no-select" th:href="@{/users/profile}">Profile</a>-->
                         <a class="nav-link main-link no-select" th:href="@{/users/inventory}">Inventory</a>
                         <div class="dropdown-divider border-2 border-secondary"
                              sec:authorize="hasRole('ROLE_ADMIN')">
@@ -34,6 +34,8 @@
                            th:href="@{/admin/items/create}">Create item</a>
                         <a class="nav-link main-link no-select" sec:authorize="hasRole('ROLE_ADMIN')"
                            th:href="@{/admin/enemies/create}">Create enemy</a>
+                        <a class="nav-link main-link no-select" sec:authorize="hasRole('ROLE_ADMIN')"
+                           th:href="@{/admin/admin-control}">Admin control</a>
                     </div>
                 </div>
                 <form th:action="@{/users/logout}"

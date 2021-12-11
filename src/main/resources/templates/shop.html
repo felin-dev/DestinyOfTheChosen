@@ -6,8 +6,37 @@
 
 <body>
 <header th:replace="fragments/navigation::navigation"></header>
-<main class="main-background">
-    <!-- TODO -->
+<main class="shop-background">
+    <br>
+    <div th:object="${userShopViewModel}" class="container-sm my-1">
+        <div th:object="${userShopViewModel}" class="row justify-content-center">
+            <div class="text-center justify-content-center
+               bg-primary bg-opacity-75 text-secondary rounded-3 shop-card align-self-end p-3">
+                <div class="fs-5">
+                    <p th:text="|You have *{getGold()} gold|"></p>
+                    <p>You can find all of your acquired items in your inventory</p>
+                </div>
+                <div th:if="*{getCurrentHeroLevel() >= 3}">
+                    <img class="chest-img" th:src="*{boxImage()}" alt="Zone image">
+                    <h5 class="card-title"
+                        th:text="|Items up to *{getCurrentHeroLevel()} level cost *{getGoldCostPerChest()} gold|"></h5>
+                    <form th:method="POST" th:action="@{/shop/buy}">
+                        <button type="submit" value="value" class="btn bg-primary main-link">Buy Mysterious Chest
+                        </button>
+                    </form>
+                </div>
+                <div th:if="*{getCurrentHeroLevel() < 3}" class="fs-5">
+                    <p>Your selected hero level is too low to buy chests.</p>
+                    <p>Minimum level to buy chest is 3.</p>
+                    <p>Level up your hero and come again.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p th:if="${shopMessage}"
+       th:text="${shopMessage}"
+       class="alert alert-secondary mx-auto col-md-6 text-center"></p>
+    <br>
 </main>
 <footer th:replace="fragments/footer::footer"></footer>
 </body>

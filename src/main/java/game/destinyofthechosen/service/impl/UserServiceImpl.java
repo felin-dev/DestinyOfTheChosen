@@ -1,15 +1,20 @@
 package game.destinyofthechosen.service.impl;
 
 import game.destinyofthechosen.exception.ObjectNotFoundException;
+import game.destinyofthechosen.exception.UserHasNoPermissionToAccessException;
 import game.destinyofthechosen.model.entity.HeroEntity;
+import game.destinyofthechosen.model.entity.ItemEntity;
+import game.destinyofthechosen.model.entity.RoleEntity;
 import game.destinyofthechosen.model.entity.UserEntity;
 import game.destinyofthechosen.model.enumeration.UserRoleEnum;
 import game.destinyofthechosen.model.service.HeroSelectServiceModel;
 import game.destinyofthechosen.model.service.UserRegisterServiceModel;
-import game.destinyofthechosen.model.view.HeroInfoViewModel;
-import game.destinyofthechosen.model.view.UserHeroSelectViewModel;
+import game.destinyofthechosen.model.service.UsernameServiceModel;
+import game.destinyofthechosen.model.view.*;
+import game.destinyofthechosen.repository.HeroRepository;
 import game.destinyofthechosen.repository.UserRepository;
 import game.destinyofthechosen.service.HeroService;
+import game.destinyofthechosen.service.ItemService;
 import game.destinyofthechosen.service.UserRoleService;
 import game.destinyofthechosen.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -31,6 +36,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final HeroRepository heroRepository;
+    private final ItemService itemService;
     private final HeroService heroService;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
@@ -43,7 +50,7 @@ public class UserServiceImpl implements UserService {
     private final String userPassword;
     private final String userEmail;
 
-    public UserServiceImpl(UserRepository userRepository, HeroService heroService, UserRoleService userRoleService,
+    public UserServiceImpl(UserRepository userRepository, HeroRepository heroRepository, ItemService itemService, HeroService heroService, UserRoleService userRoleService,
                            PasswordEncoder passwordEncoder, SecurityUserServiceImpl securityUserService,
                            ModelMapper modelMapper,
                            @Value("${admin.username}") String adminUsername,
@@ -53,6 +60,8 @@ public class UserServiceImpl implements UserService {
                            @Value("${user.password}") String userPassword,
                            @Value("${user.email}") String userEmail) {
         this.userRepository = userRepository;
+        this.heroRepository = heroRepository;
+        this.itemService = itemService;
         this.heroService = heroService;
         this.userRoleService = userRoleService;
         this.passwordEncoder = passwordEncoder;
@@ -123,6 +132,90 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public List<ItemViewModel> getAllOwnedItems(String username) {
+        return getUserByUsername(username)
+                .getStash()
+                .stream()
+                .map(itemEntity -> itemService.getItemViewById(itemEntity.getId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<HeroSelectedViewModel> getHeroesViewModel(String username) {
+        return getUserByUsername(username)
+                .getHeroes()
+                .stream()
+                .map(heroEntity -> new HeroSelectedViewModel()
+                        .setName(heroEntity.getHeroName())
+                        .setHeroRole(heroEntity.getHeroRole())
+                        .setLevel(heroEntity.getLevel()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void transferItemToHero(String username, String heroName, UUID itemId) {
+        UserEntity userEntity = getUserByUsername(username);
+        HeroEntity heroEntity = userEntity
+                .getHeroes()
+                .stream()
+                .filter(hero -> hero.getHeroName().equals(heroName))
+                .findFirst()
+                .orElseThrow(() -> new ObjectNotFoundException("User does not have hero with name: " + heroName + "."));
+
+        ItemEntity itemEntity = userEntity
+                .getStash()
+                .stream()
+                .filter(item -> item.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new ObjectNotFoundException("User does not have item with id: " + itemId + "."));
+
+        userEntity.getStash().remove(itemEntity);
+        userRepository.save(userEntity);
+
+        heroEntity.addItem(itemEntity);
+        heroRepository.save(heroEntity);
+    }
+
+    @Override
+    @Transactional
+    public void throwItem(String username, UUID weaponId) {
+        UserEntity userEntity = getUserByUsername(username);
+        ItemEntity itemEntity = itemService.getItemById(weaponId);
+        if (userEntity.getStash().contains(itemEntity)) userEntity.throwItem(itemEntity);
+    }
+
+    @Override
+    @Transactional
+    public UserShopViewModel getUserShopView(String username) {
+        UserEntity userEntity = getUserByUsername(username);
+        HeroSelectedViewModel currentHero = heroService.getCurrentHero(username);
+
+        return new UserShopViewModel()
+                .setGold(userEntity.getGold())
+                .setCurrentHeroLevel(currentHero.getLevel());
+    }
+
+    @Override
+    @Transactional
+    public String buyChest(String username) {
+        UserEntity userEntity = getUserByUsername(username);
+        HeroSelectedViewModel currentHero = heroService.getCurrentHero(username);
+
+        int chestGoldCost = currentHero.getLevel() * 30;
+        if (userEntity.getGold() < chestGoldCost) return "You do not have enough gold.";
+
+        userEntity.spendGold(chestGoldCost);
+        ItemEntity itemEntity = itemService.getRandomItemInLevelRequirementRange(currentHero.getLevel());
+
+        userEntity.addNewItem(itemEntity);
+        userRepository.save(userEntity);
+        return "You received: " + itemEntity.getItemName();
+    }
+
+    @Override
     public UserEntity getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException(
@@ -155,6 +248,36 @@ public class UserServiceImpl implements UserService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    @Override
+    @Transactional
+    public void makeUserAnAdmin(String adminName, UsernameServiceModel usernameServiceModel) {
+        boolean notAdmin = getUserByUsername(adminName)
+                .getUserRoles()
+                .stream()
+                .noneMatch(roleEntity -> roleEntity.getUserRole().equals(UserRoleEnum.ADMIN));
+
+        if (notAdmin) throw new UserHasNoPermissionToAccessException("Admin role is required to make this operation.");
+
+        UserEntity user = getUserByUsername(usernameServiceModel.getUsername());
+        RoleEntity adminRole = userRoleService.findByUserRole(UserRoleEnum.ADMIN);
+        userRepository.save(user.addNewRole(adminRole));
+    }
+
+    @Override
+    @Transactional
+    public void removeAdminRoleFromUser(String adminName, UsernameServiceModel usernameServiceModel) {
+        boolean notAdmin = getUserByUsername(adminName)
+                .getUserRoles()
+                .stream()
+                .noneMatch(roleEntity -> roleEntity.getUserRole().equals(UserRoleEnum.ADMIN));
+
+        if (notAdmin) throw new UserHasNoPermissionToAccessException("Admin role is required to make this operation.");
+
+        UserEntity user = getUserByUsername(usernameServiceModel.getUsername());
+        RoleEntity adminRole = userRoleService.findByUserRole(UserRoleEnum.ADMIN);
+        userRepository.save(user.removeRole(adminRole));
     }
 
     @Override

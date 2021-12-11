@@ -7,7 +7,49 @@
 <body>
 <header th:replace="fragments/navigation::navigation"></header>
 <main class="main-background">
-    <!-- TODO -->
+    <br>
+    <section class="container my-5 text-center justify-content-center px-5 pb-5
+                        bg-primary bg-opacity-75 text-secondary rounded-3">
+        <div class="row">
+            <div th:each="item : ${items}"
+                 class="col-6 col-md-4 col-lg-3 col-xl-2 mt-5 mb-2 px-0 pb-3 border border-secondary rounded-3">
+                <img th:src="${item.imageUrl}" class="item-image py-2 no-select" alt="item-img">
+                <p class="my-0 no-select" th:text="${item.type.name}"></p>
+                <p class="my-0 no-select" th:text="${item.itemName}"></p>
+                <p class="my-0 no-select" th:text="|Level: ${item.levelRequirement}|"></p>
+                <p class="my-0 no-select" th:each="stat : ${item.stats}" th:text="|${stat.key}: ${stat.value}|"></p>
+                <form th:if="${heroes}"
+                      th:method="PATCH" th:action="@{weapons/transfer}">
+                    <label class="hidden invisible">
+                        <select th:field="${itemTransferBindingModel.itemId}" class="custom-select">
+                            <option th:value="${item.id}"></option>
+                        </select>
+                    </label>
+
+                    <div class="form-group">
+                        <label for="heroSelect"></label>
+                        <select th:field="${itemTransferBindingModel.heroName}" class="custom-select" id="heroSelect">
+                            <option th:each="hero : ${heroes}"
+                                    th:value="${hero.name}"
+                                    th:text="|${hero.name} - level ${hero.level}|"
+                            ></option>
+                        </select>
+                    </div>
+                    <button id="equip-weapon-btn"
+                            class="d-inline main-link border border-secondary rounded-3 no-select bg-transparent">
+                        Transfer
+                    </button>
+                </form>
+                <form th:method="Delete" th:action="@{/users/weapons/{id}/throw(id = ${item.id})}" class="d-inline">
+                    <button id="throw-weapon-btn"
+                            class="d-inline main-link border border-secondary rounded-3 mt-2 px-1 no-select bg-transparent">
+                        Throw
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <br>
 </main>
 <footer th:replace="fragments/footer::footer"></footer>
 </body>

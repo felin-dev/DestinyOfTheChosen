@@ -14,6 +14,8 @@ public interface ItemService {
 
     ItemEntity getItemById(UUID itemId);
 
+    ItemEntity getRandomItemInLevelRequirementRange(Integer levelRequirement);
+
     ItemViewModel getItemViewById(UUID itemId);
 
     List<ItemViewModel> getAllItems();

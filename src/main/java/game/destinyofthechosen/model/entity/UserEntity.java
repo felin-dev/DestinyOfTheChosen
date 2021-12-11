@@ -85,6 +85,16 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
+    public UserEntity addNewRole(RoleEntity role) {
+        this.userRoles.add(role);
+        return this;
+    }
+
+    public UserEntity removeRole(RoleEntity role) {
+        this.userRoles.remove(role);
+        return this;
+    }
+
     public UUID getCurrentHeroId() {
         return currentHeroId;
     }
@@ -112,12 +122,32 @@ public class UserEntity extends BaseEntity {
         return this;
     }
 
+    public UserEntity addGold(Integer gold) {
+        this.gold += gold;
+        return this;
+    }
+
+    public UserEntity spendGold(Integer gold) {
+        this.gold -= gold;
+        return this;
+    }
+
     public List<ItemEntity> getStash() {
         return stash;
     }
 
     public UserEntity setStash(List<ItemEntity> stash) {
         this.stash = stash;
+        return this;
+    }
+
+    public UserEntity addNewItem(ItemEntity item) {
+        this.stash.add(item);
+        return this;
+    }
+
+    public UserEntity throwItem(ItemEntity item) {
+        this.stash.remove(item);
         return this;
     }
 

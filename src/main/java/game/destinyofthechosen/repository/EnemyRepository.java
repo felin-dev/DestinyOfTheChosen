@@ -10,6 +10,5 @@ import java.util.UUID;
 public interface EnemyRepository extends JpaRepository<EnemyEntity, UUID> {
     boolean existsByEnemyName(String name);
 
-
     EnemyEntity findByEnemyName(String enemyName);
 }

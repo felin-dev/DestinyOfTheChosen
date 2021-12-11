@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,16 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findById(itemId)
                 .orElseThrow(() ->
                         new ObjectNotFoundException("Item with id: " + itemId + " is does not exist."));
+    }
+
+    @Override
+    public ItemEntity getRandomItemInLevelRequirementRange(Integer levelRequirement) {
+        List<ItemEntity> items = itemRepository.findItemInLevelRequirementRange(levelRequirement);
+        if (items.size() == 0) throw new ObjectNotFoundException("There is no items with this level requirement.");
+
+        int randomItemIndex = ThreadLocalRandom.current().nextInt(0, items.size());
+
+        return items.get(randomItemIndex);
     }
 
     @Override
