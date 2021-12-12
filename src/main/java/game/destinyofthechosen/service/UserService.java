@@ -46,4 +46,6 @@ public interface UserService {
     void removeAdminRoleFromUser(String adminName, UsernameServiceModel usernameServiceModel);
 
     void initialize();
+
+    void addDailyMoney();
 }

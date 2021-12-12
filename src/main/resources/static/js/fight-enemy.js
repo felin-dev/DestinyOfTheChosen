@@ -76,7 +76,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         heroManaBarValueElement.textContent = hero.currentMana + '/' + hero.baseMana;
 
         if (hero.currentHealth === 0) {
-            attackBtn.textContent = 'Try Again'
+            attackBtn.textContent = 'Try Again';
         }
     }
 
@@ -86,9 +86,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
             firstBattle = !firstBattle;
         }
 
-        const skillsTemplate = html`
-                ${skills.map(skill => setSkillView(skill, heroMana))}
-        `;
+        const skillsTemplate = html`${skills.map(skill => setSkillView(skill, heroMana))}`;
 
         render(skillsTemplate, skillsElement);
     }
@@ -122,8 +120,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
             ${combatStatus.itemDrop ? html `
                 <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">New item: ${combatStatus.itemDrop}</p>` : ''}
             ${combatStatus.moneyDrop ? html `
-                <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">Gold: ${combatStatus.moneyDrop}</p>` : ''}
-        `;
+                <p class="my-0 fs-6 fw-normal bg-primary bg-opacity-75 text-secondary p-1 rounded-3">Gold: ${combatStatus.moneyDrop}</p>` : ''}`;
     }
 
     function updateEnemyStatus(combatStatus) {
@@ -142,7 +139,7 @@ import {performGetRequest, performPostRequest} from '/js/utility/requests.js';
         enemyHealthBarValueElement.textContent = enemy.currentHealth + '/' + enemy.health;
 
         if (enemy.currentHealth === 0) {
-            attackBtn.textContent = 'Attack Again'
+            attackBtn.textContent = 'Attack Again';
         }
     }
 })()

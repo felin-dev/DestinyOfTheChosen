@@ -309,4 +309,13 @@ public class UserServiceImpl implements UserService {
 
         userRepository.saveAll(userEntities);
     }
+
+    @Override
+    public void addDailyMoney() {
+        List<UserEntity> allUsers = userRepository.findAll();
+        allUsers.forEach(userEntity -> {
+            userEntity.addGold(1000);
+            userRepository.save(userEntity);
+        });
+    }
 }
