@@ -11,6 +11,10 @@ body {
     background-color: transparent;
 }
 
+#home-link {
+    font-size: 2vw;
+}
+
 .main-background {
     background-image: url(https://res.cloudinary.com/felin/image/upload/v1636279961/DestinyOfTheChosen/backgrounds/home-background.jpg);
     background-position: center;

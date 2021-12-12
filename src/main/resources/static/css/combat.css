@@ -1,18 +1,28 @@
+#combat-background {
+    min-height: 100vh;
+}
+
+#skills > img {
+    width: 15vw;
+}
+
 .hero-fight-card {
-    width: 50vh;
+    width: 25vw;
+    font-size: 1vw;
 }
 
 .enemy-fight-card {
-    width: 70vh;
+    width: 25vw;
+    font-size: 1vw;
 }
 
 .hero-fight-image {
     transform: scale(-1, 1);
-    width: 15rem;
+    width: 15vw;
 }
 
 .enemy-fight-image {
-    width: 25rem;
+    width: 25vw;
 }
 
 .status-bar {
@@ -86,8 +96,8 @@
 
 .skill-icon {
     margin: 0;
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 3.5vw;
+    width: 3.5vw;
     border-radius: 20%;
     transition: 200ms transform ease-in-out;
 }
